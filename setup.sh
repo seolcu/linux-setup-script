@@ -9,7 +9,7 @@ sudo apt full-upgrade -y
 
 
 # install essential packages
-sudo apt install git gcc g++ curl flatpak gnome-software-plugin-flatpak htop neofetch python3-nautilus
+sudo apt install -y git gcc g++ curl htop neofetch python3-nautilus
 
 
 # install vscode
@@ -18,9 +18,13 @@ sudo apt install ./vscode.deb
 
 
 # debloat
-sudo apt remove gnome-games rhythmbox evolution zutty transmission-common shotwell
-sudo apt autoremove
+sudo apt remove -y gnome-games rhythmbox evolution zutty transmission-common shotwell
+sudo apt autoremove -y
 
+
+# setup flatpak
+sudo apt install -y flatpak gnome-software-plugin-flatpak
+sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 
 # install flatpak packages
 flatpak install flathub com.spotify.Client
