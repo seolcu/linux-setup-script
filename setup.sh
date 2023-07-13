@@ -26,23 +26,9 @@ sudo apt autoremove -y
 sudo apt install -y flatpak gnome-software-plugin-flatpak
 sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 
+
 # install flatpak packages
-flatpak install flathub com.spotify.Client
-flatpak install flathub org.videolan.VLC
-flatpak install flathub com.microsoft.Edge
-flatpak install flathub com.github.tchx84.Flatseal
-flatpak install flathub com.mattjakeman.ExtensionManager
-flatpak install flathub com.usebottles.bottles
-flatpak install flathub us.zoom.Zoom
-flatpak install flathub com.github.unrud.VideoDownloader
-flatpak install flathub com.protonvpn.www
-flatpak install flathub md.obsidian.Obsidian
-flatpak install flathub org.gnome.Boxes
-flatpak install flathub org.remmina.Remmina
-flatpak install flathub org.gnome.NetworkDisplays
-flatpak install flathub com.rafaelmardojai.Blanket
-flatpak install flathub in.srev.guiscrcpy
-flatpak install flathub org.gabmus.whatip
+flatpak install flathub -y com.spotify.Client org.videolan.VLC com.microsoft.Edge com.github.tchx84.Flatseal com.mattjakeman.ExtensionManager com.usebottles.bottles us.zoom.Zoom com.github.unrud.VideoDownloader com.protonvpn.www md.obsidian.Obsidian org.gnome.Boxes org.remmina.Remmina org.gnome.NetworkDisplays com.rafaelmardojai.Blanket in.srev.guiscrcpy org.gabmus.whatip
 
 
 # [Enable Function Keys On Keychron/Various Mechanical Keyboards Under Linux, with systemd](https://github.com/adam-savard/keyboard-function-keys-linux)
