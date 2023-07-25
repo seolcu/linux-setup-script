@@ -5,8 +5,10 @@ initial setup script for some distros.
 ## setup
 
 ```bash
+sudo apt install git
 git clone https://github.com/seolcu/linux_setup_script
 cd linux_setup_script
-chmod +x ./setup.py
 sudo ./setup.py
+cd ..
+rm -rf linux_setup_script
 ```
