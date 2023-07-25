@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!./venv/bin/python3
 
 import subprocess
 
@@ -76,17 +76,17 @@ debian_install_string = "apt install -y "
 for pkg in debian_install_packages:
     print("install %s(%s)?" % (pkg.name, pkg.desc), end=" ")
     if pkg.default == True:
-        ans = input("[Y/n]")
+        ans = input("[Y/n]: ")
         if ans != "n" and ans != "N":
             debian_install_string += pkg.apt_name + " "
     elif pkg.default == False:
-        ans = input("[y/N]")
+        ans = input("[y/N]: ")
         if ans == "y" or ans == "Y":
             debian_install_string += pkg.apt_name + " "
 subprocess.run(debian_install_string, shell=True)
 
 # manually install VSCode
-ans = input("install Visual Studio Code(code editor)?[Y/n]")
+ans = input("install Visual Studio Code(code editor)?[Y/n]: ")
 if ans != "n" and ans != "N":
     subprocess.run(
         """
@@ -117,11 +117,11 @@ debian_remove_string = "apt remove -y "
 for pkg in debian_remove_packages:
     print("remove %s(%s)?" % (pkg.name, pkg.desc), end=" ")
     if pkg.default == True:
-        ans = input("[Y/n]")
+        ans = input("[Y/n]: ")
         if ans != "n" and ans != "N":
             debian_remove_string += pkg.apt_name + " "
     elif pkg.default == False:
-        ans = input("[y/N]")
+        ans = input("[y/N]: ")
         if ans == "y" or ans == "Y":
             debian_remove_string += pkg.apt_name + " "
 subprocess.run(debian_remove_string, shell=True)
@@ -183,11 +183,11 @@ flatpak_install_string = "flatpak install flathub -y "
 for pkg in flatpak_install_packages:
     print("install %s(%s)?" % (pkg.name, pkg.desc), end=" ")
     if pkg.default == True:
-        ans = input("[Y/n]")
+        ans = input("[Y/n]: ")
         if ans != "n" and ans != "N":
             flatpak_install_string += pkg.url + " "
     elif pkg.default == False:
-        ans = input("[y/N]")
+        ans = input("[y/N]: ")
         if ans == "y" or ans == "Y":
             flatpak_install_string += pkg.url + " "
 subprocess.run(flatpak_install_string, shell=True)
@@ -197,23 +197,11 @@ subprocess.run(flatpak_install_string, shell=True)
 display_title(
     "Function key error fix for some users(https://github.com/adam-savard/keyboard-function-keys-linux)"
 )
-ans = input("Fix keyboard?[y/N]")
+ans = input("Fix keyboard?[y/N]: ")
 if ans == "y" or ans == "Y":
     subprocess.run(
         """
-            cat > /etc/systemd/system/keychron.service<<EOF
-            [Unit]
-            Description=Disable media keys and substitute in function keys
-
-            [Service]
-            Type=simple
-            RemainAfterExit=yes
-            ExecStart=/bin/bash -c "echo 0 > /sys/module/hid_apple/parameters/fnmode"
-            ExecStop=/bin/bash -c "echo 1 > /sys/module/hid_apple/parameters/fnmode"
-
-            [Install]
-            WantedBy=multi-user.target
-            EOF
+            cp ./keychron.service /etc/systemd/system/keychron.service
             systemctl enable keychron
             systemctl start keychron
         """,
