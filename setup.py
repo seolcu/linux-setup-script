@@ -27,19 +27,18 @@ class flatpak_package(package):
 def display_title(title):
     global step
     step += 1
-    print(Fore.GREEN + "========== (%d) %s ==========" % (step, title))
+    print(Fore.GREEN + f"========== ({step}) {title} ==========")
     print(Style.RESET_ALL, end="")
 
 
 # input & output: 0(False) or 1(True)
 def binary_menu(default_answer):
-    global preset, preset_options
-    if preset == preset_options[0]:
+    global preset_index
+    if preset_index == 0:
         return default_answer
-    elif preset == preset_options[1]:
-        answer = TerminalMenu(["No", "Yes"], cursor_index=default_answer).show()
-        return answer
-    elif preset == preset_options[2]:
+    elif preset_index == 1:
+        return TerminalMenu(["No", "Yes"], cursor_index=default_answer).show()
+    elif preset_index == 2:
         return 1
 
 
@@ -192,7 +191,9 @@ def main():
         flatpak_package(
             "Gnome Boxes", "easy KVM virtual machine manager", True, "org.gnome.Boxes"
         ),
-        flatpak_package("Remmina", "VNC/RDP client", True, "org.remmina.Remmina"),
+        flatpak_package(
+            "Remmina", "remote desktop client", True, "org.remmina.Remmina"
+        ),
         flatpak_package(
             "Gnome Network Display",
             "miracast support",
