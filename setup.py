@@ -1,6 +1,7 @@
 #!./venv/bin/python3
 
-import subprocess
+from subprocess import run
+from colorama import Fore, Style
 
 step = 0
 
@@ -8,7 +9,8 @@ step = 0
 def display_title(title):
     global step
     step += 1
-    print("========== (%d) %s ==========" % (step, title))
+    print(Fore.GREEN + "========== (%d) %s ==========" % (step, title))
+    print(Style.RESET_ALL, end="")
 
 
 class package:
@@ -33,7 +35,7 @@ class flatpak_package(package):
 display_title("Switching to Debian sid")
 ans = input("Switch to Debian sid? [y/N]: ")
 if ans == "y" or ans == "Y":
-    subprocess.run(
+    run(
         """
             mv /etc/apt/sources.list /etc/apt/sources.list.old
             cp ./sources.list /etc/apt/sources.list
@@ -43,7 +45,7 @@ if ans == "y" or ans == "Y":
 
 
 display_title("Updating the system")
-subprocess.run(
+run(
     """
         apt update
         apt full-upgrade -y
@@ -83,12 +85,12 @@ for pkg in debian_install_packages:
         ans = input("[y/N]: ")
         if ans == "y" or ans == "Y":
             debian_install_string += pkg.apt_name + " "
-subprocess.run(debian_install_string, shell=True)
+run(debian_install_string, shell=True)
 
 # manually install VSCode
 ans = input("install Visual Studio Code(code editor)?[Y/n]: ")
 if ans != "n" and ans != "N":
-    subprocess.run(
+    run(
         """
             apt install -y wget gpg
             wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
@@ -124,12 +126,12 @@ for pkg in debian_remove_packages:
         ans = input("[y/N]: ")
         if ans == "y" or ans == "Y":
             debian_remove_string += pkg.apt_name + " "
-subprocess.run(debian_remove_string, shell=True)
-subprocess.run("apt autoremove -y", shell=True)
+run(debian_remove_string, shell=True)
+run("apt autoremove -y", shell=True)
 
 
 display_title("Setting up flatpak & flathub")
-subprocess.run(
+run(
     """
         apt install -y flatpak gnome-software-plugin-flatpak
         flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
@@ -190,7 +192,7 @@ for pkg in flatpak_install_packages:
         ans = input("[y/N]: ")
         if ans == "y" or ans == "Y":
             flatpak_install_string += pkg.url + " "
-subprocess.run(flatpak_install_string, shell=True)
+run(flatpak_install_string, shell=True)
 
 
 # [Enable Function Keys On Keychron/Various Mechanical Keyboards Under Linux, with systemd](https://github.com/adam-savard/keyboard-function-keys-linux)
@@ -199,7 +201,7 @@ display_title(
 )
 ans = input("Fix keyboard?[y/N]: ")
 if ans == "y" or ans == "Y":
-    subprocess.run(
+    run(
         """
             cp ./keychron.service /etc/systemd/system/keychron.service
             systemctl enable keychron
