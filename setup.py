@@ -6,25 +6,25 @@ from simple_term_menu import TerminalMenu
 
 
 class package:
-    def __init__(self, name, desc, default):
+    def __init__(self, name: str, desc: str, default: bool):
         self.name = name
         self.desc = desc
         self.default = default
 
 
-class native_package(package):
-    def __init__(self, name, desc, default, apt_name):
+class apt_package(package):
+    def __init__(self, name: str, desc: str, default: bool, apt_name: str):
         super().__init__(name, desc, default)
         self.apt_name = apt_name
 
 
 class flatpak_package(package):
-    def __init__(self, name, desc, default, url):
+    def __init__(self, name: str, desc: str, default: bool, url: str):
         super().__init__(name, desc, default)
         self.url = url
 
 
-def display_title(title):
+def display_title(title: str):
     global step
     step += 1
     print(Fore.GREEN + f"========== ({step}) {title} ==========")
@@ -32,28 +32,30 @@ def display_title(title):
 
 
 # input & output: 0(False) or 1(True)
-def binary_menu(default_answer):
+def binary_menu(default_answer: bool):
     global preset_index
     if preset_index == 0:
         return default_answer
     elif preset_index == 1:
-        return TerminalMenu(["No", "Yes"], cursor_index=default_answer).show()
+        return bool(
+            TerminalMenu(["No", "Yes"], cursor_index=int(default_answer)).show()
+        )
     elif preset_index == 2:
-        return 1
+        return True
 
 
 def main():
     global step, preset, preset_index, preset_options
-    step = 0
+    step: int = 0
 
     display_title("Selecting process preset")
-    preset_options = ["default", "custom", "all yes"]
-    preset_index = TerminalMenu(preset_options).show()
-    preset = preset_options[preset_index]
+    preset_options: list[str] = ["default", "custom", "all yes"]
+    preset_index: int = TerminalMenu(preset_options).show()
+    preset: str = preset_options[preset_index]
 
     display_title("Switching to Debian sid")
     print("Switch to Debian sid?")
-    if binary_menu(0) == 1:
+    if binary_menu(default_answer=False) == True:
         run(
             """
                 mv /etc/apt/sources.list /etc/apt/sources.list.old
@@ -73,22 +75,22 @@ def main():
 
     display_title("Installing native packages")
     debian_install_packages = [
-        native_package(
+        apt_package(
             "essentials",
             "git, gcc, g++, curl, wget, gpg",
             True,
             "git gcc g++ curl wget gpg",
         ),
-        native_package("htop", "cli system monitor", True, "htop"),
-        native_package("neofetch", "fetch script", True, "neofetch"),
-        native_package(
+        apt_package("htop", "cli system monitor", True, "htop"),
+        apt_package("neofetch", "fetch script", True, "neofetch"),
+        apt_package(
             "solaar",
             "manages Logitech receivers, keyboards, mice, and tablets",
             False,
             "solaar",
         ),
-        native_package("python3-nautilus", "for GSConnect", False, "python3-nautilus"),
-        native_package(
+        apt_package("python3-nautilus", "for GSConnect", False, "python3-nautilus"),
+        apt_package(
             "steam-devices", "steam controller support", False, "steam-devices"
         ),
     ]
@@ -125,11 +127,11 @@ def main():
 
     display_title("Remove useless packages")
     debian_remove_packages = [
-        native_package("gnome games", "gnome default games", True, "gnome-games"),
-        native_package("rhythmbox", "music player", True, "rhythmbox"),
-        native_package("evolution", "mail client", True, "evolution"),
-        native_package("zutty", "terminal", True, "zutty"),
-        native_package("shotwell", "image manager", True, "shotwell"),
+        apt_package("gnome games", "gnome default games", True, "gnome-games"),
+        apt_package("rhythmbox", "music player", True, "rhythmbox"),
+        apt_package("evolution", "mail client", True, "evolution"),
+        apt_package("zutty", "terminal", True, "zutty"),
+        apt_package("shotwell", "image manager", True, "shotwell"),
     ]
 
     debian_remove_string = "apt remove -y "
