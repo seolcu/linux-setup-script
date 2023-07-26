@@ -120,13 +120,6 @@ install_packages: package_list = package_list(
             "steam-devices", "steam controller support", False, "steam-devices"
         ),
         # flatpak
-        flatpak_package(
-            "Spotify",
-            "music streaming service",
-            False,
-            "flathub",
-            "com.spotify.Client",
-        ),
         flatpak_package("VLC", "video player", True, "flathub", "org.videolan.VLC"),
         flatpak_package(
             "MS Edge", "web browser", False, "flathub", "com.microsoft.Edge"
@@ -134,7 +127,7 @@ install_packages: package_list = package_list(
         flatpak_package(
             "Flatseal",
             "flatpak permission manager",
-            False,
+            True,
             "flathub",
             "com.github.tchx84.Flatseal",
         ),
@@ -199,7 +192,7 @@ install_packages: package_list = package_list(
             "com.rafaelmardojai.Blanket",
         ),
         flatpak_package(
-            "guiscrcpy", "easy gui scrcpy", False, "flathub", "in.srev.guiscrcpy"
+            "guiscrcpy", "easy gui scrcpy", True, "flathub", "in.srev.guiscrcpy"
         ),
         flatpak_package("What IP", "ip checker", True, "flathub", "org.gabmus.whatip"),
         # manual
@@ -254,7 +247,7 @@ def main():
         )
 
     display_title("Switching to Debian sid")
-    if binary_menu("Switch to Debian sid?", False) == True:
+    if binary_menu("Switch to Debian sid?", True) == True:
         run(
             """
                 mv /etc/apt/sources.list /etc/apt/sources.list.old
