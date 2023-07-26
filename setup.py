@@ -262,7 +262,7 @@ def main():
             apt_package("shotwell", "image manager", True, "shotwell"),
         ]
     )
-    remove_packages.install()
+    remove_packages.remove()
     run("apt autoremove -y", shell=True)
 
     # [Enable Function Keys On Keychron/Various Mechanical Keyboards Under Linux, with systemd](https://github.com/adam-savard/keyboard-function-keys-linux)
