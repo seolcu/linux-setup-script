@@ -247,7 +247,7 @@ def main():
         )
 
     display_title("Switching to Debian sid")
-    if binary_menu("Switch to Debian sid?", True) == True:
+    if binary_menu("Switch to Debian sid?", False):
         run(
             """
                 mv /etc/apt/sources.list /etc/apt/sources.list.old
