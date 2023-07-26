@@ -6,22 +6,52 @@ from simple_term_menu import TerminalMenu
 
 
 class package:
-    def __init__(self, name: str, desc: str, default: bool):
+    def install(self):
+        run(self.install_command, shell=True)
+
+    def remove(self):
+        run(self.remove_command, shell=True)
+
+    def __init__(
+        self,
+        name: str,
+        desc: str,
+        default: bool,
+        install_command: str,
+        remove_command: str,
+    ):
         self.name = name
         self.desc = desc
         self.default = default
+        self.install_command = install_command
+        self.remove_command = remove_command
 
 
 class apt_package(package):
     def __init__(self, name: str, desc: str, default: bool, apt_name: str):
-        super().__init__(name, desc, default)
-        self.apt_name = apt_name
+        install_command = f"apt install -y {apt_name}"
+        remove_command = f"apt remove -y {apt_name}"
+        super().__init__(name, desc, default, install_command, remove_command)
 
 
 class flatpak_package(package):
-    def __init__(self, name: str, desc: str, default: bool, url: str):
-        super().__init__(name, desc, default)
-        self.url = url
+    def __init__(self, name: str, desc: str, default: bool, repo: str, url: str):
+        install_command = f"flatpak install -y {repo} {url}"
+        remove_command = f"flatpak remove -y {url}"
+        super().__init__(name, desc, default, install_command, remove_command)
+
+
+class package_list:
+    def install(self):
+        for a_package in self.raw_package_list:
+            a_package.install()
+
+    def remove(self):
+        for a_package in self.raw_package_list:
+            a_package.remove()
+
+    def __init__(self, raw_package_list: list[package]):
+        self.raw_package_list = raw_package_list
 
 
 def display_title(title: str):
@@ -45,10 +75,11 @@ def binary_menu(default_answer: bool):
 
 
 def main():
-    global step, preset, preset_index, preset_options
+    global step
     step: int = 0
 
     display_title("Selecting process preset")
+    global preset, preset_index, preset_options
     preset_options: list[str] = ["default", "custom", "all yes"]
     preset_index: int = TerminalMenu(preset_options).show()
     preset: str = preset_options[preset_index]
@@ -160,53 +191,79 @@ def main():
     display_title("Installing flatpak packages")
     flatpak_install_packages = [
         flatpak_package(
-            "Spotify", "music streaming service", False, "com.spotify.Client"
+            "Spotify", "music streaming service", False, "flathub", "com.spotify.Client"
         ),
-        flatpak_package("VLC", "video player", True, "org.videolan.VLC"),
-        flatpak_package("MS Edge", "web browser", False, "com.microsoft.Edge"),
+        flatpak_package("VLC", "video player", True, "flathub", "org.videolan.VLC"),
+        flatpak_package(
+            "MS Edge", "web browser", False, "flathub", "com.microsoft.Edge"
+        ),
         flatpak_package(
             "Flatseal",
             "flatpak permission manager",
             False,
+            "flathub",
             "com.github.tchx84.Flatseal",
         ),
         flatpak_package(
             "Gnome Extension Manager",
             "manage gnome extension easily",
             True,
+            "flathub",
             "com.mattjakeman.ExtensionManager",
         ),
-        flatpak_package("Bottles", "wine env manager", True, "com.usebottles.bottles"),
-        flatpak_package("Zoom", "video conferencing", False, "us.zoom.Zoom"),
+        flatpak_package(
+            "Bottles", "wine env manager", True, "flathub", "com.usebottles.bottles"
+        ),
+        flatpak_package("Zoom", "video conferencing", False, "flathub", "us.zoom.Zoom"),
         flatpak_package(
             "Video Downloader",
             "download YT video easily",
             False,
+            "flathub",
             "com.github.unrud.VideoDownloader",
         ),
         flatpak_package(
-            "Proton VPN", "privacy respecting vpn", False, "com.protonvpn.www"
+            "Proton VPN",
+            "privacy respecting vpn",
+            False,
+            "flathub",
+            "com.protonvpn.www",
         ),
         flatpak_package(
-            "Obsidian", "markdown knowledge base", False, "md.obsidian.Obsidian"
+            "Obsidian",
+            "markdown knowledge base",
+            False,
+            "flathub",
+            "md.obsidian.Obsidian",
         ),
         flatpak_package(
-            "Gnome Boxes", "easy KVM virtual machine manager", True, "org.gnome.Boxes"
+            "Gnome Boxes",
+            "easy KVM virtual machine manager",
+            True,
+            "flathub",
+            "org.gnome.Boxes",
         ),
         flatpak_package(
-            "Remmina", "remote desktop client", True, "org.remmina.Remmina"
+            "Remmina", "remote desktop client", True, "flathub", "org.remmina.Remmina"
         ),
         flatpak_package(
             "Gnome Network Display",
             "miracast support",
             True,
+            "flathub",
             "org.gnome.NetworkDisplays",
         ),
         flatpak_package(
-            "Blanket", "white noise player", True, "com.rafaelmardojai.Blanket"
+            "Blanket",
+            "white noise player",
+            True,
+            "flathub",
+            "com.rafaelmardojai.Blanket",
         ),
-        flatpak_package("guiscrcpy", "easy gui scrcpy", False, "in.srev.guiscrcpy"),
-        flatpak_package("What IP", "ip checker", True, "org.gabmus.whatip"),
+        flatpak_package(
+            "guiscrcpy", "easy gui scrcpy", False, "flathub", "in.srev.guiscrcpy"
+        ),
+        flatpak_package("What IP", "ip checker", True, "flathub", "org.gabmus.whatip"),
     ]
 
     flatpak_install_string = "flatpak install flathub -y "
