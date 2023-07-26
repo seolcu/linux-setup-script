@@ -69,9 +69,7 @@ class package_list:
 
 
 def display_title(title: str):
-    global step
-    step += 1
-    print(Fore.GREEN + f"========== ({step}) {title} ==========")
+    print(Fore.GREEN + f"========== {title} ==========")
     print(Style.RESET_ALL, end="")
 
 
@@ -90,14 +88,11 @@ def binary_menu(question: str, default_answer: bool):
 
 
 def main():
-    global step
-    step: int = 0
-
     display_title("Selecting process preset")
     global preset, preset_index, preset_options
-    preset_options: list[str] = ["Default", "Custom", "All Yes"]
-    preset_index: int = TerminalMenu(preset_options).show()
-    preset: str = preset_options[preset_index]
+    preset_options = ["Default", "Custom", "All Yes"]
+    preset_index = TerminalMenu(preset_options).show()
+    preset = preset_options[preset_index]
 
     display_title("Switching to Debian sid")
     if binary_menu("Switch to Debian sid?", False) == True:
