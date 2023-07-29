@@ -19,7 +19,7 @@ def display_title(title: str):
 def main():
     # [Enable Function Keys On Keychron/Various Mechanical Keyboards Under Linux, with systemd](https://github.com/adam-savard/keyboard-function-keys-linux)
     display_title(
-        "Function key error fix for some users(https://github.com/adam-savard/keyboard-function-keys-linux)"
+        "Fix keyboard Fn keys issue? (https://github.com/adam-savard/keyboard-function-keys-linux)"
     )
     print("Fix keyboard Fn issue?")
     if TerminalMenu(["No", "Yes"]).show():
@@ -32,8 +32,7 @@ def main():
             shell=True,
         )
 
-    display_title("Switching to Debian sid")
-    print("Switch to Debian sid?")
+    display_title("Switch to Debian sid?")
     if TerminalMenu(["No", "Yes"]).show():
         run(
             """
