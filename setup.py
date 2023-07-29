@@ -66,7 +66,7 @@ def main():
     display_title("Setting up flatpak & flathub")
     run(
         """
-            apt install -y flatpak gnome-software-plugin-flatpak
+            apt install -y flatpak
             flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
         """,
         shell=True,

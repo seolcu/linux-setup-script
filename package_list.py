@@ -127,6 +127,7 @@ flathub_install_packages: flathub_package_list = flathub_package_list(
 
 apt_install_packages: apt_package_list = apt_package_list(
     [
+        apt_package("gnome-software-plugin-flatpak"),
         apt_package("git"),
         apt_package("gcc"),
         apt_package("g++"),
