@@ -79,7 +79,7 @@ class apt_package_list(package_list):
 
 manual_install_packages: manual_package_list = manual_package_list(
     [
-        package(
+        manual_package(
             "vscode-apt",
             """
                 apt install -y wget gpg
