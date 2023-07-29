@@ -34,7 +34,7 @@ def main():
 
     display_title("Switching to Debian sid")
     print("Switch to Debian sid?")
-    if TerminalMenu["No", "Yes"]:
+    if TerminalMenu(["No", "Yes"]).show():
         run(
             """
                 mv /etc/apt/sources.list /etc/apt/sources.list.old
