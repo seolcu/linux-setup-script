@@ -67,7 +67,7 @@ class apt_package_list(package_list):
             install_str += " " + self.raw_package_list[index].name
         run(install_str, shell=True)
 
-    def install(self):
+    def remove(self):
         remove_str = "apt remove"
         for index in self.registered_indexes:
             remove_str += " " + self.raw_package_list[index].name
