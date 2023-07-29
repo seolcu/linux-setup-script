@@ -22,7 +22,7 @@ def main():
         "Function key error fix for some users(https://github.com/adam-savard/keyboard-function-keys-linux)"
     )
     print("Fix keyboard Fn issue?")
-    if TerminalMenu["No", "Yes"].show():
+    if TerminalMenu(["No", "Yes"]).show():
         run(
             """
                 cp ./keychron.service /etc/systemd/system/keychron.service
