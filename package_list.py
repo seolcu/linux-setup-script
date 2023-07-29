@@ -34,6 +34,7 @@ class package_list:
         self.registered_indexes: tuple[int] = TerminalMenu(
             map(lambda a_package: a_package.name, self.raw_package_list),
             multi_select=True,
+            show_multi_select_hint=True,
         ).show()
 
     def __init__(self, raw_package_list: list[package]):
