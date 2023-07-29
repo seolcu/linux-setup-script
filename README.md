@@ -10,5 +10,5 @@ git clone https://github.com/seolcu/linux_setup_script
 cd linux_setup_script
 sudo ./setup.py
 cd ..
-rm -rf linux_setup_script
+sudo rm -rf linux_setup_script
 ```
