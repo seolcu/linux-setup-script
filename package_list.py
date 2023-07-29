@@ -44,7 +44,7 @@ class package_list:
 class manual_package_list(package_list):
     def install(self):
         for index in self.registered_indexes:
-            run(self.raw_package_list[index].install_command)
+            run(self.raw_package_list[index].install_command, shell=True)
 
     def __init__(self, raw_package_list: list[manual_package]):
         self.raw_package_list: list[manual_package] = raw_package_list
@@ -106,6 +106,7 @@ flathub_install_packages: flathub_package_list = flathub_package_list(
         flathub_package("com.usebottles.bottles"),
         flathub_package("us.zoom.Zoom"),
         flathub_package("com.github.unrud.VideoDownloader"),
+        flathub_package("com.spotify.Client"),
         flathub_package("com.protonvpn.www"),
         flathub_package("md.obsidian.Obsidian"),
         flathub_package("org.gnome.Boxes"),
@@ -114,6 +115,13 @@ flathub_install_packages: flathub_package_list = flathub_package_list(
         flathub_package("com.rafaelmardojai.Blanket"),
         flathub_package("in.srev.guiscrcpy"),
         flathub_package("org.gabmus.whatip"),
+        flathub_package("com.discordapp.Discord"),
+        flathub_package("com.obsproject.Studio"),
+        flathub_package("com.valvesoftware.Steam"),
+        flathub_package("com.mojang.Minecraft"),
+        flathub_package("io.mrarm.mcpelauncher"),
+        flathub_package("com.github.ztefn.haguichi"),
+        flathub_package("de.haeckerfelix.Fragments"),
     ]
 )
 
