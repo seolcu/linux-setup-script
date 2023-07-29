@@ -12,8 +12,7 @@ from package_list import (
 
 
 def display_title(title: str):
-    print(Fore.GREEN + f"[!] {title}")
-    print(Style.RESET_ALL, end="")
+    print(Fore.GREEN + f"[!] {title}", end=f"{Style.RESET_ALL}\n")
 
 
 def main():
