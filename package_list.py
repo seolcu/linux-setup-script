@@ -52,7 +52,7 @@ class manual_package_list(package_list):
 
 class flathub_package_list(package_list):
     def install(self):
-        install_str = "flatpak install flathub"
+        install_str = "flatpak install -y flathub"
         for index in self.registered_indexes:
             install_str += " " + self.raw_package_list[index].name
         run(install_str, shell=True)
@@ -63,13 +63,13 @@ class flathub_package_list(package_list):
 
 class apt_package_list(package_list):
     def install(self):
-        install_str = "apt install"
+        install_str = "apt install -y"
         for index in self.registered_indexes:
             install_str += " " + self.raw_package_list[index].name
         run(install_str, shell=True)
 
     def remove(self):
-        remove_str = "apt remove"
+        remove_str = "apt remove -y"
         for index in self.registered_indexes:
             remove_str += " " + self.raw_package_list[index].name
         run(remove_str, shell=True)
