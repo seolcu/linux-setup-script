@@ -21,7 +21,6 @@ def main():
     display_title(
         "Fix keyboard Fn keys issue? (https://github.com/adam-savard/keyboard-function-keys-linux)"
     )
-    print("Fix keyboard Fn issue?")
     if TerminalMenu(["No", "Yes"]).show():
         run(
             """
