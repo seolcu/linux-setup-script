@@ -26,3 +26,11 @@ pip3 install -r pip_requirement.txt
 ```bash
 sudo ./setup.py
 ```
+
+### 4. cleanup
+
+```bash
+deactivate
+cd ..
+sudo rm -rf linux_setup_script
+```
