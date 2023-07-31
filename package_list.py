@@ -99,7 +99,7 @@ class apt_package_list(package_list):
 class gnome_extension_package_list(package_list):
     def install(self):
         if self.isRegistered():
-            install_str = "gext install"
+            install_str = "./venv/bin/gext install"
             for index in self.registered_indexes:
                 install_str += " " + self.raw_package_list[index].name
             run(install_str, shell=True)
