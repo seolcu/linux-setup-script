@@ -29,6 +29,11 @@ class apt_package(package):
         super().__init__(name)
 
 
+class gnome_extension_package(package):
+    def __init__(self, name: str):
+        super().__init__(name)
+
+
 class package_list:
     def register(self):
         self.registered_indexes: tuple[int] | None = TerminalMenu(
@@ -89,6 +94,18 @@ class apt_package_list(package_list):
 
     def __init__(self, raw_package_list: list[apt_package]):
         self.raw_package_list: list[apt_package] = raw_package_list
+
+
+class gnome_extension_package_list(package_list):
+    def install(self):
+        if self.isRegistered():
+            install_str = "gext install"
+            for index in self.registered_indexes:
+                install_str += " " + self.raw_package_list[index].name
+            run(install_str, shell=True)
+
+    def __init__(self, raw_package_list: list[gnome_extension_package]):
+        self.raw_package_list: list[gnome_extension_package] = raw_package_list
 
 
 manual_install_packages: manual_package_list = manual_package_list(
@@ -154,6 +171,18 @@ apt_install_packages: apt_package_list = apt_package_list(
         apt_package("solaar"),
         apt_package("python3-nautilus"),
     ]
+)
+
+gnome_extension_install_packages: gnome_extension_package_list = (
+    gnome_extension_package_list(
+        [
+            gnome_extension_package("appindicatorsupport@rgcjonas.gmail.com"),
+            gnome_extension_package("caffeine@patapon.info"),
+            gnome_extension_package("gsconnect@andyholmes.github.io"),
+            gnome_extension_package("gestureImprovements@gestures"),
+            gnome_extension_package("Vitals@CoreCoding.com"),
+        ]
+    )
 )
 
 apt_remove_packages: apt_package_list = apt_package_list(
