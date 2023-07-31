@@ -24,9 +24,9 @@ def main():
     if TerminalMenu(["No", "Yes"]).show():
         run(
             """
-                cp ./keychron.service /etc/systemd/system/keychron.service
-                systemctl enable keychron
-                systemctl start keychron
+                sudo cp ./keychron.service /etc/systemd/system/keychron.service
+                sudo systemctl enable keychron
+                sudo systemctl start keychron
             """,
             shell=True,
         )
@@ -35,8 +35,8 @@ def main():
     if TerminalMenu(["No", "Yes"]).show():
         run(
             """
-                mv /etc/apt/sources.list /etc/apt/sources.list.old
-                cp ./sources.list /etc/apt/sources.list
+                sudo mv /etc/apt/sources.list /etc/apt/sources.list.old
+                sudo cp ./sources.list /etc/apt/sources.list
             """,
             shell=True,
         )
@@ -61,8 +61,8 @@ def main():
     display_title("Updating the system")
     run(
         """
-            apt update
-            apt full-upgrade -y
+            sudo apt update
+            sudo apt full-upgrade -y
         """,
         shell=True,
     )
@@ -70,8 +70,8 @@ def main():
     display_title("Setting up flatpak & flathub")
     run(
         """
-            apt install -y flatpak
-            flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+            sudo apt install -y flatpak
+            sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
         """,
         shell=True,
     )
@@ -84,7 +84,7 @@ def main():
 
     display_title("Removing packages")
     apt_remove_packages.remove()
-    run("apt autoremove -y", shell=True)
+    run("sudo apt autoremove -y", shell=True)
 
 
 if __name__ == "__main__":

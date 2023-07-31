@@ -24,7 +24,7 @@ pip3 install -r pip_requirement.txt
 ### 3. execute the script
 
 ```bash
-sudo ./setup.py
+./setup.py
 ```
 
 ### 4. cleanup
@@ -32,5 +32,5 @@ sudo ./setup.py
 ```bash
 deactivate
 cd ..
-sudo rm -rf linux_setup_script
+rm -rf linux_setup_script
 ```

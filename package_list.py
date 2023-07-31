@@ -80,14 +80,14 @@ class flathub_package_list(package_list):
 class apt_package_list(package_list):
     def install(self):
         if self.isRegistered():
-            install_str = "apt install -y"
+            install_str = "sudo apt install -y"
             for index in self.registered_indexes:
                 install_str += " " + self.raw_package_list[index].name
             run(install_str, shell=True)
 
     def remove(self):
         if self.isRegistered():
-            remove_str = "apt remove -y"
+            remove_str = "sudo apt remove -y"
             for index in self.registered_indexes:
                 remove_str += " " + self.raw_package_list[index].name
             run(remove_str, shell=True)
@@ -99,7 +99,7 @@ class apt_package_list(package_list):
 class gnome_extension_package_list(package_list):
     def install(self):
         if self.isRegistered():
-            install_str = "./venv/bin/gext install"
+            install_str = "gext install"
             for index in self.registered_indexes:
                 install_str += " " + self.raw_package_list[index].name
             run(install_str, shell=True)
@@ -113,16 +113,16 @@ manual_install_packages: manual_package_list = manual_package_list(
         manual_package(
             "vscode-apt",
             """
-                apt install -y wget gpg
+                sudo apt install wget gpg
                 wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
-                install -D -o root -g root -m 644 packages.microsoft.gpg /etc/apt/keyrings/packages.microsoft.gpg
-                sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list'
+                sudo install -D -o root -g root -m 644 packages.microsoft.gpg /etc/apt/keyrings/packages.microsoft.gpg
+                sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list'
                 rm -f packages.microsoft.gpg
-                apt install -y apt-transport-https
-                apt update
-                apt install -y code
+                sudo apt install apt-transport-https
+                sudo apt update
+                sudo apt install code
             """,
-            "apt remove -y code",
+            "sudo apt remove -y code",
         ),
     ]
 )
