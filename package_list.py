@@ -31,7 +31,7 @@ class apt_package(package):
 
 class package_list:
     def register(self):
-        self.registered_indexes: tuple[int] = TerminalMenu(
+        self.registered_indexes: tuple[int] | None = TerminalMenu(
             map(lambda a_package: a_package.name, self.raw_package_list),
             multi_select=True,
             show_multi_select_hint=True,
@@ -39,14 +39,22 @@ class package_list:
             multi_select_empty_ok=True,
         ).show()
 
+    def isRegistered(self):
+        if type(self.registered_indexes) == "<class 'tuple'>":
+            return True
+        else:
+            print("Nothing is registered")
+            return False
+
     def __init__(self, raw_package_list: list[package]):
         self.raw_package_list: list[package] = raw_package_list
 
 
 class manual_package_list(package_list):
     def install(self):
-        for index in self.registered_indexes:
-            run(self.raw_package_list[index].install_command, shell=True)
+        if self.isRegistered():
+            for index in self.registered_indexes:
+                run(self.raw_package_list[index].install_command, shell=True)
 
     def __init__(self, raw_package_list: list[manual_package]):
         self.raw_package_list: list[manual_package] = raw_package_list
@@ -54,10 +62,11 @@ class manual_package_list(package_list):
 
 class flathub_package_list(package_list):
     def install(self):
-        install_str = "flatpak install -y flathub"
-        for index in self.registered_indexes:
-            install_str += " " + self.raw_package_list[index].name
-        run(install_str, shell=True)
+        if self.isRegistered():
+            install_str = "flatpak install -y flathub"
+            for index in self.registered_indexes:
+                install_str += " " + self.raw_package_list[index].name
+            run(install_str, shell=True)
 
     def __init__(self, raw_package_list: list[flathub_package]):
         self.raw_package_list: list[flathub_package] = raw_package_list
@@ -65,16 +74,18 @@ class flathub_package_list(package_list):
 
 class apt_package_list(package_list):
     def install(self):
-        install_str = "apt install -y"
-        for index in self.registered_indexes:
-            install_str += " " + self.raw_package_list[index].name
-        run(install_str, shell=True)
+        if self.isRegistered():
+            install_str = "apt install -y"
+            for index in self.registered_indexes:
+                install_str += " " + self.raw_package_list[index].name
+            run(install_str, shell=True)
 
     def remove(self):
-        remove_str = "apt remove -y"
-        for index in self.registered_indexes:
-            remove_str += " " + self.raw_package_list[index].name
-        run(remove_str, shell=True)
+        if self.isRegistered():
+            remove_str = "apt remove -y"
+            for index in self.registered_indexes:
+                remove_str += " " + self.raw_package_list[index].name
+            run(remove_str, shell=True)
 
     def __init__(self, raw_package_list: list[apt_package]):
         self.raw_package_list: list[apt_package] = raw_package_list
