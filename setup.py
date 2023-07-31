@@ -7,6 +7,7 @@ from package_list import (
     manual_install_packages,
     flathub_install_packages,
     apt_install_packages,
+    gnome_extension_install_packages,
     apt_remove_packages,
 )
 
@@ -49,6 +50,9 @@ def main():
     display_title("Select apt packages to install")
     apt_install_packages.register()
 
+    display_title("Select gnome extensions to install")
+    gnome_extension_install_packages.register()
+
     display_title("Select apt packages to remove")
     apt_remove_packages.register()
 
@@ -76,6 +80,7 @@ def main():
     manual_install_packages.install()
     flathub_install_packages.install()
     apt_install_packages.install()
+    gnome_extension_install_packages.install()
 
     display_title("Removing packages")
     apt_remove_packages.remove()
