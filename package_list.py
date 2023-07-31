@@ -40,7 +40,7 @@ class package_list:
         ).show()
 
     def isRegistered(self):
-        if type(self.registered_indexes) == "<class 'tuple'>":
+        if str(type(self.registered_indexes)) == "<class 'tuple'>":
             return True
         else:
             print("Nothing is registered")
