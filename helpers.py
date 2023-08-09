@@ -75,17 +75,18 @@ class package_list:
 
     # selecting packages for process
     def register(self, is_install: bool = True):
-        if is_install:
-            display_title("Select packages to install")
-        else:
-            display_title("Select packages to remove")
-        self.registered_indexes = TerminalMenu(
-            map(lambda a_package: a_package.name, self.raw_package_list),
-            multi_select=True,
-            show_multi_select_hint=True,
-            multi_select_select_on_accept=False,
-            multi_select_empty_ok=True,
-        ).show()
+        if len(self.raw_package_list) != 0:
+            if is_install:
+                display_title("Select packages to install")
+            else:
+                display_title("Select packages to remove")
+            self.registered_indexes = TerminalMenu(
+                map(lambda a_package: a_package.name, self.raw_package_list),
+                multi_select=True,
+                show_multi_select_hint=True,
+                multi_select_select_on_accept=False,
+                multi_select_empty_ok=True,
+            ).show()
 
     def is_registered(self):
         if type(self.registered_indexes) == None:
@@ -172,28 +173,28 @@ def main():
     de = select_one(c.DE_LIST)
 
     # register install
-    distro_packages["common"]["install"].register()
     distro_packages[distro]["install"].register()
     de_packages[de]["install"].register()
+    distro_packages["common"]["install"].register()
 
     # register remove
     distro_packages[distro]["remove"].register(is_install=False)
 
     # bash scripts - before process
-    distro_scripts["common"]["before"].execute()
     distro_scripts[distro]["before"].execute()
+    distro_scripts["common"]["before"].execute()
 
     # installation process
-    distro_packages["common"]["install"].install()
     distro_packages[distro]["install"].install()
     de_packages[de]["install"].install()
+    distro_packages["common"]["install"].install()
 
     # removal process
     distro_packages[distro]["remove"].remove()
 
     # bash scripts - after process
-    distro_scripts["common"]["after"].execute()
     distro_scripts[distro]["after"].execute()
+    distro_scripts["common"]["after"].execute()
 
 
 # Instances
