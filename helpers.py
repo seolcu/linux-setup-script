@@ -13,7 +13,7 @@ class package:
     remove_command: str
 
     # is_install: 0 is remove, 1 is install
-    def process(self, is_install):
+    def process(self, is_install: bool):
         if is_install:
             run(self.install_command, shell=True)
         else:
@@ -93,12 +93,14 @@ class package_list:
         else:
             return True
 
-    def process(self, is_install):
+    def process(self, is_install: bool):
         if self.is_registered():
             if type(self.registered_indexes) == int:
+                print("int!")
                 index = self.registered_indexes
                 self.raw_package_list[index].process(is_install)
             elif type(self.registered_indexes) == tuple[int]:
+                print("tuple!")
                 for index in self.registered_indexes:
                     self.raw_package_list[index].process(is_install)
         else:
@@ -176,9 +178,7 @@ def main():
     de_packages[de]["install"].register()
 
     # register remove
-    distro_packages["common"]["remove"].register(is_install=False)
     distro_packages[distro]["remove"].register(is_install=False)
-    de_packages[de]["remove"].register(is_install=False)
 
     # bash scripts - before process
     distro_scripts["common"]["before"].execute()
@@ -190,9 +190,7 @@ def main():
     de_packages[de]["install"].install()
 
     # removal process
-    distro_packages["common"]["remove"].remove()
     distro_packages[distro]["remove"].remove()
-    de_packages[de]["remove"].remove()
 
     # bash scripts - after process
     distro_scripts["common"]["after"].execute()
