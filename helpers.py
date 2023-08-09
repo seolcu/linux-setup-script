@@ -95,6 +95,7 @@ class package_list:
 
     def process(self, is_install: bool):
         if self.is_registered():
+            print(type(self.registered_indexes))
             if type(self.registered_indexes) == int:
                 print("int!")
                 index = self.registered_indexes
