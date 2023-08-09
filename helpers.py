@@ -36,20 +36,17 @@ class gnome_extension_package(package):
 
 class package_list:
     def register(self):
-        self.registered_indexes: tuple[int] | None = TerminalMenu(
+        selected_indexes: int | tuple[int] | None = TerminalMenu(
             map(lambda a_package: a_package.name, self.raw_package_list),
             multi_select=True,
             show_multi_select_hint=True,
             multi_select_select_on_accept=False,
             multi_select_empty_ok=True,
         ).show()
-
-    def isRegistered(self):
-        if str(type(self.registered_indexes)) == "<class 'tuple'>":
-            return True
-        else:
-            print("Nothing is registered")
-            return False
+        if type(selected_indexes) == int:
+            self.registered_indexes: tuple[int] = (selected_indexes,)
+        elif type(selected_indexes) == tuple[int]:
+            self.registered_indexes: tuple[int] = selected_indexes
 
     def __init__(self, raw_package_list: list[package]):
         self.raw_package_list: list[package] = raw_package_list
@@ -57,7 +54,12 @@ class package_list:
 
 class manual_package_list(package_list):
     def install(self):
-        if self.isRegistered():
+        if type(self.registered_indexes) == int:
+            run(
+                self.raw_package_list[self.registered_indexes].install_command,
+                shell=True,
+            )
+        elif type(self.registered_indexes) == tuple[int]:
             for index in self.registered_indexes:
                 run(self.raw_package_list[index].install_command, shell=True)
 
@@ -67,11 +69,10 @@ class manual_package_list(package_list):
 
 class flathub_package_list(package_list):
     def install(self):
-        if self.isRegistered():
-            install_str = "flatpak install -y flathub"
-            for index in self.registered_indexes:
-                install_str += " " + self.raw_package_list[index].name
-            run(install_str, shell=True)
+        install_str = "flatpak install -y flathub"
+        for index in self.registered_indexes:
+            install_str += " " + self.raw_package_list[index].name
+        run(install_str, shell=True)
 
     def __init__(self, raw_package_list: list[flathub_package]):
         self.raw_package_list: list[flathub_package] = raw_package_list
@@ -79,18 +80,16 @@ class flathub_package_list(package_list):
 
 class apt_package_list(package_list):
     def install(self):
-        if self.isRegistered():
-            install_str = "sudo apt install -y"
-            for index in self.registered_indexes:
-                install_str += " " + self.raw_package_list[index].name
-            run(install_str, shell=True)
+        install_str = "sudo apt install -y"
+        for index in self.registered_indexes:
+            install_str += " " + self.raw_package_list[index].name
+        run(install_str, shell=True)
 
     def remove(self):
-        if self.isRegistered():
-            remove_str = "sudo apt remove -y"
-            for index in self.registered_indexes:
-                remove_str += " " + self.raw_package_list[index].name
-            run(remove_str, shell=True)
+        remove_str = "sudo apt remove -y"
+        for index in self.registered_indexes:
+            remove_str += " " + self.raw_package_list[index].name
+        run(remove_str, shell=True)
 
     def __init__(self, raw_package_list: list[apt_package]):
         self.raw_package_list: list[apt_package] = raw_package_list
@@ -98,11 +97,10 @@ class apt_package_list(package_list):
 
 class gnome_extension_package_list(package_list):
     def install(self):
-        if self.isRegistered():
-            install_str = "gext install"
-            for index in self.registered_indexes:
-                install_str += " " + self.raw_package_list[index].name
-            run(install_str, shell=True)
+        install_str = "gext install"
+        for index in self.registered_indexes:
+            install_str += " " + self.raw_package_list[index].name
+        run(install_str, shell=True)
 
     def __init__(self, raw_package_list: list[gnome_extension_package]):
         self.raw_package_list: list[gnome_extension_package] = raw_package_list
@@ -194,3 +192,125 @@ apt_remove_packages: apt_package_list = apt_package_list(
         apt_package("shotwell"),
     ]
 )
+
+
+from colorama import Fore, Style
+from simple_term_menu import TerminalMenu
+from subprocess import run
+
+
+def display_title(title: str):
+    print(Fore.GREEN + f"[!] {title}", end=f"{Style.RESET_ALL}\n")
+
+
+class linux:
+    def fix_keyboard(self):
+        # [Enable Function Keys On Keychron/Various Mechanical Keyboards Under Linux, with systemd](https://github.com/adam-savard/keyboard-function-keys-linux)
+        display_title(
+            "Fix keyboard Fn keys issue? (https://github.com/adam-savard/keyboard-function-keys-linux)"
+        )
+        if TerminalMenu(["No", "Yes"]).show():
+            run(
+                """
+                    sudo cp ./assets/keychron.service /etc/systemd/system/keychron.service
+                    sudo systemctl enable keychron
+                    sudo systemctl start keychron
+                """,
+                shell=True,
+            )
+
+    def configure(self):
+        display_title("Select manual packages to install")
+        manual_install_packages.register()
+        display_title("Select flathub packages to install")
+        flathub_install_packages.register()
+        if self.DE == "gnome":
+            display_title("Select gnome extensions to install")
+            gnome_extension_install_packages.register()
+
+    def proceed(self):
+        display_title("Installing packages")
+        manual_install_packages.install()
+        flathub_install_packages.install()
+        apt_install_packages.install()
+        gnome_extension_install_packages.install()
+
+        display_title("Removing packages")
+        apt_remove_packages.remove()
+        run("sudo apt autoremove -y", shell=True)
+
+    def __init__(self, DE: str):
+        # DE: "gnome", "kde", "xfce", ...
+        self.DE: str = DE
+
+
+class debian(linux):
+    def switch_to_debian_sid():
+        display_title("Switch to Debian sid?")
+        if TerminalMenu(["No", "Yes"]).show():
+            run(
+                """
+                    sudo mv /etc/apt/sources.list /etc/apt/sources.list.old
+                    sudo cp ./assets/sources.list /etc/apt/sources.list
+                """,
+                shell=True,
+            )
+
+    def apt_update():
+        display_title("Updating the system")
+        run(
+            """
+                sudo apt update
+                sudo apt full-upgrade -y
+            """,
+            shell=True,
+        )
+
+    def apt_setup_flatpak():
+        display_title("Setting up flatpak & flathub")
+        run(
+            """
+                sudo apt install -y flatpak
+                sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+            """,
+            shell=True,
+        )
+
+    def configure(self):
+        super().configure()
+        display_title("Select apt packages to install")
+        apt_install_packages.register()
+        display_title("Select apt packages to remove")
+        apt_remove_packages.register()
+
+    def __init__(self, DE: str):
+        super().__init__(DE)
+
+
+def register_all():
+    display_title("Select manual packages to install")
+    manual_install_packages.register()
+
+    display_title("Select flathub packages to install")
+    flathub_install_packages.register()
+
+    display_title("Select apt packages to install")
+    apt_install_packages.register()
+
+    display_title("Select gnome extensions to install")
+    gnome_extension_install_packages.register()
+
+    display_title("Select apt packages to remove")
+    apt_remove_packages.register()
+
+
+def proceed_all():
+    display_title("Installing packages")
+    manual_install_packages.install()
+    flathub_install_packages.install()
+    apt_install_packages.install()
+    gnome_extension_install_packages.install()
+
+    display_title("Removing packages")
+    apt_remove_packages.remove()
+    run("sudo apt autoremove -y", shell=True)

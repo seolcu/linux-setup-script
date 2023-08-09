@@ -18,13 +18,13 @@ cd linux-setup-script
 sudo apt install python3-venv
 python3 -m venv venv
 source venv/bin/activate
-pip3 install -r pip_requirement.txt
+pip3 install -r requirement.txt
 ```
 
 ### 3. execute the script
 
 ```bash
-./setup.py
+./run.py
 ```
 
 ### 4. cleanup
