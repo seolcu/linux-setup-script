@@ -1,4 +1,4 @@
-# linux_setup_script
+# linux-setup-script
 
 initial setup script for some distros.
 
@@ -8,8 +8,8 @@ initial setup script for some distros.
 
 ```bash
 sudo apt install git
-git clone https://github.com/seolcu/linux_setup_script
-cd linux_setup_script
+git clone https://github.com/seolcu/linux-setup-script
+cd linux-setup-script
 ```
 
 ### 2. setup python venv
@@ -32,5 +32,5 @@ pip3 install -r pip_requirement.txt
 ```bash
 deactivate
 cd ..
-rm -rf linux_setup_script
+rm -rf linux-setup-script
 ```
