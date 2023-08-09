@@ -137,6 +137,9 @@ class bash_script_list:
         self.raw_script_list: list[bash_script] = raw_script_list
 
 
+# Constants
+
+
 DISTRO_LIST: list[str] = ["debian", "fedora"]
 DE_LIST: list[str] = ["gnome"]
 
@@ -177,7 +180,7 @@ DISTRO_PACKAGES: dict[str, dict[str, package_list]] = {
         "install": package_list(
             [
                 manual_package(
-                    "vscode-apt",
+                    "manual: vscode-apt",
                     """
                 sudo apt install -y wget gpg
                 wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
