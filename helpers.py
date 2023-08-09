@@ -1,7 +1,7 @@
 from colorama import Fore, Style
 from subprocess import run
 from simple_term_menu import TerminalMenu
-from constants import DISTRO_LIST, DE_LIST, DISTRO_PACKAGES, DE_PACKAGES, DISTRO_SCRIPTS
+import constants as c
 
 
 # Classes
@@ -166,34 +166,34 @@ def select_one(options: list[str]):
 
 def main():
     display_title("Select your distro")
-    distro = select_one(DISTRO_LIST)
+    distro = select_one(c.DISTRO_LIST)
     display_title("Select your DE")
-    de = select_one(DE_LIST)
+    de = select_one(c.DE_LIST)
 
     # register install
-    DISTRO_PACKAGES["common"]["install"].register()
-    DISTRO_PACKAGES[distro]["install"].register()
-    DE_PACKAGES[de]["install"].register()
+    c.DISTRO_PACKAGES["common"]["install"].register()
+    c.DISTRO_PACKAGES[distro]["install"].register()
+    c.DE_PACKAGES[de]["install"].register()
 
     # register remove
-    DISTRO_PACKAGES["common"]["remove"].register()
-    DISTRO_PACKAGES[distro]["remove"].register()
-    DE_PACKAGES[de]["remove"].register()
+    c.DISTRO_PACKAGES["common"]["remove"].register()
+    c.DISTRO_PACKAGES[distro]["remove"].register()
+    c.DE_PACKAGES[de]["remove"].register()
 
     # bash scripts - before process
-    DISTRO_SCRIPTS["common"]["before"].execute()
-    DISTRO_SCRIPTS[distro]["before"].execute()
+    c.DISTRO_SCRIPTS["common"]["before"].execute()
+    c.DISTRO_SCRIPTS[distro]["before"].execute()
 
     # installation process
-    DISTRO_PACKAGES["common"]["install"].install()
-    DISTRO_PACKAGES[distro]["install"].install()
-    DE_PACKAGES[de]["install"].install()
+    c.DISTRO_PACKAGES["common"]["install"].install()
+    c.DISTRO_PACKAGES[distro]["install"].install()
+    c.DE_PACKAGES[de]["install"].install()
 
     # removal process
-    DISTRO_PACKAGES["common"]["remove"].remove()
-    DISTRO_PACKAGES[distro]["remove"].remove()
-    DE_PACKAGES[de]["remove"].remove()
+    c.DISTRO_PACKAGES["common"]["remove"].remove()
+    c.DISTRO_PACKAGES[distro]["remove"].remove()
+    c.DE_PACKAGES[de]["remove"].remove()
 
     # bash scripts - after process
-    DISTRO_SCRIPTS["common"]["after"].execute()
-    DISTRO_SCRIPTS[distro]["after"].execute()
+    c.DISTRO_SCRIPTS["common"]["after"].execute()
+    c.DISTRO_SCRIPTS[distro]["after"].execute()

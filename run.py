@@ -1,6 +1,6 @@
 #!./venv/bin/python3
 
-from helpers import main
+import helpers
 
 if __name__ == "__main__":
-    main()
+    helpers.main()
