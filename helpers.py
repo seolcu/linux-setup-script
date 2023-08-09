@@ -97,11 +97,9 @@ class package_list:
         if self.is_registered():
             print(type(self.registered_indexes))
             if type(self.registered_indexes) == int:
-                print("int!")
                 index = self.registered_indexes
                 self.raw_package_list[index].process(is_install)
-            elif type(self.registered_indexes) == tuple[int]:
-                print("tuple!")
+            elif type(self.registered_indexes) == tuple:
                 for index in self.registered_indexes:
                     self.raw_package_list[index].process(is_install)
         else:
