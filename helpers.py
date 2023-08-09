@@ -42,24 +42,24 @@ class flathub_package(package):
     def __init__(self, url: str):
         self.url: str = url
         self.name: str = f"Flathub: {url}"
-        self.install_command: str = f"flatpak install flathub {url}"
-        self.remove_command: str = f"flatpak remove {url}"
+        self.install_command: str = f"flatpak install flathub -y {url}"
+        self.remove_command: str = f"flatpak remove -y {url}"
 
 
 class apt_package(package):
     def __init__(self, apt_name: str):
         self.apt_name: str = apt_name
         self.name: str = f"apt: {apt_name}"
-        self.install_command: str = f"sudo apt install {apt_name}"
-        self.remove_command: str = f"sudo apt remove {apt_name}"
+        self.install_command: str = f"sudo apt install -y {apt_name}"
+        self.remove_command: str = f"sudo apt remove -y {apt_name}"
 
 
 class dnf_package(package):
     def __init__(self, dnf_name: str):
         self.dnf_name: str = dnf_name
         self.name: str = f"dnf: {dnf_name}"
-        self.install_command: str = f"sudo dnf install {dnf_name}"
-        self.remove_command: str = f"sudo dnf remove {dnf_name}"
+        self.install_command: str = f"sudo dnf install -y {dnf_name}"
+        self.remove_command: str = f"sudo dnf remove -y {dnf_name}"
 
 
 class gnome_extension_package(package):
