@@ -1,45 +1,182 @@
 import helpers as h
+from subprocess import run
+from simple_term_menu import TerminalMenu
+
+
+# Classes
+
+
+class package:
+    name: str
+    install_command: str
+    remove_command: str
+
+    # is_install: 0 is remove, 1 is install
+    def process(self, is_install):
+        if is_install:
+            run(self.install_command, shell=True)
+        else:
+            run(self.remove_command, shell=True)
+
+    def install(self):
+        self.process(True)
+
+    def remove(self):
+        self.process(False)
+
+
+class manual_package(package):
+    def __init__(
+        self,
+        name: str,
+        install_command: str,
+        remove_command: str,
+    ):
+        self.name: str = name
+        self.install_command: str = install_command
+        self.remove_command: str = remove_command
+
+
+class flathub_package(package):
+    def __init__(self, url: str):
+        self.url: str = url
+        self.name: str = f"Flathub: {url}"
+        self.install_command: str = f"flatpak install flathub {url}"
+        self.remove_command: str = f"flatpak remove {url}"
+
+
+class apt_package(package):
+    def __init__(self, apt_name: str):
+        self.apt_name: str = apt_name
+        self.name: str = f"apt: {apt_name}"
+        self.install_command: str = f"sudo apt install {apt_name}"
+        self.remove_command: str = f"sudo apt remove {apt_name}"
+
+
+class dnf_package(package):
+    def __init__(self, dnf_name: str):
+        self.dnf_name: str = dnf_name
+        self.name: str = f"dnf: {dnf_name}"
+        self.install_command: str = f"sudo dnf install {dnf_name}"
+        self.remove_command: str = f"sudo dnf remove {dnf_name}"
+
+
+class gnome_extension_package(package):
+    def __init__(self, url: str):
+        self.url: str = url
+        self.name: str = f"GNOME Extension: {url}"
+        self.install_command: str = f"gext install {url}"
+        self.remove_command: str = f"gext uninstall {url}"
+
+
+class package_list:
+    registered_indexes: int | tuple[int] | None
+
+    # selecting packages for process
+    def register(self, is_install: bool = True):
+        if is_install:
+            h.display_title("Select packages to install")
+        else:
+            h.display_title("Select packages to remove")
+        self.registered_indexes = TerminalMenu(
+            map(lambda a_package: a_package.name, self.raw_package_list),
+            multi_select=True,
+            show_multi_select_hint=True,
+            multi_select_select_on_accept=False,
+            multi_select_empty_ok=True,
+        ).show()
+
+    def is_registered(self):
+        if type(self.registered_indexes) == None:
+            return False
+        else:
+            return True
+
+    def process(self, is_install):
+        if self.is_registered():
+            if type(self.registered_indexes) == int:
+                index = self.registered_indexes
+                self.raw_package_list[index].process(is_install)
+            elif type(self.registered_indexes) == tuple[int]:
+                for index in self.registered_indexes:
+                    self.raw_package_list[index].process(is_install)
+        else:
+            print("No packages registered")
+
+    def install(self):
+        self.process(True)
+
+    def remove(self):
+        self.process(False)
+
+    def __init__(self, raw_package_list: list[package]):
+        self.raw_package_list: list[package] = raw_package_list
+
+
+class bash_script:
+    def execute(self):
+        h.display_title(self.name)
+        if self.ask:
+            if h.no_or_yes():
+                run(self.command, shell=True)
+        else:
+            run(self.command, shell=True)
+
+    def __init__(self, name: str, command: str, ask: bool = False):
+        self.name: str = name
+        self.command: str = command
+        self.ask: bool = ask
+
+
+class bash_script_list:
+    def execute(self):
+        for a_script in self.raw_script_list:
+            a_script.execute()
+
+    def __init__(self, raw_script_list: list[bash_script]):
+        self.raw_script_list: list[bash_script] = raw_script_list
+
 
 DISTRO_LIST: list[str] = ["debian", "fedora"]
 DE_LIST: list[str] = ["gnome"]
 
 
-DISTRO_PACKAGES: dict[str, dict[str, h.package_list]] = {
+DISTRO_PACKAGES: dict[str, dict[str, package_list]] = {
     "common": {
-        "install": h.package_list(
+        "install": package_list(
             [
-                h.flathub_package("in.srev.guiscrcpy"),
-                h.flathub_package("org.gnome.Boxes"),
-                h.flathub_package("com.mojang.Minecraft"),
-                h.flathub_package("io.mrarm.mcpelauncher"),
-                h.flathub_package("com.valvesoftware.Steam"),
-                h.flathub_package("com.rafaelmardojai.Blanket"),
-                h.flathub_package("org.gnome.NetworkDisplays"),
-                h.flathub_package("com.obsproject.Studio"),
-                h.flathub_package("org.videolan.VLC"),
-                h.flathub_package("md.obsidian.Obsidian"),
-                h.flathub_package("org.onlyoffice.desktopeditors"),
-                h.flathub_package("com.usebottles.bottles"),
-                h.flathub_package("de.haeckerfelix.Fragments"),
-                h.flathub_package("com.discordapp.Discord"),
-                h.flathub_package("com.github.ztefn.haguichi"),
-                h.flathub_package("com.microsoft.Edge"),
-                h.flathub_package("org.gabmus.whatip"),
-                h.flathub_package("us.zoom.Zoom"),
-                h.flathub_package("com.github.unrud.VideoDownloader"),
-                h.flathub_package("com.github.tchx84.Flatseal"),
-                h.flathub_package("com.mattjakeman.ExtensionManager"),
-                h.flathub_package("com.spotify.Client"),
-                h.flathub_package("com.protonvpn.www"),
-                h.flathub_package("org.remmina.Remmina"),
+                flathub_package("in.srev.guiscrcpy"),
+                flathub_package("org.gnome.Boxes"),
+                flathub_package("com.mojang.Minecraft"),
+                flathub_package("io.mrarm.mcpelauncher"),
+                flathub_package("com.valvesoftware.Steam"),
+                flathub_package("com.rafaelmardojai.Blanket"),
+                flathub_package("org.gnome.NetworkDisplays"),
+                flathub_package("com.obsproject.Studio"),
+                flathub_package("org.videolan.VLC"),
+                flathub_package("md.obsidian.Obsidian"),
+                flathub_package("org.onlyoffice.desktopeditors"),
+                flathub_package("com.usebottles.bottles"),
+                flathub_package("de.haeckerfelix.Fragments"),
+                flathub_package("com.discordapp.Discord"),
+                flathub_package("com.github.ztefn.haguichi"),
+                flathub_package("com.microsoft.Edge"),
+                flathub_package("org.gabmus.whatip"),
+                flathub_package("us.zoom.Zoom"),
+                flathub_package("com.github.unrud.VideoDownloader"),
+                flathub_package("com.github.tchx84.Flatseal"),
+                flathub_package("com.mattjakeman.ExtensionManager"),
+                flathub_package("com.spotify.Client"),
+                flathub_package("com.protonvpn.www"),
+                flathub_package("org.remmina.Remmina"),
             ]
         ),
-        "remove": h.package_list([]),
+        "remove": package_list([]),
     },
     "debian": {
-        "install": h.package_list(
+        "install": package_list(
             [
-                h.manual_package(
+                manual_package(
                     "vscode-apt",
                     """
                 sudo apt install -y wget gpg
@@ -53,53 +190,53 @@ DISTRO_PACKAGES: dict[str, dict[str, h.package_list]] = {
             """,
                     "sudo apt remove -y code",
                 ),
-                h.apt_package("gnome-software-plugin-flatpak"),
-                h.apt_package("git"),
-                h.apt_package("gcc"),
-                h.apt_package("g++"),
-                h.apt_package("curl"),
-                h.apt_package("wget"),
-                h.apt_package("gpg"),
-                h.apt_package("htop"),
-                h.apt_package("neofetch"),
-                h.apt_package("gh"),
-                h.apt_package("solaar"),
-                h.apt_package("python3-nautilus"),
+                apt_package("gnome-software-plugin-flatpak"),
+                apt_package("git"),
+                apt_package("gcc"),
+                apt_package("g++"),
+                apt_package("curl"),
+                apt_package("wget"),
+                apt_package("gpg"),
+                apt_package("htop"),
+                apt_package("neofetch"),
+                apt_package("gh"),
+                apt_package("solaar"),
+                apt_package("python3-nautilus"),
             ]
         ),
-        "remove": h.package_list(
+        "remove": package_list(
             [
-                h.apt_package("gnome-games"),
-                h.apt_package("rhythmbox"),
-                h.apt_package("evolution"),
-                h.apt_package("zutty"),
-                h.apt_package("shotwell"),
+                apt_package("gnome-games"),
+                apt_package("rhythmbox"),
+                apt_package("evolution"),
+                apt_package("zutty"),
+                apt_package("shotwell"),
             ]
         ),
     },
-    "fedora": {"install": h.package_list([]), "remove": h.package_list([])},
+    "fedora": {"install": package_list([]), "remove": package_list([])},
 }
 
-DE_PACKAGES: dict[str, dict[str, h.package_list]] = {
+DE_PACKAGES: dict[str, dict[str, package_list]] = {
     "gnome": {
-        "install": h.package_list(
+        "install": package_list(
             [
-                h.gnome_extension_package("appindicatorsupport@rgcjonas.gmail.com"),
-                h.gnome_extension_package("caffeine@patapon.info"),
-                h.gnome_extension_package("gsconnect@andyholmes.github.io"),
-                h.gnome_extension_package("gestureImprovements@gestures"),
-                h.gnome_extension_package("Vitals@CoreCoding.com"),
+                gnome_extension_package("appindicatorsupport@rgcjonas.gmail.com"),
+                gnome_extension_package("caffeine@patapon.info"),
+                gnome_extension_package("gsconnect@andyholmes.github.io"),
+                gnome_extension_package("gestureImprovements@gestures"),
+                gnome_extension_package("Vitals@CoreCoding.com"),
             ]
         ),
-        "remove": h.package_list([]),
+        "remove": package_list([]),
     }
 }
 
 DISTRO_SCRIPTS = {
     "common": {
-        "before": h.bash_script_list(
+        "before": bash_script_list(
             [
-                h.bash_script(
+                bash_script(
                     # [Enable Function Keys On Keychron/Various Mechanical Keyboards Under Linux, with systemd](https://github.com/adam-savard/keyboard-function-keys-linux)
                     "Fixing keyboard Fn issue (https://github.com/adam-savard/keyboard-function-keys-linux)",
                     """
@@ -111,9 +248,9 @@ DISTRO_SCRIPTS = {
                 )
             ]
         ),
-        "after": h.bash_script_list(
+        "after": bash_script_list(
             [
-                h.bash_script(
+                bash_script(
                     "Reboot",
                     """
                         sudo systemctl reboot
@@ -124,9 +261,9 @@ DISTRO_SCRIPTS = {
         ),
     },
     "debian": {
-        "before": h.bash_script_list(
+        "before": bash_script_list(
             [
-                h.bash_script(
+                bash_script(
                     "Switching to Debian sid",
                     """
                         sudo mv /etc/apt/sources.list /etc/apt/sources.list.old
@@ -134,14 +271,14 @@ DISTRO_SCRIPTS = {
                     """,
                     ask=True,
                 ),
-                h.bash_script(
+                bash_script(
                     "Updating the system",
                     """
                         sudo apt update -y
                         sudo apt full-upgrade -y
                     """,
                 ),
-                h.bash_script(
+                bash_script(
                     "Setting up flatpak & flathub",
                     """
                         sudo apt install -y flatpak
@@ -150,9 +287,9 @@ DISTRO_SCRIPTS = {
                 ),
             ]
         ),
-        "after": h.bash_script_list(
+        "after": bash_script_list(
             [
-                h.bash_script(
+                bash_script(
                     "Removing packages",
                     """
                         sudo apt autoremove -y
@@ -162,22 +299,22 @@ DISTRO_SCRIPTS = {
         ),
     },
     "fedora": {
-        "before": h.bash_script_list(
+        "before": bash_script_list(
             [
-                h.bash_script(
+                bash_script(
                     "Updating the system",
                     """
                         sudo dnf update -y
                     """,
                 ),
-                h.bash_script(
+                bash_script(
                     "Enabling RPM Fusion",
                     """
                         sudo dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
                         sudo dnf groupupdate -y core
                     """,
                 ),
-                h.bash_script(
+                bash_script(
                     "Installing codecs from RPM Fusion",
                     """
                         sudo dnf swap -y ffmpeg-free ffmpeg --allowerasing
@@ -191,6 +328,6 @@ DISTRO_SCRIPTS = {
                 ),
             ]
         ),
-        "after": h.bash_script_list([]),
+        "after": bash_script_list([]),
     },
 }
