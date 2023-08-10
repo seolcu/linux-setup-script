@@ -349,7 +349,7 @@ distro_scripts = {
             [
                 bash_script(
                     # [Enable Function Keys On Keychron/Various Mechanical Keyboards Under Linux, with systemd](https://github.com/adam-savard/keyboard-function-keys-linux)
-                    "Fixing keyboard Fn issue (https://github.com/adam-savard/keyboard-function-keys-linux)",
+                    "Fix keyboard Fn issue? (https://github.com/adam-savard/keyboard-function-keys-linux)",
                     """
                         sudo echo ./assets/keychron.service > /etc/systemd/system/keychron.service
                         sudo systemctl enable keychron
@@ -362,7 +362,7 @@ distro_scripts = {
         "after": bash_script_list(
             [
                 bash_script(
-                    "Rebooting",
+                    "Reboot?",
                     """
                         sudo systemctl reboot
                     """,
@@ -375,7 +375,7 @@ distro_scripts = {
         "before": bash_script_list(
             [
                 bash_script(
-                    "Switching to Debian sid",
+                    "Switch to Debian sid?",
                     """
                         sudo cp /etc/apt/sources.list /etc/apt/sources.list.old
                         sudo echo ./assets/sources.list > /etc/apt/sources.list
