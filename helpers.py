@@ -285,6 +285,7 @@ distro_packages: dict[str, dict[str, package_list]] = {
     "fedora": {
         "install": package_list(
             [
+                dnf_package("naver-nanum-fonts-common"),
                 manual_package(
                     "manual: vscode-dnf",
                     """
