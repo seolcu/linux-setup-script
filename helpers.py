@@ -416,7 +416,7 @@ distro_scripts = {
                 bash_script(
                     "Change the hostname?",
                     """
-                        echo "new hostname: "
+                        echo "type new hostname"
                         read input
                         sudo hostnamectl set-hostname $input
                     """,
