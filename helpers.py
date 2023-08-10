@@ -225,7 +225,6 @@ distro_packages: dict[str, dict[str, package_list]] = {
                 flathub_package("us.zoom.Zoom"),
                 flathub_package("com.github.unrud.VideoDownloader"),
                 flathub_package("com.github.tchx84.Flatseal"),
-                flathub_package("com.mattjakeman.ExtensionManager"),
                 flathub_package("com.spotify.Client"),
                 flathub_package("com.protonvpn.www"),
                 flathub_package("org.remmina.Remmina"),
@@ -336,6 +335,8 @@ de_packages: dict[str, dict[str, package_list]] = {
                 gnome_extension_package("gestureImprovements@gestures"),
                 gnome_extension_package("Vitals@CoreCoding.com"),
                 gnome_extension_package("clipboard-indicator@tudmotu.com"),
+                flathub_package("com.mattjakeman.ExtensionManager"),
+                flathub_package("io.github.realmazharhussain.GdmSettings"),
             ]
         ),
     }
@@ -350,7 +351,7 @@ distro_scripts = {
                     # [Enable Function Keys On Keychron/Various Mechanical Keyboards Under Linux, with systemd](https://github.com/adam-savard/keyboard-function-keys-linux)
                     "Fixing keyboard Fn issue (https://github.com/adam-savard/keyboard-function-keys-linux)",
                     """
-                        sudo cp ./assets/keychron.service /etc/systemd/system/keychron.service
+                        sudo echo ./assets/keychron.service > /etc/systemd/system/keychron.service
                         sudo systemctl enable keychron
                         sudo systemctl start keychron
                     """,
@@ -376,8 +377,8 @@ distro_scripts = {
                 bash_script(
                     "Switching to Debian sid",
                     """
-                        sudo mv /etc/apt/sources.list /etc/apt/sources.list.old
-                        sudo cp ./assets/sources.list /etc/apt/sources.list
+                        sudo cp /etc/apt/sources.list /etc/apt/sources.list.old
+                        sudo echo ./assets/sources.list > /etc/apt/sources.list
                     """,
                     ask=True,
                 ),
@@ -412,21 +413,26 @@ distro_scripts = {
         "before": bash_script_list(
             [
                 bash_script(
-                    "Updating the system",
+                    "Change the hostname?",
                     """
-                        sudo dnf update -y
+                        echo "new hostname: "
+                        read input
+                        sudo hostnamectl set-hostname $input
                     """,
+                    ask=True,
                 ),
                 bash_script(
-                    "Enabling RPM Fusion",
+                    "Edit dnf.conf to make it faster?",
+                    """
+                        sudo echo ./assets/append_dnf.conf.txt >> /etc/dnf/dnf.conf
+                    """,
+                    ask=True,
+                ),
+                bash_script(
+                    "Enable RPM Fusion & install codecs?",
                     """
                         sudo dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
                         sudo dnf groupupdate -y core
-                    """,
-                ),
-                bash_script(
-                    "Installing codecs from RPM Fusion",
-                    """
                         sudo dnf swap -y ffmpeg-free ffmpeg --allowerasing
                         sudo dnf groupupdate -y multimedia --setop="install_weak_deps=False" --exclude=PackageKit-gstreamer-plugin
                         sudo dnf groupupdate -y sound-and-video
@@ -434,6 +440,13 @@ distro_scripts = {
                         sudo dnf swap -y mesa-vdpau-drivers mesa-vdpau-drivers-freeworld
                         sudo dnf swap -y mesa-va-drivers.i686 mesa-va-drivers-freeworld.i686
                         sudo dnf swap -y mesa-vdpau-drivers.i686 mesa-vdpau-drivers-freeworld.i686
+                    """,
+                    ask=True,
+                ),
+                bash_script(
+                    "Updating the system",
+                    """
+                        sudo dnf update -y
                     """,
                 ),
             ]
