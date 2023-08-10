@@ -352,7 +352,7 @@ distro_scripts = {
                     # [Enable Function Keys On Keychron/Various Mechanical Keyboards Under Linux, with systemd](https://github.com/adam-savard/keyboard-function-keys-linux)
                     "Fix keyboard Fn issue? (https://github.com/adam-savard/keyboard-function-keys-linux)",
                     """
-                        sudo echo ./assets/keychron.service > /etc/systemd/system/keychron.service
+                        sudo cp ./assets/keychron.service /etc/systemd/system/keychron.service
                         sudo systemctl enable keychron
                         sudo systemctl start keychron
                     """,
@@ -378,8 +378,8 @@ distro_scripts = {
                 bash_script(
                     "Switch to Debian sid?",
                     """
-                        sudo cp /etc/apt/sources.list /etc/apt/sources.list.old
-                        sudo echo ./assets/sources.list > /etc/apt/sources.list
+                        sudo mv /etc/apt/sources.list /etc/apt/sources.list.old
+                        sudo cp ./assets/sources.list /etc/apt/sources.list
                     """,
                     ask=True,
                 ),
@@ -425,7 +425,7 @@ distro_scripts = {
                 bash_script(
                     "Edit dnf.conf to make it faster?",
                     """
-                        sudo echo ./assets/append_dnf_conf.txt >> /etc/dnf/dnf.conf
+                        sudo cat ./assets/append_dnf_conf.txt >> /etc/dnf/dnf.conf
                     """,
                     ask=True,
                 ),
