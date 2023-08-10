@@ -133,8 +133,9 @@ class bash_script:
 
 class bash_script_list:
     def execute(self):
-        for a_script in self.raw_script_list:
-            a_script.execute()
+        if len(self.raw_script_list) != 0:
+            for a_script in self.raw_script_list:
+                a_script.execute()
 
     def __init__(self, raw_script_list: list[bash_script]):
         self.raw_script_list: list[bash_script] = raw_script_list
@@ -174,8 +175,8 @@ def main():
 
     # register install
     distro_packages[distro]["install"].register()
-    de_packages[de]["install"].register()
     distro_packages["common"]["install"].register()
+    de_packages[de]["install"].register()
 
     # register remove
     distro_packages[distro]["remove"].register(is_install=False)
@@ -186,8 +187,8 @@ def main():
 
     # installation process
     distro_packages[distro]["install"].install()
-    de_packages[de]["install"].install()
     distro_packages["common"]["install"].install()
+    de_packages[de]["install"].install()
 
     # removal process
     distro_packages[distro]["remove"].remove()
@@ -208,6 +209,7 @@ distro_packages: dict[str, dict[str, package_list]] = {
                 flathub_package("com.mojang.Minecraft"),
                 flathub_package("io.mrarm.mcpelauncher"),
                 flathub_package("com.valvesoftware.Steam"),
+                flathub_package("org.gnome.Music"),
                 flathub_package("com.rafaelmardojai.Blanket"),
                 flathub_package("org.gnome.NetworkDisplays"),
                 flathub_package("com.obsproject.Studio"),
@@ -229,7 +231,6 @@ distro_packages: dict[str, dict[str, package_list]] = {
                 flathub_package("org.remmina.Remmina"),
             ]
         ),
-        "remove": package_list([]),
     },
     "debian": {
         "install": package_list(
@@ -237,21 +238,30 @@ distro_packages: dict[str, dict[str, package_list]] = {
                 manual_package(
                     "manual: vscode-apt",
                     """
-                sudo apt install -y wget gpg
-                wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
-                sudo install -D -o root -g root -m 644 packages.microsoft.gpg /etc/apt/keyrings/packages.microsoft.gpg
-                sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list'
-                rm -f packages.microsoft.gpg
-                sudo apt install apt-transport-https
-                sudo apt update -y
-                sudo apt install -y code
-            """,
+                        sudo apt install -y wget gpg
+                        wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
+                        sudo install -D -o root -g root -m 644 packages.microsoft.gpg /etc/apt/keyrings/packages.microsoft.gpg
+                        sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list'
+                        rm -f packages.microsoft.gpg
+                        sudo apt install apt-transport-https
+                        sudo apt update -y
+                        sudo apt install -y code
+                    """,
                     "sudo apt remove -y code",
                 ),
                 apt_package("gnome-software-plugin-flatpak"),
                 apt_package("git"),
                 apt_package("gcc"),
                 apt_package("g++"),
+                apt_package("default-jdk"),
+                manual_package(
+                    "manual: nvm",
+                    """
+                        sudo apt install -y curl
+                        curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.4/install.sh | bash
+                    """,
+                    "",
+                ),
                 apt_package("curl"),
                 apt_package("wget"),
                 apt_package("gpg"),
@@ -260,6 +270,7 @@ distro_packages: dict[str, dict[str, package_list]] = {
                 apt_package("gh"),
                 apt_package("solaar"),
                 apt_package("python3-nautilus"),
+                apt_package("distrobox"),
             ]
         ),
         "remove": package_list(
@@ -272,8 +283,48 @@ distro_packages: dict[str, dict[str, package_list]] = {
             ]
         ),
     },
-    "fedora": {"install": package_list([]), "remove": package_list([])},
+    "fedora": {
+        "install": package_list(
+            [
+                manual_package(
+                    "manual: vscode-dnf",
+                    """
+                        sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
+                        sudo sh -c 'echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/vscode.repo'
+                        dnf check-update
+                        sudo dnf install -y code
+                    """,
+                    "sudo dnf remove -y code",
+                ),
+                dnf_package("git"),
+                dnf_package("gcc"),
+                dnf_package("g++"),
+                dnf_package("java-latest-openjdk"),
+                manual_package(
+                    "manual: nvm",
+                    """
+                        sudo dnf install -y curl
+                        curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.4/install.sh | bash
+                    """,
+                    "",
+                ),
+                dnf_package("curl"),
+                dnf_package("wget"),
+                dnf_package("gpg"),
+                dnf_package("htop"),
+                dnf_package("neofetch"),
+                dnf_package("gh"),
+                dnf_package("solaar"),
+                dnf_package("nautilus-python"),
+                dnf_package("nautilus-extensions"),
+                dnf_package("evolution-data-server"),
+                dnf_package("distrobox"),
+            ]
+        ),
+        "remove": package_list([dnf_package("rhythmbox")]),
+    },
 }
+
 
 de_packages: dict[str, dict[str, package_list]] = {
     "gnome": {
@@ -284,11 +335,12 @@ de_packages: dict[str, dict[str, package_list]] = {
                 gnome_extension_package("gsconnect@andyholmes.github.io"),
                 gnome_extension_package("gestureImprovements@gestures"),
                 gnome_extension_package("Vitals@CoreCoding.com"),
+                gnome_extension_package("clipboard-indicator@tudmotu.com"),
             ]
         ),
-        "remove": package_list([]),
     }
 }
+
 
 distro_scripts = {
     "common": {
@@ -309,7 +361,7 @@ distro_scripts = {
         "after": bash_script_list(
             [
                 bash_script(
-                    "Reboot",
+                    "Rebooting",
                     """
                         sudo systemctl reboot
                     """,
@@ -348,7 +400,7 @@ distro_scripts = {
         "after": bash_script_list(
             [
                 bash_script(
-                    "Removing packages",
+                    "Autoremoving packages",
                     """
                         sudo apt autoremove -y
                     """,
