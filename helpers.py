@@ -425,7 +425,7 @@ distro_scripts = {
                 bash_script(
                     "Edit dnf.conf to make it faster?",
                     """
-                        sudo echo ./assets/append_dnf.conf.txt >> /etc/dnf/dnf.conf
+                        sudo echo ./assets/append_dnf_conf.txt >> /etc/dnf/dnf.conf
                     """,
                     ask=True,
                 ),
