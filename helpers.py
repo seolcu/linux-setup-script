@@ -96,7 +96,6 @@ class package_list:
 
     def process(self, is_install: bool):
         if self.is_registered():
-            print(type(self.registered_indexes))
             if type(self.registered_indexes) == int:
                 index = self.registered_indexes
                 self.raw_package_list[index].process(is_install)
@@ -384,13 +383,6 @@ distro_scripts = {
                     ask=True,
                 ),
                 bash_script(
-                    "Updating the system",
-                    """
-                        sudo apt update -y
-                        sudo apt full-upgrade -y
-                    """,
-                ),
-                bash_script(
                     "Setting up flatpak & flathub",
                     """
                         sudo apt install -y flatpak
@@ -402,11 +394,18 @@ distro_scripts = {
         "after": bash_script_list(
             [
                 bash_script(
+                    "Updating the system",
+                    """
+                        sudo apt update -y
+                        sudo apt full-upgrade -y
+                    """,
+                ),
+                bash_script(
                     "Autoremoving packages",
                     """
                         sudo apt autoremove -y
                     """,
-                )
+                ),
             ]
         ),
     },
@@ -430,6 +429,10 @@ distro_scripts = {
                     """,
                     ask=True,
                 ),
+            ]
+        ),
+        "after": bash_script_list(
+            [
                 bash_script(
                     "Enable RPM Fusion & install codecs?",
                     """
@@ -453,6 +456,5 @@ distro_scripts = {
                 ),
             ]
         ),
-        "after": bash_script_list([]),
     },
 }
