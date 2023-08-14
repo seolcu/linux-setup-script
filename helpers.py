@@ -429,25 +429,52 @@ distro_scripts = {
                     """,
                     ask=True,
                 ),
-            ]
-        ),
-        "after": bash_script_list(
-            [
                 bash_script(
-                    "Enable RPM Fusion & install codecs?",
+                    "Enable RPM Fusion & Switch to full ffmpeg & Install codecs?\n(No VAAPI codecs included)",
                     """
                         sudo dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
                         sudo dnf groupupdate -y core
                         sudo dnf swap -y ffmpeg-free ffmpeg --allowerasing
                         sudo dnf groupupdate -y multimedia --setop="install_weak_deps=False" --exclude=PackageKit-gstreamer-plugin
                         sudo dnf groupupdate -y sound-and-video
-                        sudo dnf swap -y mesa-va-drivers mesa-va-drivers-freeworld
-                        sudo dnf swap -y mesa-vdpau-drivers mesa-vdpau-drivers-freeworld
-                        sudo dnf swap -y mesa-va-drivers.i686 mesa-va-drivers-freeworld.i686
-                        sudo dnf swap -y mesa-vdpau-drivers.i686 mesa-vdpau-drivers-freeworld.i686
                     """,
                     ask=True,
                 ),
+                bash_script(
+                    "Install VAAPI codecs for Intel(recent)?",
+                    """
+                        sudo dnf install intel-media-driver
+                    """,
+                    ask=True,
+                ),
+                bash_script(
+                    "Install VAAPI codecs for Intel(older)?",
+                    """
+                        sudo dnf install intel-media-driver
+                    """,
+                    ask=True,
+                ),
+                bash_script(
+                    "Install VAAPI codecs for AMD(mesa)?",
+                    """
+                        sudo dnf swap mesa-va-drivers mesa-va-drivers-freeworld
+                        sudo dnf swap mesa-vdpau-drivers mesa-vdpau-drivers-freeworld
+                        sudo dnf swap mesa-va-drivers.i686 mesa-va-drivers-freeworld.i686
+                        sudo dnf swap mesa-vdpau-drivers.i686 mesa-vdpau-drivers-freeworld.i686
+                    """,
+                    ask=True,
+                ),
+                bash_script(
+                    "Install VAAPI codecs for NVIDIA?",
+                    """
+                        sudo dnf install nvidia-vaapi-driver
+                    """,
+                    ask=True,
+                ),
+            ]
+        ),
+        "after": bash_script_list(
+            [
                 bash_script(
                     "Updating the system",
                     """
