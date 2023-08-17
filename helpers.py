@@ -379,6 +379,7 @@ distro_scripts = {
                     """
                         sudo mv /etc/apt/sources.list /etc/apt/sources.list.old
                         sudo cp ./assets/sources.list /etc/apt/sources.list
+                        sudo apt update -y
                     """,
                     ask=True,
                 ),
