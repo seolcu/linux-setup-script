@@ -247,6 +247,7 @@ distro_packages: dict[str, dict[str, package_list]] = {
                     """,
                     "sudo apt remove -y code",
                 ),
+                apt_package("gnome-boxes"),
                 apt_package("gnome-software-plugin-flatpak"),
                 apt_package("git"),
                 apt_package("gcc"),
