@@ -204,7 +204,6 @@ distro_packages: dict[str, dict[str, package_list]] = {
         "install": package_list(
             [
                 flathub_package("in.srev.guiscrcpy"),
-                flathub_package("org.gnome.Boxes"),
                 flathub_package("com.mojang.Minecraft"),
                 flathub_package("io.mrarm.mcpelauncher"),
                 flathub_package("com.valvesoftware.Steam"),
@@ -319,6 +318,7 @@ distro_packages: dict[str, dict[str, package_list]] = {
                 dnf_package("nautilus-extensions"),
                 dnf_package("evolution-data-server"),
                 dnf_package("distrobox"),
+                dnf_package("libva-utils"),
             ]
         ),
         "remove": package_list([dnf_package("rhythmbox")]),
@@ -445,31 +445,31 @@ distro_scripts = {
                 bash_script(
                     "Install VAAPI codecs for Intel(recent)?",
                     """
-                        sudo dnf install intel-media-driver
+                        sudo dnf install -y intel-media-driver
                     """,
                     ask=True,
                 ),
                 bash_script(
                     "Install VAAPI codecs for Intel(older)?",
                     """
-                        sudo dnf install intel-media-driver
+                        sudo dnf install -y libva-intel-driver
                     """,
                     ask=True,
                 ),
                 bash_script(
                     "Install VAAPI codecs for AMD(mesa)?",
                     """
-                        sudo dnf swap mesa-va-drivers mesa-va-drivers-freeworld
-                        sudo dnf swap mesa-vdpau-drivers mesa-vdpau-drivers-freeworld
-                        sudo dnf swap mesa-va-drivers.i686 mesa-va-drivers-freeworld.i686
-                        sudo dnf swap mesa-vdpau-drivers.i686 mesa-vdpau-drivers-freeworld.i686
+                        sudo dnf swap -y mesa-va-drivers mesa-va-drivers-freeworld
+                        sudo dnf swap -y mesa-vdpau-drivers mesa-vdpau-drivers-freeworld
+                        sudo dnf swap -y mesa-va-drivers.i686 mesa-va-drivers-freeworld.i686
+                        sudo dnf swap -y mesa-vdpau-drivers.i686 mesa-vdpau-drivers-freeworld.i686
                     """,
                     ask=True,
                 ),
                 bash_script(
                     "Install VAAPI codecs for NVIDIA?",
                     """
-                        sudo dnf install nvidia-vaapi-driver
+                        sudo dnf install -y nvidia-vaapi-driver
                     """,
                     ask=True,
                 ),
