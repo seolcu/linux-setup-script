@@ -250,7 +250,7 @@ distro_packages: dict[str, dict[str, package_list]] = {
                 manual_package(
                     "virt-manager",
                     """
-                        sudo apt install virt-manager
+                        sudo apt install -y virt-manager
                         sudo usermod -a -G libvirt $(whoami)
                         sudo virsh net-autostart default
                         sudo virsh net-start default
