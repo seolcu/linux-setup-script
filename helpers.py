@@ -33,7 +33,7 @@ class manual_package(package):
         install_command: str,
         remove_command: str,
     ):
-        self.name: str = name
+        self.name: str = f"manaul: {name}"
         self.install_command: str = install_command
         self.remove_command: str = remove_command
 
@@ -184,7 +184,7 @@ def main():
     distro_scripts[distro]["before"].execute()
     distro_scripts["common"]["before"].execute()
 
-    display_title("Execute registered installations & uninstallations?")
+    display_title("Final question: Execute registered installations & uninstallations?")
     if no_or_yes():
         # installation process
         distro_packages[distro]["install"].install()
@@ -234,7 +234,7 @@ distro_packages: dict[str, dict[str, package_list]] = {
         "install": package_list(
             [
                 manual_package(
-                    "manual: vscode-apt",
+                    "vscode",
                     """
                         sudo apt install -y wget gpg
                         wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
@@ -246,6 +246,15 @@ distro_packages: dict[str, dict[str, package_list]] = {
                         sudo apt install -y code
                     """,
                     "sudo apt remove -y code",
+                ),
+                manual_package(
+                    "virt-manager",
+                    """
+                        sudo apt install virt-manager
+                        sudo usermod -a -G libvirt $(whoami)
+                        sudo virsh net-autostart default
+                        sudo virsh net-start default
+                    """
                 ),
                 apt_package("gnome-boxes"),
                 apt_package("gnome-software-plugin-flatpak"),
@@ -286,7 +295,7 @@ distro_packages: dict[str, dict[str, package_list]] = {
             [
                 dnf_package("naver-nanum-gothic-fonts"),
                 manual_package(
-                    "manual: vscode-dnf",
+                    "vscode",
                     """
                         sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
                         sudo sh -c 'echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/vscode.repo'
