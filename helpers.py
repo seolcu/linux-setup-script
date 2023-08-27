@@ -254,7 +254,8 @@ distro_packages: dict[str, dict[str, package_list]] = {
                         sudo usermod -a -G libvirt $(whoami)
                         sudo virsh net-autostart default
                         sudo virsh net-start default
-                    """
+                    """,
+                    "sudo apt remove -y virt-manager"
                 ),
                 apt_package("gnome-boxes"),
                 apt_package("gnome-software-plugin-flatpak"),
