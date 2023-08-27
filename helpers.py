@@ -184,13 +184,14 @@ def main():
     distro_scripts[distro]["before"].execute()
     distro_scripts["common"]["before"].execute()
 
-    # installation process
-    distro_packages[distro]["install"].install()
-    distro_packages["common"]["install"].install()
-    de_packages[de]["install"].install()
-
-    # removal process
-    distro_packages[distro]["remove"].remove()
+    display_title("Execute registered installations & uninstallations?")
+    if no_or_yes():
+        # installation process
+        distro_packages[distro]["install"].install()
+        distro_packages["common"]["install"].install()
+        de_packages[de]["install"].install()
+        # removal process
+        distro_packages[distro]["remove"].remove()
 
     # bash scripts - after process
     distro_scripts[distro]["after"].execute()
@@ -248,7 +249,6 @@ distro_packages: dict[str, dict[str, package_list]] = {
                 ),
                 apt_package("gnome-boxes"),
                 apt_package("gnome-software-plugin-flatpak"),
-                apt_package("git"),
                 apt_package("gcc"),
                 apt_package("g++"),
                 apt_package("default-jdk"),
@@ -295,7 +295,6 @@ distro_packages: dict[str, dict[str, package_list]] = {
                     """,
                     "sudo dnf remove -y code",
                 ),
-                dnf_package("git"),
                 dnf_package("gcc"),
                 dnf_package("g++"),
                 dnf_package("java-latest-openjdk"),
@@ -361,15 +360,7 @@ distro_scripts = {
             ]
         ),
         "after": bash_script_list(
-            [
-                bash_script(
-                    "Reboot?",
-                    """
-                        sudo systemctl reboot
-                    """,
-                    ask=True,
-                )
-            ]
+            []
         ),
     },
     "debian": {
@@ -381,6 +372,7 @@ distro_scripts = {
                         sudo mv /etc/apt/sources.list /etc/apt/sources.list.old
                         sudo cp ./assets/sources.list /etc/apt/sources.list
                         sudo apt update -y
+                        sudo apt full-upgrade -y
                     """,
                     ask=True,
                 ),
@@ -390,6 +382,7 @@ distro_scripts = {
                         sudo apt install -y flatpak
                         sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
                     """,
+                    ask=True,
                 ),
             ]
         ),
@@ -399,7 +392,7 @@ distro_scripts = {
                     "Updating the system",
                     """
                         sudo apt update -y
-                        sudo apt full-upgrade -y
+                        sudo apt upgrade -y
                     """,
                 ),
                 bash_script(
