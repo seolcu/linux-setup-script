@@ -255,7 +255,7 @@ distro_packages: dict[str, dict[str, package_list]] = {
                         sudo virsh net-autostart default
                         sudo virsh net-start default
                     """,
-                    "sudo apt remove -y virt-manager"
+                    "sudo apt remove -y virt-manager",
                 ),
                 apt_package("gnome-boxes"),
                 apt_package("gnome-software-plugin-flatpak"),
@@ -279,6 +279,7 @@ distro_packages: dict[str, dict[str, package_list]] = {
                 apt_package("solaar"),
                 apt_package("python3-nautilus"),
                 apt_package("distrobox"),
+                apt_package("timeshift"),
             ]
         ),
         "remove": package_list(
@@ -369,9 +370,7 @@ distro_scripts = {
                 )
             ]
         ),
-        "after": bash_script_list(
-            []
-        ),
+        "after": bash_script_list([]),
     },
     "debian": {
         "before": bash_script_list(
