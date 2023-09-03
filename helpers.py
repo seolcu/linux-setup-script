@@ -212,6 +212,8 @@ distro_packages: dict[str, dict[str, PackageList]] = {
                 FlathubPackage("com.rafaelmardojai.Blanket"),
                 FlathubPackage("org.gnome.NetworkDisplays"),
                 FlathubPackage("com.obsproject.Studio"),
+                FlathubPackage("org.kde.kdenlive"),
+                FlathubPackage("org.gimp.GIMP"),
                 FlathubPackage("org.videolan.VLC"),
                 FlathubPackage("md.obsidian.Obsidian"),
                 FlathubPackage("org.onlyoffice.desktopeditors"),
