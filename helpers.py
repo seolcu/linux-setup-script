@@ -7,7 +7,7 @@ import constants as c
 # Classes
 
 
-class package:
+class Package:
     name: str
     install_command: str
     remove_command: str
@@ -26,7 +26,7 @@ class package:
         self.process(False)
 
 
-class manual_package(package):
+class ManualPackage(Package):
     def __init__(
         self,
         name: str,
@@ -38,7 +38,7 @@ class manual_package(package):
         self.remove_command: str = remove_command
 
 
-class flathub_package(package):
+class FlathubPackage(Package):
     def __init__(self, url: str):
         self.url: str = url
         self.name: str = f"Flathub: {url}"
@@ -46,7 +46,7 @@ class flathub_package(package):
         self.remove_command: str = f"flatpak remove -y {url}"
 
 
-class apt_package(package):
+class AptPackage(Package):
     def __init__(self, apt_name: str):
         self.apt_name: str = apt_name
         self.name: str = f"apt: {apt_name}"
@@ -54,7 +54,7 @@ class apt_package(package):
         self.remove_command: str = f"sudo apt remove -y {apt_name}"
 
 
-class dnf_package(package):
+class DnfPackage(Package):
     def __init__(self, dnf_name: str):
         self.dnf_name: str = dnf_name
         self.name: str = f"dnf: {dnf_name}"
@@ -62,7 +62,7 @@ class dnf_package(package):
         self.remove_command: str = f"sudo dnf remove -y {dnf_name}"
 
 
-class gnome_extension_package(package):
+class GnomeExtensionPackage(Package):
     def __init__(self, url: str):
         self.url: str = url
         self.name: str = f"GNOME Extension: {url}"
@@ -70,7 +70,7 @@ class gnome_extension_package(package):
         self.remove_command: str = f"gext uninstall {url}"
 
 
-class package_list:
+class PackageList:
     registered_indexes: int | tuple[int] | None
 
     # selecting packages for process
@@ -111,11 +111,11 @@ class package_list:
     def remove(self):
         self.process(False)
 
-    def __init__(self, raw_package_list: list[package]):
-        self.raw_package_list: list[package] = raw_package_list
+    def __init__(self, raw_package_list: list[Package]):
+        self.raw_package_list: list[Package] = raw_package_list
 
 
-class bash_script:
+class BashScript:
     def execute(self):
         display_title(self.name)
         if self.ask:
@@ -130,14 +130,14 @@ class bash_script:
         self.ask: bool = ask
 
 
-class bash_script_list:
+class BashScriptList:
     def execute(self):
         if len(self.raw_script_list) != 0:
             for a_script in self.raw_script_list:
                 a_script.execute()
 
-    def __init__(self, raw_script_list: list[bash_script]):
-        self.raw_script_list: list[bash_script] = raw_script_list
+    def __init__(self, raw_script_list: list[BashScript]):
+        self.raw_script_list: list[BashScript] = raw_script_list
 
 
 # Functions
@@ -200,40 +200,40 @@ def main():
 
 # Instances
 
-distro_packages: dict[str, dict[str, package_list]] = {
+distro_packages: dict[str, dict[str, PackageList]] = {
     "common": {
-        "install": package_list(
+        "install": PackageList(
             [
-                flathub_package("in.srev.guiscrcpy"),
-                flathub_package("com.mojang.Minecraft"),
-                flathub_package("io.mrarm.mcpelauncher"),
-                flathub_package("com.valvesoftware.Steam"),
-                flathub_package("org.gnome.Music"),
-                flathub_package("com.rafaelmardojai.Blanket"),
-                flathub_package("org.gnome.NetworkDisplays"),
-                flathub_package("com.obsproject.Studio"),
-                flathub_package("org.videolan.VLC"),
-                flathub_package("md.obsidian.Obsidian"),
-                flathub_package("org.onlyoffice.desktopeditors"),
-                flathub_package("com.usebottles.bottles"),
-                flathub_package("de.haeckerfelix.Fragments"),
-                flathub_package("com.discordapp.Discord"),
-                flathub_package("com.github.ztefn.haguichi"),
-                flathub_package("com.microsoft.Edge"),
-                flathub_package("org.gabmus.whatip"),
-                flathub_package("us.zoom.Zoom"),
-                flathub_package("com.github.unrud.VideoDownloader"),
-                flathub_package("com.github.tchx84.Flatseal"),
-                flathub_package("com.spotify.Client"),
-                flathub_package("com.protonvpn.www"),
-                flathub_package("org.remmina.Remmina"),
+                FlathubPackage("in.srev.guiscrcpy"),
+                FlathubPackage("com.mojang.Minecraft"),
+                FlathubPackage("io.mrarm.mcpelauncher"),
+                FlathubPackage("com.valvesoftware.Steam"),
+                FlathubPackage("org.gnome.Music"),
+                FlathubPackage("com.rafaelmardojai.Blanket"),
+                FlathubPackage("org.gnome.NetworkDisplays"),
+                FlathubPackage("com.obsproject.Studio"),
+                FlathubPackage("org.videolan.VLC"),
+                FlathubPackage("md.obsidian.Obsidian"),
+                FlathubPackage("org.onlyoffice.desktopeditors"),
+                FlathubPackage("com.usebottles.bottles"),
+                FlathubPackage("de.haeckerfelix.Fragments"),
+                FlathubPackage("com.discordapp.Discord"),
+                FlathubPackage("com.github.ztefn.haguichi"),
+                FlathubPackage("com.microsoft.Edge"),
+                FlathubPackage("org.gabmus.whatip"),
+                FlathubPackage("us.zoom.Zoom"),
+                FlathubPackage("com.github.unrud.VideoDownloader"),
+                FlathubPackage("com.github.tchx84.Flatseal"),
+                FlathubPackage("com.spotify.Client"),
+                FlathubPackage("com.protonvpn.www"),
+                FlathubPackage("org.remmina.Remmina"),
             ]
         ),
     },
     "debian": {
-        "install": package_list(
+        "install": PackageList(
             [
-                manual_package(
+                ManualPackage(
                     "vscode",
                     """
                         sudo apt install -y wget gpg
@@ -247,7 +247,7 @@ distro_packages: dict[str, dict[str, package_list]] = {
                     """,
                     "sudo apt remove -y code",
                 ),
-                manual_package(
+                ManualPackage(
                     "virt-manager",
                     """
                         sudo apt install -y virt-manager
@@ -257,12 +257,12 @@ distro_packages: dict[str, dict[str, package_list]] = {
                     """,
                     "sudo apt remove -y virt-manager",
                 ),
-                apt_package("gnome-boxes"),
-                apt_package("gnome-software-plugin-flatpak"),
-                apt_package("gcc"),
-                apt_package("g++"),
-                apt_package("default-jdk"),
-                manual_package(
+                AptPackage("gnome-boxes"),
+                AptPackage("gnome-software-plugin-flatpak"),
+                AptPackage("gcc"),
+                AptPackage("g++"),
+                AptPackage("default-jdk"),
+                ManualPackage(
                     "manual: nvm",
                     """
                         sudo apt install -y curl
@@ -270,33 +270,33 @@ distro_packages: dict[str, dict[str, package_list]] = {
                     """,
                     "",
                 ),
-                apt_package("curl"),
-                apt_package("wget"),
-                apt_package("gpg"),
-                apt_package("htop"),
-                apt_package("neofetch"),
-                apt_package("gh"),
-                apt_package("solaar"),
-                apt_package("python3-nautilus"),
-                apt_package("distrobox"),
-                apt_package("timeshift"),
+                AptPackage("curl"),
+                AptPackage("wget"),
+                AptPackage("gpg"),
+                AptPackage("htop"),
+                AptPackage("neofetch"),
+                AptPackage("gh"),
+                AptPackage("solaar"),
+                AptPackage("python3-nautilus"),
+                AptPackage("distrobox"),
+                AptPackage("timeshift"),
             ]
         ),
-        "remove": package_list(
+        "remove": PackageList(
             [
-                apt_package("gnome-games"),
-                apt_package("rhythmbox"),
-                apt_package("evolution"),
-                apt_package("zutty"),
-                apt_package("shotwell"),
+                AptPackage("gnome-games"),
+                AptPackage("rhythmbox"),
+                AptPackage("evolution"),
+                AptPackage("zutty"),
+                AptPackage("shotwell"),
             ]
         ),
     },
     "fedora": {
-        "install": package_list(
+        "install": PackageList(
             [
-                dnf_package("naver-nanum-gothic-fonts"),
-                manual_package(
+                DnfPackage("naver-nanum-gothic-fonts"),
+                ManualPackage(
                     "vscode",
                     """
                         sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
@@ -306,10 +306,10 @@ distro_packages: dict[str, dict[str, package_list]] = {
                     """,
                     "sudo dnf remove -y code",
                 ),
-                dnf_package("gcc"),
-                dnf_package("g++"),
-                dnf_package("java-latest-openjdk"),
-                manual_package(
+                DnfPackage("gcc"),
+                DnfPackage("g++"),
+                DnfPackage("java-latest-openjdk"),
+                ManualPackage(
                     "manual: nvm",
                     """
                         sudo dnf install -y curl
@@ -317,37 +317,37 @@ distro_packages: dict[str, dict[str, package_list]] = {
                     """,
                     "",
                 ),
-                dnf_package("curl"),
-                dnf_package("wget"),
-                dnf_package("gpg"),
-                dnf_package("htop"),
-                dnf_package("neofetch"),
-                dnf_package("gh"),
-                dnf_package("solaar"),
-                dnf_package("nautilus-python"),
-                dnf_package("nautilus-extensions"),
-                dnf_package("evolution-data-server"),
-                dnf_package("distrobox"),
-                dnf_package("libva-utils"),
+                DnfPackage("curl"),
+                DnfPackage("wget"),
+                DnfPackage("gpg"),
+                DnfPackage("htop"),
+                DnfPackage("neofetch"),
+                DnfPackage("gh"),
+                DnfPackage("solaar"),
+                DnfPackage("nautilus-python"),
+                DnfPackage("nautilus-extensions"),
+                DnfPackage("evolution-data-server"),
+                DnfPackage("distrobox"),
+                DnfPackage("libva-utils"),
             ]
         ),
-        "remove": package_list([dnf_package("rhythmbox")]),
+        "remove": PackageList([DnfPackage("rhythmbox")]),
     },
 }
 
 
-de_packages: dict[str, dict[str, package_list]] = {
+de_packages: dict[str, dict[str, PackageList]] = {
     "gnome": {
-        "install": package_list(
+        "install": PackageList(
             [
-                gnome_extension_package("appindicatorsupport@rgcjonas.gmail.com"),
-                gnome_extension_package("caffeine@patapon.info"),
-                gnome_extension_package("gsconnect@andyholmes.github.io"),
-                gnome_extension_package("gestureImprovements@gestures"),
-                gnome_extension_package("Vitals@CoreCoding.com"),
-                gnome_extension_package("clipboard-indicator@tudmotu.com"),
-                flathub_package("com.mattjakeman.ExtensionManager"),
-                flathub_package("io.github.realmazharhussain.GdmSettings"),
+                GnomeExtensionPackage("appindicatorsupport@rgcjonas.gmail.com"),
+                GnomeExtensionPackage("caffeine@patapon.info"),
+                GnomeExtensionPackage("gsconnect@andyholmes.github.io"),
+                GnomeExtensionPackage("gestureImprovements@gestures"),
+                GnomeExtensionPackage("Vitals@CoreCoding.com"),
+                GnomeExtensionPackage("clipboard-indicator@tudmotu.com"),
+                FlathubPackage("com.mattjakeman.ExtensionManager"),
+                FlathubPackage("io.github.realmazharhussain.GdmSettings"),
             ]
         ),
     }
@@ -356,9 +356,9 @@ de_packages: dict[str, dict[str, package_list]] = {
 
 distro_scripts = {
     "common": {
-        "before": bash_script_list(
+        "before": BashScriptList(
             [
-                bash_script(
+                BashScript(
                     # [Enable Function Keys On Keychron/Various Mechanical Keyboards Under Linux, with systemd](https://github.com/adam-savard/keyboard-function-keys-linux)
                     "Fix keyboard Fn issue? (https://github.com/adam-savard/keyboard-function-keys-linux)",
                     """
@@ -370,12 +370,12 @@ distro_scripts = {
                 )
             ]
         ),
-        "after": bash_script_list([]),
+        "after": BashScriptList([]),
     },
     "debian": {
-        "before": bash_script_list(
+        "before": BashScriptList(
             [
-                bash_script(
+                BashScript(
                     "Switch to Debian sid?",
                     """
                         sudo mv /etc/apt/sources.list /etc/apt/sources.list.old
@@ -385,7 +385,7 @@ distro_scripts = {
                     """,
                     ask=True,
                 ),
-                bash_script(
+                BashScript(
                     "Setup flatpak & flathub?",
                     """
                         sudo apt install -y flatpak
@@ -395,16 +395,16 @@ distro_scripts = {
                 ),
             ]
         ),
-        "after": bash_script_list(
+        "after": BashScriptList(
             [
-                bash_script(
+                BashScript(
                     "Updating the system",
                     """
                         sudo apt update -y
                         sudo apt upgrade -y
                     """,
                 ),
-                bash_script(
+                BashScript(
                     "Autoremoving packages",
                     """
                         sudo apt autoremove -y
@@ -414,9 +414,9 @@ distro_scripts = {
         ),
     },
     "fedora": {
-        "before": bash_script_list(
+        "before": BashScriptList(
             [
-                bash_script(
+                BashScript(
                     "Change the hostname?",
                     """
                         echo "type new hostname"
@@ -425,7 +425,7 @@ distro_scripts = {
                     """,
                     ask=True,
                 ),
-                bash_script(
+                BashScript(
                     "Edit dnf.conf to make it faster?",
                     """
                         sudo mv /etc/dnf/dnf.conf /etc/dnf/dnf.conf.old
@@ -433,7 +433,7 @@ distro_scripts = {
                     """,
                     ask=True,
                 ),
-                bash_script(
+                BashScript(
                     "Enable RPM Fusion & Switch to full ffmpeg & Install codecs?\n(No VAAPI codecs included)",
                     """
                         sudo dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
@@ -444,21 +444,21 @@ distro_scripts = {
                     """,
                     ask=True,
                 ),
-                bash_script(
+                BashScript(
                     "Install VAAPI codecs for Intel(recent)?",
                     """
                         sudo dnf install -y intel-media-driver
                     """,
                     ask=True,
                 ),
-                bash_script(
+                BashScript(
                     "Install VAAPI codecs for Intel(older)?",
                     """
                         sudo dnf install -y libva-intel-driver
                     """,
                     ask=True,
                 ),
-                bash_script(
+                BashScript(
                     "Install VAAPI codecs for AMD(mesa)?",
                     """
                         sudo dnf swap -y mesa-va-drivers mesa-va-drivers-freeworld
@@ -468,7 +468,7 @@ distro_scripts = {
                     """,
                     ask=True,
                 ),
-                bash_script(
+                BashScript(
                     "Install VAAPI codecs for NVIDIA?",
                     """
                         sudo dnf install -y nvidia-vaapi-driver
@@ -477,9 +477,9 @@ distro_scripts = {
                 ),
             ]
         ),
-        "after": bash_script_list(
+        "after": BashScriptList(
             [
-                bash_script(
+                BashScript(
                     "Updating the system",
                     """
                         sudo dnf update -y
