@@ -266,7 +266,7 @@ distro_packages: dict[str, dict[str, PackageList]] = {
                 AptPackage("g++"),
                 AptPackage("default-jdk"),
                 ManualPackage(
-                    "manual: nvm",
+                    "nvm",
                     """
                         sudo apt install -y curl
                         curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.4/install.sh | bash
