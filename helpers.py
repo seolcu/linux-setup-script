@@ -349,6 +349,7 @@ de_packages: dict[str, dict[str, PackageList]] = {
                 GnomeExtensionPackage("gestureImprovements@gestures"),
                 GnomeExtensionPackage("Vitals@CoreCoding.com"),
                 GnomeExtensionPackage("clipboard-indicator@tudmotu.com"),
+                GnomeExtensionPackage("thinkpad-battery-threshold@marcosdalvarez.org"),
                 FlathubPackage("com.mattjakeman.ExtensionManager"),
                 FlathubPackage("io.github.realmazharhussain.GdmSettings"),
             ]
