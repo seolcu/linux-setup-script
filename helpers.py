@@ -446,7 +446,7 @@ distro_scripts = {
                     "Edit dnf.conf to make it faster?",
                     """
                         sudo mv /etc/dnf/dnf.conf /etc/dnf/dnf.conf.old
-                        sudo cp ./assets/dnf.conf /etc/dnf/dnf.conf
+                        sudo cp ./assets/fedora/dnf.conf /etc/dnf/dnf.conf
                     """,
                     ask=True,
                 ),
