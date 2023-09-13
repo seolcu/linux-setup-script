@@ -265,6 +265,9 @@ distro_packages: dict[str, dict[str, PackageList]] = {
                 AptPackage("gcc"),
                 AptPackage("g++"),
                 AptPackage("default-jdk"),
+                AptPackage("python3-pip"),
+                AptPackage("python3-venv"),
+                AptPackage("black"),
                 ManualPackage(
                     "nvm",
                     """
