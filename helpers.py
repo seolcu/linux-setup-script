@@ -71,7 +71,7 @@ class GnomeExtensionPackage(Package):
 
 
 class PackageList:
-    registered_indexes: int | tuple[int] | None
+    registered_indexes: int | tuple[int, ...] | None
 
     # selecting packages for process
     def register(self, is_install: bool = True):
@@ -148,7 +148,7 @@ def display_title(title: str):
 
 
 def no_or_yes():
-    ans: int | tuple[int] | None = TerminalMenu(["No", "Yes"]).show()
+    ans: int | tuple[int, ...] | None = TerminalMenu(["No", "Yes"]).show()
     if type(ans) == int:
         return ans
     else:
@@ -156,7 +156,7 @@ def no_or_yes():
 
 
 def select_one(options: list[str]):
-    index: int | tuple[int] | None = TerminalMenu(options).show()
+    index: int | tuple[int, ...] | None = TerminalMenu(options).show()
     if type(index) == int:
         return options[index]
     else:
