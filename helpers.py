@@ -383,10 +383,20 @@ distro_scripts = {
         "before": BashScriptList(
             [
                 BashScript(
-                    "Switch to Debian sid?",
+                    "Switch to Debian Unstable?",
                     """
                         sudo mv /etc/apt/sources.list /etc/apt/sources.list.old
-                        sudo cp ./assets/sources.list /etc/apt/sources.list
+                        sudo cp ./assets/debian/unstable/sources.list /etc/apt/sources.list
+                        sudo apt update -y
+                        sudo apt upgrade -y
+                    """,
+                    ask=True,
+                ),
+                BashScript(
+                    "Switch to Debian Testing?",
+                    """
+                        sudo mv /etc/apt/sources.list /etc/apt/sources.list.old
+                        sudo cp ./assets/debian/testing/sources.list /etc/apt/sources.list
                         sudo apt update -y
                         sudo apt upgrade -y
                     """,
