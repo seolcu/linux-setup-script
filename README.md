@@ -33,3 +33,38 @@ deactivate
 cd ..
 rm -rf linux-setup-script
 ```
+
+## documentation: developer manual
+
+### 0. mission
+
+what this script do:
+
+    1. install native packages
+    2. setup flatpak
+    3. tweak package managers
+        - edit apt sources.list
+        - edit dnf.conf
+    4. install flatpak packages
+    5. install gnome extensions
+    6. add flatpak repos
+    7. add rpmfusion repos
+    8. install system codecs
+
+principles:
+
+    - only use sudo inside script. never run this script as root.
+    - use native package manager for CLI apps as possible
+    - use flatpak for GUI apps as possible
+    - reusability: make functions as possible
+    - clear process: nothing should happen if user selects nothing.
+    - no bloat: no unnecessary python dependencies should be installed.
+
+### 1. get system infos
+
+    - get distro name
+    - get desktop environment name
+
+### 2. install packages
+
+    -
