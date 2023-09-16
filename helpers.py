@@ -71,15 +71,10 @@ class GnomeExtensionPackage(Package):
 
 
 class PackageList:
-    registered_indexes: int | tuple[int, ...] | None
-
-    # selecting packages for process
-    def register(self, is_install: bool = True):
+    def register_and_process(self, is_install: bool = True):
         if len(self.raw_package_list) != 0:
-            if is_install:
-                display_title("Select packages to install")
-            else:
-                display_title("Select packages to remove")
+            display_title(f"Select packages to {'install' if is_install else 'remove'}")
+
             self.registered_indexes = TerminalMenu(
                 map(lambda a_package: a_package.name, self.raw_package_list),
                 multi_select=True,
@@ -88,28 +83,20 @@ class PackageList:
                 multi_select_empty_ok=True,
             ).show()
 
-    def is_registered(self):
-        if type(self.registered_indexes) == None:
-            return False
-        else:
-            return True
-
-    def process(self, is_install: bool):
-        if self.is_registered():
-            if type(self.registered_indexes) == int:
+            if type(self.registered_indexes) == None:
+                print("No packages registered")
+            elif type(self.registered_indexes) == int:
                 index = self.registered_indexes
                 self.raw_package_list[index].process(is_install)
             elif type(self.registered_indexes) == tuple:
                 for index in self.registered_indexes:
                     self.raw_package_list[index].process(is_install)
-        else:
-            print("No packages registered")
 
-    def install(self):
-        self.process(True)
+    def register_and_install(self):
+        self.register_and_process(is_install=True)
 
-    def remove(self):
-        self.process(False)
+    def register_and_remove(self):
+        self.register_and_process(is_install=False)
 
     def __init__(self, raw_package_list: list[Package]):
         self.raw_package_list: list[Package] = raw_package_list
@@ -172,30 +159,20 @@ def main():
     display_title("Select your DE")
     de = select_one(c.DE_LIST)
 
-    # register install
-    distro_packages[distro]["install"].register()
-    distro_packages["common"]["install"].register()
-    de_packages[de]["install"].register()
-
-    # register remove
-    distro_packages[distro]["remove"].register(is_install=False)
-
     # bash scripts - before process
-    distro_scripts[distro]["before"].execute()
     distro_scripts["common"]["before"].execute()
+    distro_scripts[distro]["before"].execute()
 
-    display_title("Final question: Execute registered installations & uninstallations?")
-    if no_or_yes():
-        # installation process
-        distro_packages[distro]["install"].install()
-        distro_packages["common"]["install"].install()
-        de_packages[de]["install"].install()
-        # removal process
-        distro_packages[distro]["remove"].remove()
+    # installation process
+    distro_packages[distro]["install"].register_and_install()
+    distro_packages["common"]["install"].register_and_install()
+    de_packages[de]["install"].register_and_install()
+    # removal process
+    distro_packages[distro]["remove"].register_and_remove()
 
     # bash scripts - after process
-    distro_scripts[distro]["after"].execute()
     distro_scripts["common"]["after"].execute()
+    distro_scripts[distro]["after"].execute()
 
 
 # Instances
@@ -204,32 +181,31 @@ distro_packages: dict[str, dict[str, PackageList]] = {
     "common": {
         "install": PackageList(
             [
-                FlathubPackage("in.srev.guiscrcpy"),
-                FlathubPackage("com.mojang.Minecraft"),
-                FlathubPackage("io.mrarm.mcpelauncher"),
-                FlathubPackage("com.valvesoftware.Steam"),
-                FlathubPackage("org.gnome.Music"),
-                FlathubPackage("com.rafaelmardojai.Blanket"),
-                FlathubPackage("org.gnome.NetworkDisplays"),
-                FlathubPackage("com.obsproject.Studio"),
-                FlathubPackage("org.kde.kdenlive"),
-                FlathubPackage("org.raspberrypi.rpi-imager"),
-                FlathubPackage("org.gimp.GIMP"),
-                FlathubPackage("org.videolan.VLC"),
-                FlathubPackage("md.obsidian.Obsidian"),
-                FlathubPackage("org.onlyoffice.desktopeditors"),
-                FlathubPackage("com.usebottles.bottles"),
-                FlathubPackage("de.haeckerfelix.Fragments"),
                 FlathubPackage("com.discordapp.Discord"),
+                FlathubPackage("com.github.tchx84.Flatseal"),
+                FlathubPackage("com.github.unrud.VideoDownloader"),
                 FlathubPackage("com.github.ztefn.haguichi"),
                 FlathubPackage("com.microsoft.Edge"),
-                FlathubPackage("org.gabmus.whatip"),
-                FlathubPackage("us.zoom.Zoom"),
-                FlathubPackage("com.github.unrud.VideoDownloader"),
-                FlathubPackage("com.github.tchx84.Flatseal"),
-                FlathubPackage("com.spotify.Client"),
+                FlathubPackage("com.mojang.Minecraft"),
+                FlathubPackage("com.obsproject.Studio"),
                 FlathubPackage("com.protonvpn.www"),
+                FlathubPackage("com.rafaelmardojai.Blanket"),
+                FlathubPackage("com.spotify.Client"),
+                FlathubPackage("com.usebottles.bottles"),
+                FlathubPackage("com.valvesoftware.Steam"),
+                FlathubPackage("de.haeckerfelix.Fragments"),
+                FlathubPackage("in.srev.guiscrcpy"),
+                FlathubPackage("io.mrarm.mcpelauncher"),
+                FlathubPackage("md.obsidian.Obsidian"),
+                FlathubPackage("org.gabmus.whatip"),
+                FlathubPackage("org.gimp.GIMP"),
+                FlathubPackage("org.gnome.NetworkDisplays"),
+                FlathubPackage("org.kde.kdenlive"),
+                FlathubPackage("org.onlyoffice.desktopeditors"),
+                FlathubPackage("org.raspberrypi.rpi-imager"),
                 FlathubPackage("org.remmina.Remmina"),
+                FlathubPackage("org.videolan.VLC"),
+                FlathubPackage("us.zoom.Zoom"),
             ]
         ),
     },
@@ -336,6 +312,7 @@ distro_packages: dict[str, dict[str, PackageList]] = {
                 DnfPackage("evolution-data-server"),
                 DnfPackage("distrobox"),
                 DnfPackage("libva-utils"),
+                FlathubPackage("org.gnome.Music"),
             ]
         ),
         "remove": PackageList([DnfPackage("rhythmbox")]),
@@ -367,6 +344,12 @@ distro_scripts = {
         "before": BashScriptList(
             [
                 BashScript(
+                    "update firmware?",
+                    # no -y option!! must be confirmed by user
+                    "sudo fwupdmgr update",
+                    ask=True,
+                ),
+                BashScript(
                     # [Enable Function Keys On Keychron/Various Mechanical Keyboards Under Linux, with systemd](https://github.com/adam-savard/keyboard-function-keys-linux)
                     "Fix keyboard Fn issue? (https://github.com/adam-savard/keyboard-function-keys-linux)",
                     """
@@ -375,7 +358,7 @@ distro_scripts = {
                         sudo systemctl start keychron
                     """,
                     ask=True,
-                )
+                ),
             ]
         ),
         "after": BashScriptList([]),
