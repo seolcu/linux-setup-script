@@ -75,3 +75,7 @@ rm -rf linux-setup-script
 - no confirmation should be duplicated
 - stability over efficiency
 - Keep it simple: no unnecessary features.
+
+### todos:
+
+- add 'up' command to simplify update process
