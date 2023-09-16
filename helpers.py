@@ -38,11 +38,11 @@ class ManualPackage(Package):
         self.remove_command: str = remove_command
 
 
-class FlathubPackage(Package):
+class FlatpakPackage(Package):
     def __init__(self, url: str):
         self.url: str = url
-        self.name: str = f"Flathub: {url}"
-        self.install_command: str = f"flatpak install flathub -y {url}"
+        self.name: str = f"Flatpak: {url}"
+        self.install_command: str = f"flatpak install -y {url}"
         self.remove_command: str = f"flatpak remove -y {url}"
 
 
@@ -166,31 +166,31 @@ distro_packages: dict[str, dict[str, PackageList]] = {
     "common": {
         "install": PackageList(
             [
-                FlathubPackage("com.discordapp.Discord"),
-                FlathubPackage("com.github.tchx84.Flatseal"),
-                FlathubPackage("com.github.unrud.VideoDownloader"),
-                FlathubPackage("com.github.ztefn.haguichi"),
-                FlathubPackage("com.microsoft.Edge"),
-                FlathubPackage("com.mojang.Minecraft"),
-                FlathubPackage("com.obsproject.Studio"),
-                FlathubPackage("com.protonvpn.www"),
-                FlathubPackage("com.rafaelmardojai.Blanket"),
-                FlathubPackage("com.spotify.Client"),
-                FlathubPackage("com.usebottles.bottles"),
-                FlathubPackage("com.valvesoftware.Steam"),
-                FlathubPackage("de.haeckerfelix.Fragments"),
-                FlathubPackage("in.srev.guiscrcpy"),
-                FlathubPackage("io.mrarm.mcpelauncher"),
-                FlathubPackage("md.obsidian.Obsidian"),
-                FlathubPackage("org.gabmus.whatip"),
-                FlathubPackage("org.gimp.GIMP"),
-                FlathubPackage("org.gnome.NetworkDisplays"),
-                FlathubPackage("org.kde.kdenlive"),
-                FlathubPackage("org.onlyoffice.desktopeditors"),
-                FlathubPackage("org.raspberrypi.rpi-imager"),
-                FlathubPackage("org.remmina.Remmina"),
-                FlathubPackage("org.videolan.VLC"),
-                FlathubPackage("us.zoom.Zoom"),
+                FlatpakPackage("com.discordapp.Discord"),
+                FlatpakPackage("com.github.tchx84.Flatseal"),
+                FlatpakPackage("com.github.unrud.VideoDownloader"),
+                FlatpakPackage("com.github.ztefn.haguichi"),
+                FlatpakPackage("com.microsoft.Edge"),
+                FlatpakPackage("com.mojang.Minecraft"),
+                FlatpakPackage("com.obsproject.Studio"),
+                FlatpakPackage("com.protonvpn.www"),
+                FlatpakPackage("com.rafaelmardojai.Blanket"),
+                FlatpakPackage("com.spotify.Client"),
+                FlatpakPackage("com.usebottles.bottles"),
+                FlatpakPackage("com.valvesoftware.Steam"),
+                FlatpakPackage("de.haeckerfelix.Fragments"),
+                FlatpakPackage("in.srev.guiscrcpy"),
+                FlatpakPackage("io.mrarm.mcpelauncher"),
+                FlatpakPackage("md.obsidian.Obsidian"),
+                FlatpakPackage("org.gabmus.whatip"),
+                FlatpakPackage("org.gimp.GIMP"),
+                FlatpakPackage("org.gnome.NetworkDisplays"),
+                FlatpakPackage("org.kde.kdenlive"),
+                FlatpakPackage("org.onlyoffice.desktopeditors"),
+                FlatpakPackage("org.raspberrypi.rpi-imager"),
+                FlatpakPackage("org.remmina.Remmina"),
+                FlatpakPackage("org.videolan.VLC"),
+                FlatpakPackage("us.zoom.Zoom"),
             ]
         ),
     },
@@ -297,7 +297,7 @@ distro_packages: dict[str, dict[str, PackageList]] = {
                 DnfPackage("evolution-data-server"),
                 DnfPackage("distrobox"),
                 DnfPackage("libva-utils"),
-                FlathubPackage("org.gnome.Music"),
+                FlatpakPackage("org.gnome.Music"),
             ]
         ),
         "remove": PackageList([DnfPackage("rhythmbox")]),
@@ -316,8 +316,8 @@ de_packages: dict[str, dict[str, PackageList]] = {
                 GnomeExtensionPackage("Vitals@CoreCoding.com"),
                 GnomeExtensionPackage("clipboard-indicator@tudmotu.com"),
                 GnomeExtensionPackage("thinkpad-battery-threshold@marcosdalvarez.org"),
-                FlathubPackage("com.mattjakeman.ExtensionManager"),
-                FlathubPackage("io.github.realmazharhussain.GdmSettings"),
+                FlatpakPackage("com.mattjakeman.ExtensionManager"),
+                FlatpakPackage("io.github.realmazharhussain.GdmSettings"),
             ]
         ),
     }
