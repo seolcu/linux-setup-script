@@ -15,9 +15,9 @@ class Package:
     # is_install: 0 is remove, 1 is install
     def process(self, is_install: bool):
         if is_install:
-            run(self.install_command, shell=True)
+            bash(self.install_command)
         else:
-            run(self.remove_command, shell=True)
+            bash(self.remove_command)
 
     def install(self):
         self.process(True)
@@ -108,7 +108,7 @@ class BashScript:
     def execute(self):
         display_question(self.question)
         if no_or_yes():
-            run(self.command, shell=True)
+            bash(self.command)
 
     def __init__(self, question: str, command: str):
         self.question: str = question
@@ -154,6 +154,10 @@ def select_one(options: list[str]):
         return options[index]
     else:
         return ""
+
+
+def bash(command: str):
+    run(command, shell=True)
 
 
 # Instances
