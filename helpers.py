@@ -159,30 +159,20 @@ def main():
     display_title("Select your DE")
     de = select_one(c.DE_LIST)
 
-    # register install
-    distro_packages[distro]["install"].register()
-    distro_packages["common"]["install"].register()
-    de_packages[de]["install"].register()
-
-    # register remove
-    distro_packages[distro]["remove"].register(is_install=False)
-
     # bash scripts - before process
-    distro_scripts[distro]["before"].execute()
     distro_scripts["common"]["before"].execute()
+    distro_scripts[distro]["before"].execute()
 
-    display_title("Final question: Execute registered installations & uninstallations?")
-    if no_or_yes():
-        # installation process
-        distro_packages[distro]["install"].install()
-        distro_packages["common"]["install"].install()
-        de_packages[de]["install"].install()
-        # removal process
-        distro_packages[distro]["remove"].remove()
+    # installation process
+    distro_packages[distro]["install"].register_and_install()
+    distro_packages["common"]["install"].register_and_install()
+    de_packages[de]["install"].register_and_install()
+    # removal process
+    distro_packages[distro]["remove"].register_and_remove()
 
     # bash scripts - after process
-    distro_scripts[distro]["after"].execute()
     distro_scripts["common"]["after"].execute()
+    distro_scripts[distro]["after"].execute()
 
 
 # Instances
