@@ -468,6 +468,8 @@ distro_scripts = {
 
 
 def main():
+    # 0. prepare
+
     display_title("Welcome to the Linux Setup Script")
 
     display_question("Select your distro")
@@ -475,15 +477,24 @@ def main():
     display_question("Select your DE")
     de = select_one(c.DE_LIST)
 
-    display_title("1. system setup")
+    # 1. native package management
+
+    display_title("Native Package Management")
+
+    # 2. flatpak management
+
+    display_title("Flatpak Management")
+
+    # 3. desktop enviroment setup
+
+    display_title("Desktop Enviroment Setup")
+
+    # 4. system setup
+
+    display_title("System Setup")
 
     BashScriptList(
         [
-            BashScript(
-                "firmware update with fwupdmgr?",
-                # no -y option!! must be confirmed by user
-                "sudo fwupdmgr update",
-            ),
             BashScript(
                 # [Enable Function Keys On Keychron/Various Mechanical Keyboards Under Linux, with systemd](https://github.com/adam-savard/keyboard-function-keys-linux)
                 "Fix keyboard Fn issue? (https://github.com/adam-savard/keyboard-function-keys-linux)",
@@ -493,14 +504,10 @@ def main():
                     sudo systemctl start keychron
                 """,
             ),
+            BashScript(
+                "firmware update with fwupdmgr?",
+                # no -y option!! must be confirmed by user
+                "sudo fwupdmgr update",
+            ),
         ]
-    )
-
-
-# 2. native package management
-
-# 3. flatpak management
-
-# 4. desktop enviroment setup
-
-# 5. etc
+    ).execute()
