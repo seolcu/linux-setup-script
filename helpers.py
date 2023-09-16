@@ -150,31 +150,6 @@ def select_one(options: list[str]):
         return ""
 
 
-# Main
-
-
-def main():
-    display_title("Select your distro")
-    distro = select_one(c.DISTRO_LIST)
-    display_title("Select your DE")
-    de = select_one(c.DE_LIST)
-
-    # bash scripts - before process
-    distro_scripts["common"]["before"].execute()
-    distro_scripts[distro]["before"].execute()
-
-    # installation process
-    distro_packages[distro]["install"].register_and_install()
-    distro_packages["common"]["install"].register_and_install()
-    de_packages[de]["install"].register_and_install()
-    # removal process
-    distro_packages[distro]["remove"].register_and_remove()
-
-    # bash scripts - after process
-    distro_scripts["common"]["after"].execute()
-    distro_scripts[distro]["after"].execute()
-
-
 # Instances
 
 distro_packages: dict[str, dict[str, PackageList]] = {
@@ -490,3 +465,27 @@ distro_scripts = {
         ),
     },
 }
+
+# Main
+
+
+def main():
+    display_title("Select your distro")
+    distro = select_one(c.DISTRO_LIST)
+    display_title("Select your DE")
+    de = select_one(c.DE_LIST)
+
+    # bash scripts - before process
+    distro_scripts["common"]["before"].execute()
+    distro_scripts[distro]["before"].execute()
+
+    # installation process
+    distro_packages[distro]["install"].register_and_install()
+    distro_packages["common"]["install"].register_and_install()
+    de_packages[de]["install"].register_and_install()
+    # removal process
+    distro_packages[distro]["remove"].register_and_remove()
+
+    # bash scripts - after process
+    distro_scripts["common"]["after"].execute()
+    distro_scripts[distro]["after"].execute()
