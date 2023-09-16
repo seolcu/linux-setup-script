@@ -73,7 +73,9 @@ class GnomeExtensionPackage(Package):
 class PackageList:
     def register_and_process(self, is_install: bool = True):
         if len(self.raw_package_list) != 0:
-            display_question(f"Select packages to {'install' if is_install else 'remove'}")
+            display_question(
+                f"Select packages to {'install' if is_install else 'remove'}"
+            )
 
             self.registered_indexes = TerminalMenu(
                 map(lambda a_package: a_package.name, self.raw_package_list),
@@ -104,18 +106,13 @@ class PackageList:
 
 class BashScript:
     def execute(self):
-        if self.ask:
-            display_question(self.name)
-            if no_or_yes():
-                run(self.command, shell=True)
-        else:
-            print(self.name)
+        display_question(self.question)
+        if no_or_yes():
             run(self.command, shell=True)
 
-    def __init__(self, name: str, command: str, ask: bool = False):
-        self.name: str = name
+    def __init__(self, question: str, command: str):
+        self.question: str = question
         self.command: str = command
-        self.ask: bool = ask
 
 
 class BashScriptList:
@@ -134,8 +131,10 @@ class BashScriptList:
 def display_title(title: str):
     print(Fore.GREEN + f"[!] {title}", end=f"{Style.RESET_ALL}\n")
 
+
 def display_question(question: str):
     print(Fore.BLUE + question, end=f"{Style.RESET_ALL}\n")
+
 
 def display_warning(warning: str):
     print(Fore.YELLOW + warning, end=f"{Style.RESET_ALL}\n")
@@ -329,7 +328,6 @@ distro_scripts = {
                     "update firmware?",
                     # no -y option!! must be confirmed by user
                     "sudo fwupdmgr update",
-                    ask=True,
                 ),
                 BashScript(
                     # [Enable Function Keys On Keychron/Various Mechanical Keyboards Under Linux, with systemd](https://github.com/adam-savard/keyboard-function-keys-linux)
@@ -339,7 +337,6 @@ distro_scripts = {
                         sudo systemctl enable keychron
                         sudo systemctl start keychron
                     """,
-                    ask=True,
                 ),
             ]
         ),
@@ -356,7 +353,6 @@ distro_scripts = {
                         sudo apt update -y
                         sudo apt upgrade -y
                     """,
-                    ask=True,
                 ),
                 BashScript(
                     "Switch to Debian Testing?",
@@ -366,7 +362,6 @@ distro_scripts = {
                         sudo apt update -y
                         sudo apt upgrade -y
                     """,
-                    ask=True,
                 ),
                 BashScript(
                     "Setup flatpak & flathub?",
@@ -374,7 +369,6 @@ distro_scripts = {
                         sudo apt install -y flatpak
                         sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
                     """,
-                    ask=True,
                 ),
             ]
         ),
@@ -406,7 +400,6 @@ distro_scripts = {
                         read input
                         sudo hostnamectl set-hostname $input
                     """,
-                    ask=True,
                 ),
                 BashScript(
                     "Edit dnf.conf to make it faster?",
@@ -414,7 +407,6 @@ distro_scripts = {
                         sudo mv /etc/dnf/dnf.conf /etc/dnf/dnf.conf.old
                         sudo cp ./assets/fedora/dnf.conf /etc/dnf/dnf.conf
                     """,
-                    ask=True,
                 ),
                 BashScript(
                     "Enable RPM Fusion & Switch to full ffmpeg & Install codecs?\n(No VAAPI codecs included)",
@@ -425,21 +417,18 @@ distro_scripts = {
                         sudo dnf groupupdate -y multimedia --setop="install_weak_deps=False" --exclude=PackageKit-gstreamer-plugin
                         sudo dnf groupupdate -y sound-and-video
                     """,
-                    ask=True,
                 ),
                 BashScript(
                     "Install VAAPI codecs for Intel(recent)?",
                     """
                         sudo dnf install -y intel-media-driver
                     """,
-                    ask=True,
                 ),
                 BashScript(
                     "Install VAAPI codecs for Intel(older)?",
                     """
                         sudo dnf install -y libva-intel-driver
                     """,
-                    ask=True,
                 ),
                 BashScript(
                     "Install VAAPI codecs for AMD(mesa)?",
@@ -449,14 +438,12 @@ distro_scripts = {
                         sudo dnf swap -y mesa-va-drivers.i686 mesa-va-drivers-freeworld.i686
                         sudo dnf swap -y mesa-vdpau-drivers.i686 mesa-vdpau-drivers-freeworld.i686
                     """,
-                    ask=True,
                 ),
                 BashScript(
                     "Install VAAPI codecs for NVIDIA?",
                     """
                         sudo dnf install -y nvidia-vaapi-driver
                     """,
-                    ask=True,
                 ),
             ]
         ),
@@ -490,7 +477,6 @@ def main():
         "firmware update with fwupdmgr?",
         # no -y option!! must be confirmed by user
         "sudo fwupdmgr update",
-        ask=True,
     ).execute()
 
     BashScript(
@@ -501,33 +487,12 @@ def main():
             sudo systemctl enable keychron
             sudo systemctl start keychron
         """,
-        ask=True,
     ).execute()
 
     # 2. native package management
-
-    # 2.1. tweak native package managers
-
-    if distro == "fedora":
-        
 
     # 3. flatpak management
 
     # 4. desktop enviroment setup
 
     # 5. etc
-
-    # bash scripts - before process
-    distro_scripts["common"]["before"].execute()
-    distro_scripts[distro]["before"].execute()
-
-    # installation process
-    distro_packages[distro]["install"].register_and_install()
-    distro_packages["common"]["install"].register_and_install()
-    de_packages[de]["install"].register_and_install()
-    # removal process
-    distro_packages[distro]["remove"].register_and_remove()
-
-    # bash scripts - after process
-    distro_scripts["common"]["after"].execute()
-    distro_scripts[distro]["after"].execute()
