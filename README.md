@@ -44,23 +44,22 @@ rm -rf linux-setup-script
 
 ### what this script do:
 
-1. system setup
-   1. fwupdmgr: firmware update(no -y option!! must be confirmed by user)
-   2. keyboard faulty fn keys fix
-2. native package management
+1. native package management
    1. tweak native package managers
    2. edit repos
    3. update packages
    4. install codecs and drivers
    5. install native packages
    6. remove unnecessary packages
-3. flatpak management
+2. flatpak management
    1. setup flatpak
    2. add flatpak repos
    3. install flatpak packages
-4. desktop environment setup
+3. desktop environment setup
    1. install extensions
-5. etc
+4. system setup
+   1. fix keyboard faulty fn keys
+   2. fwupdmgr: firmware update(no -y option!! must be confirmed by user)
 
 ### principles:
 
