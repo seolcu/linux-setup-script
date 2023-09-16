@@ -477,26 +477,30 @@ def main():
 
     display_title("1. system setup")
 
-    BashScript(
-        "firmware update with fwupdmgr?",
-        # no -y option!! must be confirmed by user
-        "sudo fwupdmgr update",
-    ).execute()
+    BashScriptList(
+        [
+            BashScript(
+                "firmware update with fwupdmgr?",
+                # no -y option!! must be confirmed by user
+                "sudo fwupdmgr update",
+            ),
+            BashScript(
+                # [Enable Function Keys On Keychron/Various Mechanical Keyboards Under Linux, with systemd](https://github.com/adam-savard/keyboard-function-keys-linux)
+                "Fix keyboard Fn issue? (https://github.com/adam-savard/keyboard-function-keys-linux)",
+                """
+                    sudo cp ./assets/keychron.service /etc/systemd/system/keychron.service
+                    sudo systemctl enable keychron
+                    sudo systemctl start keychron
+                """,
+            ),
+        ]
+    )
 
-    BashScript(
-        # [Enable Function Keys On Keychron/Various Mechanical Keyboards Under Linux, with systemd](https://github.com/adam-savard/keyboard-function-keys-linux)
-        "Fix keyboard Fn issue? (https://github.com/adam-savard/keyboard-function-keys-linux)",
-        """
-            sudo cp ./assets/keychron.service /etc/systemd/system/keychron.service
-            sudo systemctl enable keychron
-            sudo systemctl start keychron
-        """,
-    ).execute()
 
-    # 2. native package management
+# 2. native package management
 
-    # 3. flatpak management
+# 3. flatpak management
 
-    # 4. desktop enviroment setup
+# 4. desktop enviroment setup
 
-    # 5. etc
+# 5. etc
