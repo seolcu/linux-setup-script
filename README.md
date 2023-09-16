@@ -68,8 +68,10 @@ rm -rf linux-setup-script
 - use native package manager for CLI apps as possible
 - use flatpak for GUI apps as possible
 - reusability: make functions as possible
-- clear process: nothing should happen if user selects nothing.
 - no bloat: no unnecessary libraries should be installed.
 - don't reinvent the wheel: use existing libraries as possible.
-- no confirmation should be duplicated: use -y option as possible.
+- clear process: nothing should happen if user selects nothing.
+- always ask for confirmation
+- no confirmation should be duplicated
 - stability over efficiency
+- Keep it simple: no unnecessary features.
