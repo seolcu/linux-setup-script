@@ -73,7 +73,7 @@ class GnomeExtensionPackage(Package):
 class PackageList:
     def register_and_process(self, is_install: bool = True):
         if len(self.raw_package_list) != 0:
-            display_title(f"Select packages to {'install' if is_install else 'remove'}")
+            display_question(f"Select packages to {'install' if is_install else 'remove'}")
 
             self.registered_indexes = TerminalMenu(
                 map(lambda a_package: a_package.name, self.raw_package_list),
@@ -84,7 +84,7 @@ class PackageList:
             ).show()
 
             if type(self.registered_indexes) == None:
-                print("No packages registered")
+                display_warning("No packages registered")
             elif type(self.registered_indexes) == int:
                 index = self.registered_indexes
                 self.raw_package_list[index].process(is_install)
@@ -104,11 +104,12 @@ class PackageList:
 
 class BashScript:
     def execute(self):
-        display_title(self.name)
         if self.ask:
+            display_question(self.name)
             if no_or_yes():
                 run(self.command, shell=True)
         else:
+            print(self.name)
             run(self.command, shell=True)
 
     def __init__(self, name: str, command: str, ask: bool = False):
@@ -132,6 +133,12 @@ class BashScriptList:
 
 def display_title(title: str):
     print(Fore.GREEN + f"[!] {title}", end=f"{Style.RESET_ALL}\n")
+
+def display_question(question: str):
+    print(Fore.BLUE + question, end=f"{Style.RESET_ALL}\n")
+
+def display_warning(warning: str):
+    print(Fore.YELLOW + warning, end=f"{Style.RESET_ALL}\n")
 
 
 def no_or_yes():
@@ -470,10 +477,45 @@ distro_scripts = {
 
 
 def main():
-    display_title("Select your distro")
+    display_title("Welcome to the Linux Setup Script")
+
+    display_question("Select your distro")
     distro = select_one(c.DISTRO_LIST)
-    display_title("Select your DE")
+    display_question("Select your DE")
     de = select_one(c.DE_LIST)
+
+    display_title("1. system setup")
+
+    BashScript(
+        "firmware update with fwupdmgr?",
+        # no -y option!! must be confirmed by user
+        "sudo fwupdmgr update",
+        ask=True,
+    ).execute()
+
+    BashScript(
+        # [Enable Function Keys On Keychron/Various Mechanical Keyboards Under Linux, with systemd](https://github.com/adam-savard/keyboard-function-keys-linux)
+        "Fix keyboard Fn issue? (https://github.com/adam-savard/keyboard-function-keys-linux)",
+        """
+            sudo cp ./assets/keychron.service /etc/systemd/system/keychron.service
+            sudo systemctl enable keychron
+            sudo systemctl start keychron
+        """,
+        ask=True,
+    ).execute()
+
+    # 2. native package management
+
+    # 2.1. tweak native package managers
+
+    if distro == "fedora":
+        
+
+    # 3. flatpak management
+
+    # 4. desktop enviroment setup
+
+    # 5. etc
 
     # bash scripts - before process
     distro_scripts["common"]["before"].execute()
