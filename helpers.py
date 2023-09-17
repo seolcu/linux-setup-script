@@ -482,6 +482,13 @@ def main():
     BashScriptList(
         [
             BashScript(
+                "Add 'up' alias to ~/.bashrc to maintain system?",
+                # only use triple quotes
+                """
+                    echo "alias up='sudo apt update -y;sudo apt upgrade -y;sudo apt autoremove -y;flatpak update -y'" >> ~/.bashrc
+                """,
+            ),
+            BashScript(
                 # [Enable Function Keys On Keychron/Various Mechanical Keyboards Under Linux, with systemd](https://github.com/adam-savard/keyboard-function-keys-linux)
                 "Fix keyboard Fn issue? (https://github.com/adam-savard/keyboard-function-keys-linux)",
                 """
