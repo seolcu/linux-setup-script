@@ -41,7 +41,7 @@ class ManualPackage(Package):
 class FlatpakPackage(Package):
     def __init__(self, url: str):
         self.url: str = url
-        self.name: str = f"Flatpak: {url}"
+        self.name: str = f"flatpak: {url}"
         self.install_command: str = f"flatpak install -y {url}"
         self.remove_command: str = f"flatpak remove -y {url}"
 
@@ -329,146 +329,6 @@ de_packages: dict[str, dict[str, PackageList]] = {
 }
 
 
-distro_scripts = {
-    "common": {
-        "before": BashScriptList(
-            [
-                BashScript(
-                    "update firmware?",
-                    # no -y option!! must be confirmed by user
-                    "sudo fwupdmgr update",
-                ),
-                BashScript(
-                    # [Enable Function Keys On Keychron/Various Mechanical Keyboards Under Linux, with systemd](https://github.com/adam-savard/keyboard-function-keys-linux)
-                    "Fix keyboard Fn issue? (https://github.com/adam-savard/keyboard-function-keys-linux)",
-                    """
-                        sudo cp ./assets/keychron.service /etc/systemd/system/keychron.service
-                        sudo systemctl enable keychron
-                        sudo systemctl start keychron
-                    """,
-                ),
-            ]
-        ),
-        "after": BashScriptList([]),
-    },
-    "debian": {
-        "before": BashScriptList(
-            [
-                BashScript(
-                    "Switch to Debian Unstable?",
-                    """
-                        sudo mv /etc/apt/sources.list /etc/apt/sources.list.old
-                        sudo cp ./assets/debian/unstable/sources.list /etc/apt/sources.list
-                        sudo apt update -y
-                        sudo apt upgrade -y
-                    """,
-                ),
-                BashScript(
-                    "Switch to Debian Testing?",
-                    """
-                        sudo mv /etc/apt/sources.list /etc/apt/sources.list.old
-                        sudo cp ./assets/debian/testing/sources.list /etc/apt/sources.list
-                        sudo apt update -y
-                        sudo apt upgrade -y
-                    """,
-                ),
-                BashScript(
-                    "Setup flatpak & flathub?",
-                    """
-                        sudo apt install -y flatpak
-                        sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-                    """,
-                ),
-            ]
-        ),
-        "after": BashScriptList(
-            [
-                BashScript(
-                    "Updating the system",
-                    """
-                        sudo apt update -y
-                        sudo apt upgrade -y
-                    """,
-                ),
-                BashScript(
-                    "Autoremoving packages",
-                    """
-                        sudo apt autoremove -y
-                    """,
-                ),
-            ]
-        ),
-    },
-    "fedora": {
-        "before": BashScriptList(
-            [
-                BashScript(
-                    "Change the hostname?",
-                    """
-                        echo "type new hostname"
-                        read input
-                        sudo hostnamectl set-hostname $input
-                    """,
-                ),
-                BashScript(
-                    "Edit dnf.conf to make it faster?",
-                    """
-                        sudo mv /etc/dnf/dnf.conf /etc/dnf/dnf.conf.old
-                        sudo cp ./assets/fedora/dnf.conf /etc/dnf/dnf.conf
-                    """,
-                ),
-                BashScript(
-                    "Enable RPM Fusion & Switch to full ffmpeg & Install codecs?\n(No VAAPI codecs included)",
-                    """
-                        sudo dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
-                        sudo dnf groupupdate -y core
-                        sudo dnf swap -y ffmpeg-free ffmpeg --allowerasing
-                        sudo dnf groupupdate -y multimedia --setop="install_weak_deps=False" --exclude=PackageKit-gstreamer-plugin
-                        sudo dnf groupupdate -y sound-and-video
-                    """,
-                ),
-                BashScript(
-                    "Install VAAPI codecs for Intel(recent)?",
-                    """
-                        sudo dnf install -y intel-media-driver
-                    """,
-                ),
-                BashScript(
-                    "Install VAAPI codecs for Intel(older)?",
-                    """
-                        sudo dnf install -y libva-intel-driver
-                    """,
-                ),
-                BashScript(
-                    "Install VAAPI codecs for AMD(mesa)?",
-                    """
-                        sudo dnf swap -y mesa-va-drivers mesa-va-drivers-freeworld
-                        sudo dnf swap -y mesa-vdpau-drivers mesa-vdpau-drivers-freeworld
-                        sudo dnf swap -y mesa-va-drivers.i686 mesa-va-drivers-freeworld.i686
-                        sudo dnf swap -y mesa-vdpau-drivers.i686 mesa-vdpau-drivers-freeworld.i686
-                    """,
-                ),
-                BashScript(
-                    "Install VAAPI codecs for NVIDIA?",
-                    """
-                        sudo dnf install -y nvidia-vaapi-driver
-                    """,
-                ),
-            ]
-        ),
-        "after": BashScriptList(
-            [
-                BashScript(
-                    "Updating the system",
-                    """
-                        sudo dnf update -y
-                    """,
-                ),
-            ]
-        ),
-    },
-}
-
 # Main
 
 
@@ -486,17 +346,138 @@ def main():
 
     display_title("Native Package Management")
 
+    if distro == "debian":
+        BashScript(
+            "Backup sources.list?",
+            "sudo cp /etc/apt/sources.list /etc/apt/sources.list.old",
+        ).execute()
+
+        display_question("Select your Debian branch")
+        branch = select_one(["do nothing", "stable", "testing", "unstable"])
+        if branch != "do nothing":
+            bash(f"sudo cp ./assets/debian/{branch}/sources.list /etc/apt/sources.list")
+
+        BashScript(
+            "Update the system? (highly recommended)",
+            "sudo apt update -y;sudo apt upgrade -y",
+        ).execute()
+
+        distro_packages["debian"]["install"].register_and_install()
+
+        distro_packages["debian"]["remove"].register_and_remove()
+
+        BashScript(
+            "Autoremove?",
+            "sudo apt autoremove -y",
+        ).execute()
+
+    elif distro == "fedora":
+        BashScript(
+            "Backup dnf.conf?", "sudo cp /etc/dnf/dnf.conf /etc/dnf/dnf.conf.old"
+        ).execute()
+
+        BashScript(
+            "Edit dnf.conf to make it faster?",
+            "sudo cp ./assets/fedora/dnf.conf /etc/dnf/dnf.conf",
+        ).execute()
+
+        BashScript(
+            "Enable RPM Fusion?",
+            """
+                sudo dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+                sudo dnf groupupdate -y core
+            """,
+        ).execute()
+
+        BashScript(
+            "Update the system? (highly recommended)", "sudo dnf update -y"
+        ).execute()
+
+        BashScript(
+            "Switch to full ffmpeg?",
+            "sudo dnf swap -y ffmpeg-free ffmpeg --allowerasing",
+        ).execute()
+
+        BashScript(
+            "Install codecs? (No VAAPI codecs included))",
+            """
+                sudo dnf groupupdate -y multimedia --setop="install_weak_deps=False" --exclude=PackageKit-gstreamer-plugin
+                sudo dnf groupupdate -y sound-and-video
+            """,
+        ).execute()
+
+        BashScript(
+            "Install VAAPI codecs for Intel(recent)?",
+            "sudo dnf install -y intel-media-driver",
+        ).execute()
+
+        BashScript(
+            "Install VAAPI codecs for Intel(older)?",
+            "sudo dnf install -y libva-intel-driver",
+        ).execute()
+
+        BashScript(
+            "Install VAAPI codecs for AMD(mesa)?",
+            """
+                sudo dnf swap -y mesa-va-drivers mesa-va-drivers-freeworld
+                sudo dnf swap -y mesa-vdpau-drivers mesa-vdpau-drivers-freeworld
+                
+            """,
+        ).execute()
+
+        BashScript(
+            "Install VAAPI codecs for AMD(mesa) - i686?",
+            """
+                sudo dnf swap -y mesa-va-drivers.i686 mesa-va-drivers-freeworld.i686
+                sudo dnf swap -y mesa-vdpau-drivers.i686 mesa-vdpau-drivers-freeworld.i686
+            """,
+        )
+
+        BashScript(
+            "Install VAAPI codecs for NVIDIA?",
+            "sudo dnf install -y nvidia-vaapi-driver",
+        ).execute()
+
+        distro_packages["fedora"]["install"].register_and_install()
+        distro_packages["fedora"]["remove"].register_and_remove()
+
     # 2. flatpak management
 
     display_title("Flatpak Management")
+
+    if distro == "debian":
+        BashScript(
+            "Install flatpak?",
+            "sudo apt install -y flatpak",
+        ).execute()
+
+        BashScript(
+            "Add flathub repo?",
+            "sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo",
+        ).execute()
+
+    distro_packages["common"]["install"].register_and_install()
 
     # 3. desktop enviroment setup
 
     display_title("Desktop Enviroment Setup")
 
+    if de == "gnome":
+        de_packages["gnome"]["install"].register_and_install()
+
     # 4. system setup
 
     display_title("System Setup")
+
+    if distro == "fedora":
+        BashScript(
+            "Change the hostname?",
+            """
+                echo "type new hostname"
+                read input
+                sudo hostnamectl set-hostname $input
+            """,
+        )
 
     BashScriptList(
         [
