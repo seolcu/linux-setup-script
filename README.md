@@ -59,8 +59,9 @@ rm -rf linux-setup-script
    1. install extensions
 4. system setup
    1. (if needed) change hostname
-   2. fix keyboard faulty fn keys
-   3. fwupdmgr: firmware update(no -y option!! must be confirmed by user)
+   2. (if needed) enable firefox on wayland
+   3. fix keyboard faulty fn keys
+   4. fwupdmgr: firmware update(no -y option!! must be confirmed by user)
 
 ### principles:
 
