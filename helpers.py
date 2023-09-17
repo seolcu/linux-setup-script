@@ -431,7 +431,7 @@ def main():
                 sudo dnf swap -y mesa-va-drivers.i686 mesa-va-drivers-freeworld.i686
                 sudo dnf swap -y mesa-vdpau-drivers.i686 mesa-vdpau-drivers-freeworld.i686
             """,
-        )
+        ).execute()
 
         BashScript(
             "Install VAAPI codecs for NVIDIA?",
@@ -477,7 +477,7 @@ def main():
                 read input
                 sudo hostnamectl set-hostname $input
             """,
-        )
+        ).execute()
 
     BashScriptList(
         [
