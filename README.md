@@ -58,8 +58,9 @@ rm -rf linux-setup-script
 3. desktop environment setup
    1. install extensions
 4. system setup
-   1. fix keyboard faulty fn keys
-   2. fwupdmgr: firmware update(no -y option!! must be confirmed by user)
+   1. (if needed) change hostname
+   2. fix keyboard faulty fn keys
+   3. fwupdmgr: firmware update(no -y option!! must be confirmed by user)
 
 ### principles:
 
