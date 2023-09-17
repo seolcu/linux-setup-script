@@ -479,6 +479,15 @@ def main():
             """,
         ).execute()
 
+    if distro == "debian":
+        BashScript(
+            "Add 'MOZ_ENABLE_WAYLAND=1' to environment variables to enable Firefox Wayland?",
+            """
+                mkdir -p ~/.config/environment.d/
+                echo "MOZ_ENABLE_WAYLAND=1" > ~/.config/environment.d/firefox_wayland.conf
+            """,
+        ).execute()
+
     BashScriptList(
         [
             BashScript(
