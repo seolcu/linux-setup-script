@@ -71,7 +71,7 @@ class GnomeExtensionPackage(Package):
 
 
 class PackageList:
-    def register_and_process(self, is_install: bool = True):
+    def register(self, is_install: bool = True):
         if len(self.raw_package_list) != 0:
             display_question(
                 f"Select packages to {'install' if is_install else 'remove'}"
@@ -85,14 +85,19 @@ class PackageList:
                 multi_select_empty_ok=True,
             ).show()
 
-            if type(self.registered_indexes) == None:
-                display_warning("No packages registered")
-            elif type(self.registered_indexes) == int:
-                index = self.registered_indexes
+    def process(self, is_install: bool = True):
+        if type(self.registered_indexes) == None:
+            display_warning("No packages registered")
+        elif type(self.registered_indexes) == int:
+            index = self.registered_indexes
+            self.raw_package_list[index].process(is_install)
+        elif type(self.registered_indexes) == tuple:
+            for index in self.registered_indexes:
                 self.raw_package_list[index].process(is_install)
-            elif type(self.registered_indexes) == tuple:
-                for index in self.registered_indexes:
-                    self.raw_package_list[index].process(is_install)
+
+    def register_and_process(self, is_install: bool = True):
+        self.register(is_install)
+        self.process(is_install)
 
     def register_and_install(self):
         self.register_and_process(is_install=True)
