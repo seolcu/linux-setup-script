@@ -144,10 +144,10 @@ def no_or_yes():
         return no_or_yes()
 
 
-def select_one(options: list[str]):
+def select_one(options: list[str]) -> int:
     index: int | tuple[int, ...] | None = TerminalMenu(options).show()
     if type(index) == int:
-        return options[index]
+        return index
     else:
         display_warning("No option selected")
         return select_one(options)
@@ -330,9 +330,9 @@ def main():
     display_title("Welcome to the Linux Setup Script")
 
     display_question("Select your distro")
-    distro = select_one(c.DISTRO_LIST)
+    distro = c.DISTRO_LIST[select_one(c.DISTRO_LIST)]
     display_question("Select your DE")
-    de = select_one(c.DE_LIST)
+    de = c.DE_LIST[select_one(c.DE_LIST)]
 
     # 1. native package management
 
@@ -345,9 +345,12 @@ def main():
         ).execute()
 
         display_question("Select your Debian branch")
-        branch = select_one(["do nothing", "stable", "testing", "unstable"])
-        if branch != "do nothing":
-            bash(f"sudo cp ./assets/debian/{branch}/sources.list /etc/apt/sources.list")
+        branch_list = ["do nothing", "stable", "testing", "unstable"]
+        selected_branch = branch_list[select_one(branch_list)]
+        if selected_branch != "do nothing":
+            bash(
+                f"sudo cp ./assets/debian/{selected_branch}/sources.list /etc/apt/sources.list"
+            )
 
         BashScript(
             "Update the system? (highly recommended)",
