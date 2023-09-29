@@ -200,6 +200,7 @@ distro_packages: dict[str, dict[str, PackageList]] = {
                 FlatpakPackage("org.remmina.Remmina"),
                 FlatpakPackage("org.videolan.VLC"),
                 FlatpakPackage("us.zoom.Zoom"),
+                FlatpakPackage("im.riot.Riot"),
             ]
         ),
     },
