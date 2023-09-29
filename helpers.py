@@ -120,16 +120,6 @@ class BashScript:
         self.command: str = command
 
 
-class BashScriptList:
-    def execute(self):
-        if len(self.raw_script_list) != 0:
-            for a_script in self.raw_script_list:
-                a_script.execute()
-
-    def __init__(self, raw_script_list: list[BashScript]):
-        self.raw_script_list: list[BashScript] = raw_script_list
-
-
 # Functions
 
 
@@ -488,28 +478,24 @@ def main():
             """,
         ).execute()
 
-    BashScriptList(
-        [
-            BashScript(
-                "Add 'up' alias to ~/.bashrc to maintain system?",
-                # only use triple quotes
-                """
-                    echo "alias up='sudo apt update -y;sudo apt upgrade -y;sudo apt autoremove -y;flatpak update -y'" >> ~/.bashrc
-                """,
-            ),
-            BashScript(
-                # [Enable Function Keys On Keychron/Various Mechanical Keyboards Under Linux, with systemd](https://github.com/adam-savard/keyboard-function-keys-linux)
-                "Fix keyboard Fn issue? (https://github.com/adam-savard/keyboard-function-keys-linux)",
-                """
-                    sudo cp ./assets/keychron.service /etc/systemd/system/keychron.service
-                    sudo systemctl enable keychron
-                    sudo systemctl start keychron
-                """,
-            ),
-            BashScript(
-                "firmware update with fwupdmgr?",
-                # no -y option!! must be confirmed by user
-                "sudo fwupdmgr update",
-            ),
-        ]
+    BashScript(
+        "Add 'up' alias to ~/.bashrc to maintain system?",
+        # only use triple quotes
+        """
+            echo "alias up='sudo apt update -y;sudo apt upgrade -y;sudo apt autoremove -y;flatpak update -y'" >> ~/.bashrc
+        """,
+    ).execute()
+    BashScript(
+        # [Enable Function Keys On Keychron/Various Mechanical Keyboards Under Linux, with systemd](https://github.com/adam-savard/keyboard-function-keys-linux)
+        "Fix keyboard Fn issue? (https://github.com/adam-savard/keyboard-function-keys-linux)",
+        """
+            sudo cp ./assets/keychron.service /etc/systemd/system/keychron.service
+            sudo systemctl enable keychron
+            sudo systemctl start keychron
+        """,
+    ).execute()
+    BashScript(
+        "firmware update with fwupdmgr?",
+        # no -y option!! must be confirmed by user
+        "sudo fwupdmgr update",
     ).execute()
