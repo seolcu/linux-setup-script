@@ -140,7 +140,8 @@ def no_or_yes():
     if type(ans) == int:
         return ans
     else:
-        return 0
+        display_warning("No option selected")
+        return no_or_yes()
 
 
 def select_one(options: list[str]):
@@ -148,7 +149,8 @@ def select_one(options: list[str]):
     if type(index) == int:
         return options[index]
     else:
-        return ""
+        display_warning("No option selected")
+        return select_one(options)
 
 
 def bash(command: str):
