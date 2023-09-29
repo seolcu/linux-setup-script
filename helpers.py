@@ -13,16 +13,16 @@ class Package:
     remove_command: str
 
     # is_install: 0 is remove, 1 is install
-    def process(self, is_install: bool):
+    def process(self, is_install: bool) -> None:
         if is_install:
             bash(self.install_command)
         else:
             bash(self.remove_command)
 
-    def install(self):
+    def install(self) -> None:
         self.process(True)
 
-    def remove(self):
+    def remove(self) -> None:
         self.process(False)
 
 
@@ -32,14 +32,14 @@ class ManualPackage(Package):
         name: str,
         install_command: str,
         remove_command: str,
-    ):
+    ) -> None:
         self.name: str = f"manaul: {name}"
         self.install_command: str = install_command
         self.remove_command: str = remove_command
 
 
 class FlatpakPackage(Package):
-    def __init__(self, url: str):
+    def __init__(self, url: str) -> None:
         self.url: str = url
         self.name: str = f"flatpak: {url}"
         self.install_command: str = f"flatpak install -y {url}"
@@ -47,7 +47,7 @@ class FlatpakPackage(Package):
 
 
 class AptPackage(Package):
-    def __init__(self, apt_name: str):
+    def __init__(self, apt_name: str) -> None:
         self.apt_name: str = apt_name
         self.name: str = f"apt: {apt_name}"
         self.install_command: str = f"sudo apt install -y {apt_name}"
@@ -55,7 +55,7 @@ class AptPackage(Package):
 
 
 class DnfPackage(Package):
-    def __init__(self, dnf_name: str):
+    def __init__(self, dnf_name: str) -> None:
         self.dnf_name: str = dnf_name
         self.name: str = f"dnf: {dnf_name}"
         self.install_command: str = f"sudo dnf install -y {dnf_name}"
@@ -63,7 +63,7 @@ class DnfPackage(Package):
 
 
 class GnomeExtensionPackage(Package):
-    def __init__(self, url: str):
+    def __init__(self, url: str) -> None:
         self.url: str = url
         self.name: str = f"GNOME Extension: {url}"
         self.install_command: str = f"gext install {url}"
@@ -71,51 +71,63 @@ class GnomeExtensionPackage(Package):
 
 
 class PackageList:
-    def register(self, is_install: bool = True):
+    def register(self, is_install: bool = True) -> int | tuple[int, ...] | None:
         if len(self.raw_package_list) != 0:
             display_question(
                 f"Select packages to {'install' if is_install else 'remove'}"
             )
 
-            self.registered_indexes = TerminalMenu(
+            registered_indexes: int | tuple[int, ...] | None = TerminalMenu(
                 map(lambda a_package: a_package.name, self.raw_package_list),
                 multi_select=True,
                 show_multi_select_hint=True,
                 multi_select_select_on_accept=False,
                 multi_select_empty_ok=True,
             ).show()
-
-    def process(self, is_install: bool = True):
-        if type(self.registered_indexes) == None:
+            return registered_indexes
+        else:
             display_warning("No packages registered")
-        elif type(self.registered_indexes) == int:
-            index = self.registered_indexes
+            return None
+
+    def process(
+        self, is_install: bool = True, indexes: int | tuple[int, ...] | None = None
+    ) -> None:
+        if type(indexes) == None:
+            display_warning("No packages registered")
+        elif type(indexes) == int:
+            index = indexes
             self.raw_package_list[index].process(is_install)
-        elif type(self.registered_indexes) == tuple:
-            for index in self.registered_indexes:
+        elif type(indexes) == tuple:
+            for index in indexes:
                 self.raw_package_list[index].process(is_install)
 
-    def register_and_process(self, is_install: bool = True):
+    def register_and_process(self, is_install: bool = True) -> None:
         self.register(is_install)
         self.process(is_install)
 
-    def register_and_install(self):
+    def register_and_install(self) -> None:
         self.register_and_process(is_install=True)
 
-    def register_and_remove(self):
+    def register_and_remove(self) -> None:
         self.register_and_process(is_install=False)
 
-    def __init__(self, raw_package_list: list[Package]):
+    def __init__(self, raw_package_list: list[Package]) -> None:
         self.raw_package_list: list[Package] = raw_package_list
 
 
 class BashScript:
-    def execute(self):
+    def ask(self) -> bool:
         display_question(self.question)
-        if no_or_yes():
-            bash(self.command)
+        return no_or_yes()
 
-    def __init__(self, question: str, command: str):
+    def execute(self) -> None:
+        bash(self.command)
+
+    def ask_and_execute(self) -> None:
+        if self.ask():
+            self.execute()
+
+    def __init__(self, question: str, command: str) -> None:
         self.question: str = question
         self.command: str = command
 
@@ -123,22 +135,22 @@ class BashScript:
 # Functions
 
 
-def display_title(title: str):
+def display_title(title: str) -> None:
     print(Fore.GREEN + f"[!] {title}", end=f"{Style.RESET_ALL}\n")
 
 
-def display_question(question: str):
+def display_question(question: str) -> None:
     print(Fore.BLUE + question, end=f"{Style.RESET_ALL}\n")
 
 
-def display_warning(warning: str):
+def display_warning(warning: str) -> None:
     print(Fore.YELLOW + warning, end=f"{Style.RESET_ALL}\n")
 
 
-def no_or_yes():
+def no_or_yes() -> bool:
     ans: int | tuple[int, ...] | None = TerminalMenu(["No", "Yes"]).show()
     if type(ans) == int:
-        return ans
+        return bool(ans)
     else:
         display_warning("No option selected")
         return no_or_yes()
@@ -153,7 +165,7 @@ def select_one(options: list[str]) -> int:
         return select_one(options)
 
 
-def bash(command: str):
+def bash(command: str) -> None:
     run(command, shell=True)
 
 
@@ -342,7 +354,7 @@ def main():
         BashScript(
             "Backup sources.list?",
             "sudo cp /etc/apt/sources.list /etc/apt/sources.list.old",
-        ).execute()
+        ).ask_and_execute()
 
         display_question("Select your Debian branch")
         branch_list = ["do nothing", "stable", "testing", "unstable"]
@@ -355,7 +367,7 @@ def main():
         BashScript(
             "Update the system? (highly recommended)",
             "sudo apt update -y;sudo apt upgrade -y",
-        ).execute()
+        ).ask_and_execute()
 
         distro_packages["debian"]["install"].register_and_install()
 
@@ -364,17 +376,17 @@ def main():
         BashScript(
             "Autoremove?",
             "sudo apt autoremove -y",
-        ).execute()
+        ).ask_and_execute()
 
     elif distro == "fedora":
         BashScript(
             "Backup dnf.conf?", "sudo cp /etc/dnf/dnf.conf /etc/dnf/dnf.conf.old"
-        ).execute()
+        ).ask_and_execute()
 
         BashScript(
             "Edit dnf.conf to make it faster?",
             "sudo cp ./assets/fedora/dnf.conf /etc/dnf/dnf.conf",
-        ).execute()
+        ).ask_and_execute()
 
         BashScript(
             "Enable RPM Fusion?",
@@ -382,16 +394,16 @@ def main():
                 sudo dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
                 sudo dnf groupupdate -y core
             """,
-        ).execute()
+        ).ask_and_execute()
 
         BashScript(
             "Update the system? (highly recommended)", "sudo dnf update -y"
-        ).execute()
+        ).ask_and_execute()
 
         BashScript(
             "Switch to full ffmpeg?",
             "sudo dnf swap -y ffmpeg-free ffmpeg --allowerasing",
-        ).execute()
+        ).ask_and_execute()
 
         BashScript(
             "Install codecs? (No VAAPI codecs included))",
@@ -399,17 +411,17 @@ def main():
                 sudo dnf groupupdate -y multimedia --setop="install_weak_deps=False" --exclude=PackageKit-gstreamer-plugin
                 sudo dnf groupupdate -y sound-and-video
             """,
-        ).execute()
+        ).ask_and_execute()
 
         BashScript(
             "Install VAAPI codecs for Intel(recent)?",
             "sudo dnf install -y intel-media-driver",
-        ).execute()
+        ).ask_and_execute()
 
         BashScript(
             "Install VAAPI codecs for Intel(older)?",
             "sudo dnf install -y libva-intel-driver",
-        ).execute()
+        ).ask_and_execute()
 
         BashScript(
             "Install VAAPI codecs for AMD(mesa)?",
@@ -418,7 +430,7 @@ def main():
                 sudo dnf swap -y mesa-vdpau-drivers mesa-vdpau-drivers-freeworld
                 
             """,
-        ).execute()
+        ).ask_and_execute()
 
         BashScript(
             "Install VAAPI codecs for AMD(mesa) - i686?",
@@ -426,12 +438,12 @@ def main():
                 sudo dnf swap -y mesa-va-drivers.i686 mesa-va-drivers-freeworld.i686
                 sudo dnf swap -y mesa-vdpau-drivers.i686 mesa-vdpau-drivers-freeworld.i686
             """,
-        ).execute()
+        ).ask_and_execute()
 
         BashScript(
             "Install VAAPI codecs for NVIDIA?",
             "sudo dnf install -y nvidia-vaapi-driver",
-        ).execute()
+        ).ask_and_execute()
 
         distro_packages["fedora"]["install"].register_and_install()
         distro_packages["fedora"]["remove"].register_and_remove()
@@ -444,12 +456,12 @@ def main():
         BashScript(
             "Install flatpak?",
             "sudo apt install -y flatpak",
-        ).execute()
+        ).ask_and_execute()
 
         BashScript(
             "Add flathub repo?",
             "sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo",
-        ).execute()
+        ).ask_and_execute()
 
     distro_packages["common"]["install"].register_and_install()
 
@@ -472,7 +484,7 @@ def main():
                 read input
                 sudo hostnamectl set-hostname $input
             """,
-        ).execute()
+        ).ask_and_execute()
 
     if distro == "debian":
         BashScript(
@@ -481,7 +493,7 @@ def main():
                 mkdir -p ~/.config/environment.d/
                 echo "MOZ_ENABLE_WAYLAND=1" > ~/.config/environment.d/firefox_wayland.conf
             """,
-        ).execute()
+        ).ask_and_execute()
 
     BashScript(
         "Add 'up' alias to ~/.bashrc to maintain system?",
@@ -489,7 +501,7 @@ def main():
         """
             echo "alias up='sudo apt update -y;sudo apt upgrade -y;sudo apt autoremove -y;flatpak update -y'" >> ~/.bashrc
         """,
-    ).execute()
+    ).ask_and_execute()
     BashScript(
         # [Enable Function Keys On Keychron/Various Mechanical Keyboards Under Linux, with systemd](https://github.com/adam-savard/keyboard-function-keys-linux)
         "Fix keyboard Fn issue? (https://github.com/adam-savard/keyboard-function-keys-linux)",
@@ -498,9 +510,9 @@ def main():
             sudo systemctl enable keychron
             sudo systemctl start keychron
         """,
-    ).execute()
+    ).ask_and_execute()
     BashScript(
         "firmware update with fwupdmgr?",
         # no -y option!! must be confirmed by user
         "sudo fwupdmgr update",
-    ).execute()
+    ).ask_and_execute()
