@@ -13,17 +13,17 @@ class Package:
     remove_command: str
 
     # is_install: 0 is remove, 1 is install
-    def process(self, is_install: bool) -> None:
+    def __process__(self, is_install: bool) -> None:
         if is_install:
             bash(self.install_command)
         else:
             bash(self.remove_command)
 
     def install(self) -> None:
-        self.process(True)
+        self.__process__(True)
 
     def remove(self) -> None:
-        self.process(False)
+        self.__process__(False)
 
 
 class ManualPackage(Package):
@@ -71,7 +71,7 @@ class GnomeExtensionPackage(Package):
 
 
 class PackageList:
-    def register(self, is_install: bool = True) -> int | tuple[int, ...] | None:
+    def __register__(self, is_install: bool = True) -> int | tuple[int, ...] | None:
         if len(self.raw_package_list) != 0:
             display_question(
                 f"Select packages to {'install' if is_install else 'remove'}"
@@ -89,43 +89,43 @@ class PackageList:
             display_warning("No packages registered")
             return None
 
-    def process(
+    def __process__(
         self, is_install: bool = True, indexes: int | tuple[int, ...] | None = None
     ) -> None:
         if type(indexes) == None:
             display_warning("No packages registered")
         elif type(indexes) == int:
             index = indexes
-            self.raw_package_list[index].process(is_install)
+            self.raw_package_list[index].__process__(is_install)
         elif type(indexes) == tuple:
             for index in indexes:
-                self.raw_package_list[index].process(is_install)
+                self.raw_package_list[index].__process__(is_install)
 
-    def register_and_process(self, is_install: bool = True) -> None:
-        self.register(is_install)
-        self.process(is_install)
+    def __register_and_process__(self, is_install: bool = True) -> None:
+        self.__register__(is_install)
+        self.__process__(is_install)
 
     def register_and_install(self) -> None:
-        self.register_and_process(is_install=True)
+        self.__register_and_process__(is_install=True)
 
     def register_and_remove(self) -> None:
-        self.register_and_process(is_install=False)
+        self.__register_and_process__(is_install=False)
 
     def __init__(self, raw_package_list: list[Package]) -> None:
         self.raw_package_list: list[Package] = raw_package_list
 
 
 class BashScript:
-    def ask(self) -> bool:
+    def __ask__(self) -> bool:
         display_question(self.question)
         return no_or_yes()
 
-    def execute(self) -> None:
+    def __execute__(self) -> None:
         bash(self.command)
 
     def ask_and_execute(self) -> None:
-        if self.ask():
-            self.execute()
+        if self.__ask__():
+            self.__execute__()
 
     def __init__(self, question: str, command: str) -> None:
         self.question: str = question
@@ -232,6 +232,7 @@ distro_packages: dict[str, dict[str, PackageList]] = {
                 ),
                 AptPackage("gnome-boxes"),
                 AptPackage("gnome-software-plugin-flatpak"),
+                AptPackage("gnome-shell-extension-appindicator"),
                 AptPackage("gcc"),
                 AptPackage("g++"),
                 AptPackage("default-jdk"),
