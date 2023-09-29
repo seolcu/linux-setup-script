@@ -102,8 +102,7 @@ class PackageList:
                 self.raw_package_list[index].__process__(is_install)
 
     def __register_and_process__(self, is_install: bool = True) -> None:
-        self.__register__(is_install)
-        self.__process__(is_install)
+        self.__process__(is_install, self.__register__(is_install))
 
     def register_and_install(self) -> None:
         self.__register_and_process__(is_install=True)
