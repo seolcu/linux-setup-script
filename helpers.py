@@ -51,7 +51,7 @@ class AptPackage(Package):
         self.apt_name: str = apt_name
         self.name: str = f"apt: {apt_name}"
         self.install_command: str = f"sudo apt install -y {apt_name}"
-        self.remove_command: str = f"sudo apt remove -y {apt_name}"
+        self.remove_command: str = f"sudo apt autoremove -y {apt_name}"
 
 
 class DnfPackage(Package):
@@ -413,11 +413,6 @@ def main():
         distro_packages["debian"]["install"].register_and_install()
 
         distro_packages["debian"]["remove"].register_and_remove()
-
-        BashScript(
-            "Autoremove?",
-            "sudo apt autoremove -y",
-        ).ask_and_execute()
 
     elif distro == "fedora":
         BashScript(
