@@ -174,38 +174,62 @@ distro_packages: dict[str, dict[str, PackageList]] = {
     "common": {
         "install": PackageList(
             [
-                FlatpakPackage("com.discordapp.Discord"),
-                FlatpakPackage("com.github.tchx84.Flatseal"),
-                FlatpakPackage("com.github.unrud.VideoDownloader"),
-                FlatpakPackage("com.github.ztefn.haguichi"),
-                FlatpakPackage("com.microsoft.Edge"),
-                FlatpakPackage("com.mojang.Minecraft"),
-                FlatpakPackage("com.obsproject.Studio"),
-                FlatpakPackage("com.protonvpn.www"),
+                # GNOME Apps
+                FlatpakPackage("org.gnome.Snapshot"),
+                FlatpakPackage("org.gnome.Connections"),
+                FlatpakPackage("org.gnome.Extensions"),
+                FlatpakPackage("org.gnome.Loupe"),
+                FlatpakPackage("org.gnome.Music"),
                 FlatpakPackage("com.rafaelmardojai.Blanket"),
-                FlatpakPackage("com.spotify.Client"),
-                FlatpakPackage("com.usebottles.bottles"),
-                FlatpakPackage("com.valvesoftware.Steam"),
                 FlatpakPackage("de.haeckerfelix.Fragments"),
-                FlatpakPackage("in.srev.guiscrcpy"),
-                FlatpakPackage("io.mrarm.mcpelauncher"),
-                FlatpakPackage("md.obsidian.Obsidian"),
+                FlatpakPackage("io.gitlab.adhami3310.Impression"),
+                FlatpakPackage("com.belmoussaoui.Obfuscate"),
+                FlatpakPackage("org.gnome.gitlab.YaLTeR.VideoTrimmer"),
+                FlatpakPackage("org.gnome.Boxes"),
+                FlatpakPackage("com.usebottles.bottles"),
+                FlatpakPackage("org.gnome.NetworkDisplays"),
                 FlatpakPackage("org.gabmus.whatip"),
                 FlatpakPackage("org.gimp.GIMP"),
-                FlatpakPackage("org.gnome.NetworkDisplays"),
+                ManualPackage(
+                    "Firefox Gnome Theme",
+                    "curl -s -o- https://raw.githubusercontent.com/rafaelmardojai/firefox-gnome-theme/master/scripts/install-by-curl.sh | bash",
+                    "",
+                ),
+                # KDE Apps
                 FlatpakPackage("org.kde.kdenlive"),
+                # Work
                 FlatpakPackage("org.onlyoffice.desktopeditors"),
-                FlatpakPackage("org.raspberrypi.rpi-imager"),
-                FlatpakPackage("org.remmina.Remmina"),
-                FlatpakPackage("org.videolan.VLC"),
+                FlatpakPackage("md.obsidian.Obsidian"),
+                # Communication
                 FlatpakPackage("us.zoom.Zoom"),
                 FlatpakPackage("im.riot.Riot"),
+                # Utilities
+                FlatpakPackage("com.github.tchx84.Flatseal"),
+                FlatpakPackage("com.obsproject.Studio"),
+                FlatpakPackage("com.github.unrud.VideoDownloader"),
+                FlatpakPackage("org.raspberrypi.rpi-imager"),
+                # Web
+                FlatpakPackage("com.microsoft.Edge"),
+                FlatpakPackage("com.protonvpn.www"),
+                # Games
+                FlatpakPackage("com.valvesoftware.Steam"),
+                FlatpakPackage("com.discordapp.Discord"),
+                FlatpakPackage("com.mojang.Minecraft"),
+                FlatpakPackage("io.mrarm.mcpelauncher"),
+                FlatpakPackage("com.github.ztefn.haguichi"),
+                # Etc
+                FlatpakPackage("com.spotify.Client"),
+                FlatpakPackage("in.srev.guiscrcpy"),
+                FlatpakPackage("org.remmina.Remmina"),
+                FlatpakPackage("org.videolan.VLC"),
             ]
         ),
     },
     "debian": {
         "install": PackageList(
             [
+                # GUI
+                ## Development
                 ManualPackage(
                     "vscode",
                     """
@@ -231,15 +255,23 @@ distro_packages: dict[str, dict[str, PackageList]] = {
                     "sudo apt remove -y virt-manager",
                 ),
                 AptPackage("gnome-boxes"),
-                AptPackage("gnome-software-plugin-flatpak"),
-                AptPackage("gnome-shell-extension-appindicator"),
+                AptPackage("gnome-console"),
+                ## Etc
+                AptPackage("timeshift"),
+                AptPackage("solaar"),
+                # CLI
+                ## Development
+                ### C/C++
                 AptPackage("gcc"),
                 AptPackage("g++"),
+                ### Java
                 AptPackage("default-jdk"),
+                ### Python
                 AptPackage("python3-pip"),
                 AptPackage("python3-venv"),
                 AptPackage("python3-ipykernel"),
                 AptPackage("black"),
+                ### Node.js
                 ManualPackage(
                     "nvm",
                     """
@@ -248,25 +280,33 @@ distro_packages: dict[str, dict[str, PackageList]] = {
                     """,
                     "",
                 ),
+                ## Utilities
                 AptPackage("curl"),
                 AptPackage("wget"),
                 AptPackage("gpg"),
                 AptPackage("htop"),
                 AptPackage("neofetch"),
                 AptPackage("gh"),
-                AptPackage("solaar"),
-                AptPackage("python3-nautilus"),
                 AptPackage("distrobox"),
-                AptPackage("timeshift"),
+                # Plugins
+                AptPackage("gnome-software-plugin-flatpak"),
+                AptPackage("gnome-shell-extension-appindicator"),
+                AptPackage("python3-nautilus"),
             ]
         ),
         "remove": PackageList(
             [
+                # [!] Don't remove gnome-terminal
+                # Mess
                 AptPackage("gnome-games"),
                 AptPackage("rhythmbox"),
                 AptPackage("evolution"),
                 AptPackage("zutty"),
                 AptPackage("shotwell"),
+                # Replace to newer apps
+                AptPackage("transmission-*"),
+                AptPackage("cheese"),
+                AptPackage("eog"),
             ]
         ),
     },
