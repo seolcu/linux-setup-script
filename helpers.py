@@ -292,6 +292,7 @@ distro_packages: dict[str, dict[str, PackageList]] = {
                 AptPackage("gnome-software-plugin-flatpak"),
                 AptPackage("gnome-shell-extension-appindicator"),
                 AptPackage("python3-nautilus"),
+                AptPackage("steam-devices"),
             ]
         ),
         "remove": PackageList(
