@@ -175,17 +175,25 @@ distro_packages: dict[str, dict[str, PackageList]] = {
         "install": PackageList(
             [
                 # GNOME Apps
+                ## Core
                 FlatpakPackage("org.gnome.Snapshot"),
                 FlatpakPackage("org.gnome.Connections"),
                 FlatpakPackage("org.gnome.Extensions"),
                 FlatpakPackage("org.gnome.Loupe"),
                 FlatpakPackage("org.gnome.Music"),
+                ## Circle
                 FlatpakPackage("com.rafaelmardojai.Blanket"),
+                FlatpakPackage("org.gnome.design.Emblem"),
                 FlatpakPackage("de.haeckerfelix.Fragments"),
                 FlatpakPackage("io.gitlab.adhami3310.Impression"),
+                FlatpakPackage("io.gitlab.gregorni.Letterpress"),
                 FlatpakPackage("com.belmoussaoui.Obfuscate"),
                 FlatpakPackage("org.gnome.gitlab.YaLTeR.VideoTrimmer"),
+                FlatpakPackage("re.sonny.Workbench"),
+                ## Development
                 FlatpakPackage("org.gnome.Boxes"),
+                FlatpakPackage("org.gnome.Builder"),
+                ## Etc
                 FlatpakPackage("com.usebottles.bottles"),
                 FlatpakPackage("org.gnome.NetworkDisplays"),
                 FlatpakPackage("org.gabmus.whatip"),
