@@ -259,6 +259,16 @@ distro_packages: dict[str, dict[str, PackageList]] = {
                 ## Etc
                 AptPackage("timeshift"),
                 AptPackage("solaar"),
+                ManualPackage(
+                    "ProtonVPN",
+                    """
+                        wget -P . -O protonvpn.deb https://repo.protonvpn.com/debian/dists/stable/main/binary-all/protonvpn-stable-release_1.0.3-2_all.deb
+                        sudo apt install -f -y ./protonvpn.deb
+                        sudo apt update -y
+                        sudo apt install -y protonvpn
+                    """,
+                    "sudo apt remove protonvpn",
+                ),
                 # CLI
                 ## Development
                 ### C/C++
