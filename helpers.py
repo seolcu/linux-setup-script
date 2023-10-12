@@ -308,8 +308,13 @@ distro_packages: dict[str, dict[str, PackageList]] = {
                 AptPackage("gh"),
                 AptPackage("distrobox"),
                 # Plugins
-                AptPackage("gnome-software-plugin-flatpak"),
+                ## GNOME extensions
                 AptPackage("gnome-shell-extension-appindicator"),
+                AptPackage("gnome-shell-extension-caffeine"),
+                AptPackage("gnome-shell-extension-gamemode"),
+                AptPackage("gnome-shell-extension-gsconnect"),
+                ## Etc
+                AptPackage("gnome-software-plugin-flatpak"),
                 AptPackage("python3-nautilus"),
                 AptPackage("steam-devices"),
             ]
