@@ -226,6 +226,7 @@ distro_packages: dict[str, dict[str, PackageList]] = {
                 FlatpakPackage("com.mojang.Minecraft"),
                 FlatpakPackage("io.mrarm.mcpelauncher"),
                 FlatpakPackage("com.github.ztefn.haguichi"),
+                FlatpakPackage("com.adobe.Flash-Player-Projector"),
                 # Etc
                 FlatpakPackage("com.spotify.Client"),
                 FlatpakPackage("in.srev.guiscrcpy"),
