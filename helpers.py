@@ -188,6 +188,7 @@ distro_packages: dict[str, dict[str, PackageList]] = {
                 FlatpakPackage("io.gitlab.adhami3310.Impression"),
                 FlatpakPackage("io.gitlab.gregorni.Letterpress"),
                 FlatpakPackage("com.belmoussaoui.Obfuscate"),
+                FlatpakPackage("org.gnome.Solanum"),
                 FlatpakPackage("org.gnome.gitlab.YaLTeR.VideoTrimmer"),
                 FlatpakPackage("re.sonny.Workbench"),
                 ## Development
