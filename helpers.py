@@ -563,6 +563,11 @@ def main():
         ).ask_and_execute()
 
     BashScript(
+        "Set bundler to install gems to ~/.gem?",
+        "bundle config set --local path '~/.gem'",
+    ).ask_and_execute()
+
+    BashScript(
         "Add 'up' alias to ~/.bashrc to maintain system?",
         # only use triple quotes
         """
