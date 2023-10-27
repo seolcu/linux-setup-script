@@ -303,6 +303,7 @@ distro_packages: dict[str, dict[str, PackageList]] = {
                 ),
                 ### Ruby
                 AptPackage("ruby-full"),
+                AptPackage("bundler"),
                 ## Utilities
                 AptPackage("curl"),
                 AptPackage("wget"),
