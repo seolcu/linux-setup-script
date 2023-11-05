@@ -1,7 +1,7 @@
 # linux-setup-script
 
 initial setup script for some distros.
-currently support Debian/Fedora/Mint, GNOME/KDE/Cinnamon/Xfce.
+currently support Debian, GNOME.
 
 ## setup
 
