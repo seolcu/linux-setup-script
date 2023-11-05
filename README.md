@@ -1,7 +1,6 @@
 # linux-setup-script
 
-initial setup script for some distros.
-currently support Debian, GNOME.
+OOTB productive setup script for Debian, GNOME.
 
 ## setup
 
@@ -32,7 +31,7 @@ pip3 install -r requirement.txt
 ./run.py
 ```
 
-### 4. cleanup
+### 4. cleanup if not needed anymore
 
 ```bash
 deactivate
@@ -40,41 +39,25 @@ cd ..
 rm -rf linux-setup-script
 ```
 
+### notes
+
+- this script is not using gext anymore, so you should install gnome extensions manually if they are not provided by debian.
+
 ## documentation: developer manual
 
 ### what this script do:
 
-1. native package management
+1. apt management
    1. tweak native package managers
-   2. edit repos
-   3. update packages
-   4. install codecs and drivers
-   5. install native packages
-   6. remove unnecessary packages
+   2. update packages
+   3. install native packages
 2. flatpak management
-   1. setup flatpak
+   1. install flatpak
    2. add flatpak repos
    3. install flatpak packages
-3. desktop environment setup
-   1. install extensions
-4. system setup
-   1. (if needed) change hostname
-   2. (if needed) enable firefox on wayland
-   3. fix keyboard faulty fn keys
-   4. fwupdmgr: firmware update(no -y option!! must be confirmed by user)
-
-### principles:
-
-- only use sudo inside script. never run this script as root.
-- use native package manager for CLI apps as possible
-- use flatpak for GUI apps as possible
-- reusability: make functions as possible
-- no bloat: no unnecessary libraries should be installed.
-- don't reinvent the wheel: use existing libraries as possible.
-- clear process: nothing should happen if user selects nothing.
-- always ask for confirmation
-- no confirmation should be duplicated
-- stability over efficiency
-- Keep it simple: no unnecessary features.
+3. misc
+   1. enable firefox on wayland
+   2. fix keyboard faulty fn keys
+   3. fwupdmgr: firmware update(no -y option!! must be confirmed by user)
 
 ### todos:
