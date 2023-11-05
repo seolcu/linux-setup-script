@@ -7,61 +7,6 @@ import constants as c
 # Classes
 
 
-class Package:
-    name: str
-    install_command: str
-    remove_command: str
-
-    # is_install: 0 is remove, 1 is install
-    def __process__(self, is_install: bool) -> None:
-        if is_install:
-            bash(self.install_command)
-        else:
-            bash(self.remove_command)
-
-    def install(self) -> None:
-        self.__process__(True)
-
-    def remove(self) -> None:
-        self.__process__(False)
-
-
-class ManualPackage(Package):
-    def __init__(
-        self,
-        name: str,
-        install_command: str,
-        remove_command: str,
-    ) -> None:
-        self.name: str = f"manual: {name}"
-        self.install_command: str = install_command
-        self.remove_command: str = remove_command
-
-
-class FlatpakPackage(Package):
-    def __init__(self, url: str) -> None:
-        self.url: str = url
-        self.name: str = f"flatpak: {url}"
-        self.install_command: str = f"flatpak install -y {url}"
-        self.remove_command: str = f"flatpak remove -y {url}"
-
-
-class AptPackage(Package):
-    def __init__(self, apt_name: str) -> None:
-        self.apt_name: str = apt_name
-        self.name: str = f"apt: {apt_name}"
-        self.install_command: str = f"sudo apt install -y {apt_name}"
-        self.remove_command: str = f"sudo apt autoremove -y {apt_name}"
-
-
-class GnomeExtensionPackage(Package):
-    def __init__(self, url: str) -> None:
-        self.url: str = url
-        self.name: str = f"GNOME Extension: {url}"
-        self.install_command: str = f"gext install {url}"
-        self.remove_command: str = f"gext uninstall {url}"
-
-
 class PackageList:
     def __register__(self, is_install: bool = True) -> int | tuple[int, ...] | None:
         if len(self.raw_package_list) != 0:
@@ -170,7 +115,6 @@ distro_packages: dict[str, dict[str, PackageList]] = {
                 ## Core
                 FlatpakPackage("org.gnome.Snapshot"),
                 FlatpakPackage("org.gnome.Connections"),
-                FlatpakPackage("org.gnome.Extensions"),
                 FlatpakPackage("org.gnome.Loupe"),
                 FlatpakPackage("org.gnome.Music"),
                 ## Circle
@@ -196,14 +140,11 @@ distro_packages: dict[str, dict[str, PackageList]] = {
                     "curl -s -o- https://raw.githubusercontent.com/rafaelmardojai/firefox-gnome-theme/master/scripts/install-by-curl.sh | bash",
                     "",
                 ),
-                # KDE Apps
-                FlatpakPackage("org.kde.kdenlive"),
                 # Work
                 FlatpakPackage("org.onlyoffice.desktopeditors"),
                 FlatpakPackage("md.obsidian.Obsidian"),
                 # Communication
                 FlatpakPackage("us.zoom.Zoom"),
-                FlatpakPackage("im.riot.Riot"),
                 # Utilities
                 FlatpakPackage("com.github.tchx84.Flatseal"),
                 FlatpakPackage("com.obsproject.Studio"),
@@ -224,6 +165,8 @@ distro_packages: dict[str, dict[str, PackageList]] = {
                 FlatpakPackage("in.srev.guiscrcpy"),
                 FlatpakPackage("org.remmina.Remmina"),
                 FlatpakPackage("org.videolan.VLC"),
+                FlatpakPackage("com.mattjakeman.ExtensionManager"),
+                FlatpakPackage("io.github.realmazharhussain.GdmSettings"),
             ]
         ),
     },
@@ -336,21 +279,6 @@ distro_packages: dict[str, dict[str, PackageList]] = {
 }
 
 
-de_packages: dict[str, dict[str, PackageList]] = {
-    "gnome": {
-        "install": PackageList(
-            [
-                GnomeExtensionPackage("gestureImprovements@gestures"),
-                GnomeExtensionPackage("Vitals@CoreCoding.com"),
-                GnomeExtensionPackage("thinkpad-battery-threshold@marcosdalvarez.org"),
-                FlatpakPackage("com.mattjakeman.ExtensionManager"),
-                FlatpakPackage("io.github.realmazharhussain.GdmSettings"),
-            ]
-        ),
-    }
-}
-
-
 # Main
 
 
@@ -359,74 +287,55 @@ def main():
 
     display_title("Welcome to the Linux Setup Script")
 
-    display_question("Select your distro")
-    distro = c.DISTRO_LIST[select_one(c.DISTRO_LIST)]
-    display_question("Select your DE")
-    de = c.DE_LIST[select_one(c.DE_LIST)]
+    # 1. apt management
 
-    # 1. native package management
+    display_title("APT Management")
 
-    display_title("Native Package Management")
+    BashScript(
+        "Backup sources.list?",
+        "sudo cp /etc/apt/sources.list /etc/apt/sources.list.old",
+    ).ask_and_execute()
 
-    if distro == "debian":
-        BashScript(
-            "Backup sources.list?",
-            "sudo cp /etc/apt/sources.list /etc/apt/sources.list.old",
-        ).ask_and_execute()
+    display_question("Select your Debian branch")
+    branch_list = ["do nothing", "stable", "testing", "unstable"]
+    selected_branch = branch_list[select_one(branch_list)]
+    if selected_branch != "do nothing":
+        bash(
+            f"sudo cp ./assets/debian/{selected_branch}/sources.list /etc/apt/sources.list"
+        )
 
-        display_question("Select your Debian branch")
-        branch_list = ["do nothing", "stable", "testing", "unstable"]
-        selected_branch = branch_list[select_one(branch_list)]
-        if selected_branch != "do nothing":
-            bash(
-                f"sudo cp ./assets/debian/{selected_branch}/sources.list /etc/apt/sources.list"
-            )
-
-        BashScript(
-            "Update the system? (highly recommended)",
-            "sudo apt update -y;sudo apt upgrade -y",
-        ).ask_and_execute()
-
-        distro_packages["debian"]["install"].register_and_install()
-
-        distro_packages["debian"]["remove"].register_and_remove()
+    BashScript(
+        "Update the system? (highly recommended)",
+        "sudo apt update -y;sudo apt upgrade -y",
+    ).ask_and_execute()
 
     # 2. flatpak management
 
     display_title("Flatpak Management")
 
-    if distro == "debian":
-        BashScript(
-            "Install flatpak?",
-            "sudo apt install -y flatpak",
-        ).ask_and_execute()
+    BashScript(
+        "Install flatpak?",
+        "sudo apt install -y flatpak",
+    ).ask_and_execute()
 
-        BashScript(
-            "Add flathub repo?",
-            "sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo",
-        ).ask_and_execute()
+    BashScript(
+        "Add flathub repo?",
+        "sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo",
+    ).ask_and_execute()
 
     distro_packages["common"]["install"].register_and_install()
 
-    # 3. desktop enviroment setup
+    # 3. misc
 
-    display_title("Desktop Enviroment Setup")
+    display_title("Misc.")
 
-    if de == "gnome":
-        de_packages["gnome"]["install"].register_and_install()
-
-    # 4. system setup
-
-    display_title("System Setup")
-
-    if distro == "debian":
-        BashScript(
-            "Add 'MOZ_ENABLE_WAYLAND=1' to environment variables to enable Firefox Wayland?",
-            """
-                mkdir -p ~/.config/environment.d/
-                echo "MOZ_ENABLE_WAYLAND=1" > ~/.config/environment.d/firefox_wayland.conf
-            """,
-        ).ask_and_execute()
+    BashScript(
+        "Add 'MOZ_ENABLE_WAYLAND=1' to environment variables to enable Firefox Wayland?",
+        """
+            mkdir -p ~/.config/environment.d/
+            echo "MOZ_ENABLE_WAYLAND=1" > ~/.config/environment.d/firefox_wayland.conf
+        """,
+    ).ask_and_execute()
 
     BashScript(
         "Set bundler to install gems to ~/.gem?",
@@ -440,6 +349,7 @@ def main():
             echo "alias up='sudo apt update -y;sudo apt upgrade -y;sudo apt autoremove -y;flatpak update -y'" >> ~/.bashrc
         """,
     ).ask_and_execute()
+
     BashScript(
         # [Enable Function Keys On Keychron/Various Mechanical Keyboards Under Linux, with systemd](https://github.com/adam-savard/keyboard-function-keys-linux)
         "Fix keyboard Fn issue? (https://github.com/adam-savard/keyboard-function-keys-linux)",
@@ -449,6 +359,7 @@ def main():
             sudo systemctl start keychron
         """,
     ).ask_and_execute()
+
     BashScript(
         "firmware update with fwupdmgr?",
         # no -y option!! must be confirmed by user
