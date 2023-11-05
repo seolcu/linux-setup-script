@@ -33,7 +33,7 @@ class ManualPackage(Package):
         install_command: str,
         remove_command: str,
     ) -> None:
-        self.name: str = f"manaul: {name}"
+        self.name: str = f"manual: {name}"
         self.install_command: str = install_command
         self.remove_command: str = remove_command
 
@@ -52,14 +52,6 @@ class AptPackage(Package):
         self.name: str = f"apt: {apt_name}"
         self.install_command: str = f"sudo apt install -y {apt_name}"
         self.remove_command: str = f"sudo apt autoremove -y {apt_name}"
-
-
-class DnfPackage(Package):
-    def __init__(self, dnf_name: str) -> None:
-        self.dnf_name: str = dnf_name
-        self.name: str = f"dnf: {dnf_name}"
-        self.install_command: str = f"sudo dnf install -y {dnf_name}"
-        self.remove_command: str = f"sudo dnf remove -y {dnf_name}"
 
 
 class GnomeExtensionPackage(Package):
@@ -341,48 +333,6 @@ distro_packages: dict[str, dict[str, PackageList]] = {
             ]
         ),
     },
-    "fedora": {
-        "install": PackageList(
-            [
-                DnfPackage("naver-nanum-gothic-fonts"),
-                ManualPackage(
-                    "vscode",
-                    """
-                        sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
-                        sudo sh -c 'echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/vscode.repo'
-                        dnf check-update
-                        sudo dnf install -y code
-                    """,
-                    "sudo dnf remove -y code",
-                ),
-                DnfPackage("gcc"),
-                DnfPackage("g++"),
-                DnfPackage("java-latest-openjdk"),
-                ManualPackage(
-                    "manual: nvm",
-                    """
-                        sudo dnf install -y curl
-                        curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.4/install.sh | bash
-                    """,
-                    "",
-                ),
-                DnfPackage("curl"),
-                DnfPackage("wget"),
-                DnfPackage("gpg"),
-                DnfPackage("htop"),
-                DnfPackage("neofetch"),
-                DnfPackage("gh"),
-                DnfPackage("solaar"),
-                DnfPackage("nautilus-python"),
-                DnfPackage("nautilus-extensions"),
-                DnfPackage("evolution-data-server"),
-                DnfPackage("distrobox"),
-                DnfPackage("libva-utils"),
-                FlatpakPackage("org.gnome.Music"),
-            ]
-        ),
-        "remove": PackageList([DnfPackage("rhythmbox")]),
-    },
 }
 
 
@@ -390,12 +340,8 @@ de_packages: dict[str, dict[str, PackageList]] = {
     "gnome": {
         "install": PackageList(
             [
-                GnomeExtensionPackage("appindicatorsupport@rgcjonas.gmail.com"),
-                GnomeExtensionPackage("caffeine@patapon.info"),
-                GnomeExtensionPackage("gsconnect@andyholmes.github.io"),
                 GnomeExtensionPackage("gestureImprovements@gestures"),
                 GnomeExtensionPackage("Vitals@CoreCoding.com"),
-                GnomeExtensionPackage("clipboard-indicator@tudmotu.com"),
                 GnomeExtensionPackage("thinkpad-battery-threshold@marcosdalvarez.org"),
                 FlatpakPackage("com.mattjakeman.ExtensionManager"),
                 FlatpakPackage("io.github.realmazharhussain.GdmSettings"),
@@ -445,76 +391,6 @@ def main():
 
         distro_packages["debian"]["remove"].register_and_remove()
 
-    elif distro == "fedora":
-        BashScript(
-            "Backup dnf.conf?", "sudo cp /etc/dnf/dnf.conf /etc/dnf/dnf.conf.old"
-        ).ask_and_execute()
-
-        BashScript(
-            "Edit dnf.conf to make it faster?",
-            "sudo cp ./assets/fedora/dnf.conf /etc/dnf/dnf.conf",
-        ).ask_and_execute()
-
-        BashScript(
-            "Enable RPM Fusion?",
-            """
-                sudo dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
-                sudo dnf groupupdate -y core
-            """,
-        ).ask_and_execute()
-
-        BashScript(
-            "Update the system? (highly recommended)", "sudo dnf update -y"
-        ).ask_and_execute()
-
-        BashScript(
-            "Switch to full ffmpeg?",
-            "sudo dnf swap -y ffmpeg-free ffmpeg --allowerasing",
-        ).ask_and_execute()
-
-        BashScript(
-            "Install codecs? (No VAAPI codecs included))",
-            """
-                sudo dnf groupupdate -y multimedia --setop="install_weak_deps=False" --exclude=PackageKit-gstreamer-plugin
-                sudo dnf groupupdate -y sound-and-video
-            """,
-        ).ask_and_execute()
-
-        BashScript(
-            "Install VAAPI codecs for Intel(recent)?",
-            "sudo dnf install -y intel-media-driver",
-        ).ask_and_execute()
-
-        BashScript(
-            "Install VAAPI codecs for Intel(older)?",
-            "sudo dnf install -y libva-intel-driver",
-        ).ask_and_execute()
-
-        BashScript(
-            "Install VAAPI codecs for AMD(mesa)?",
-            """
-                sudo dnf swap -y mesa-va-drivers mesa-va-drivers-freeworld
-                sudo dnf swap -y mesa-vdpau-drivers mesa-vdpau-drivers-freeworld
-                
-            """,
-        ).ask_and_execute()
-
-        BashScript(
-            "Install VAAPI codecs for AMD(mesa) - i686?",
-            """
-                sudo dnf swap -y mesa-va-drivers.i686 mesa-va-drivers-freeworld.i686
-                sudo dnf swap -y mesa-vdpau-drivers.i686 mesa-vdpau-drivers-freeworld.i686
-            """,
-        ).ask_and_execute()
-
-        BashScript(
-            "Install VAAPI codecs for NVIDIA?",
-            "sudo dnf install -y nvidia-vaapi-driver",
-        ).ask_and_execute()
-
-        distro_packages["fedora"]["install"].register_and_install()
-        distro_packages["fedora"]["remove"].register_and_remove()
-
     # 2. flatpak management
 
     display_title("Flatpak Management")
@@ -542,16 +418,6 @@ def main():
     # 4. system setup
 
     display_title("System Setup")
-
-    if distro == "fedora":
-        BashScript(
-            "Change the hostname?",
-            """
-                echo "type new hostname"
-                read input
-                sudo hostnamectl set-hostname $input
-            """,
-        ).ask_and_execute()
 
     if distro == "debian":
         BashScript(
