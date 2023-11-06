@@ -51,23 +51,6 @@ class PackageList:
         self.raw_package_list: list[Package] = raw_package_list
 
 
-class BashScript:
-    def __ask__(self) -> bool:
-        display_question(self.question)
-        return no_or_yes()
-
-    def __execute__(self) -> None:
-        bash(self.command)
-
-    def ask_and_execute(self) -> None:
-        if self.__ask__():
-            self.__execute__()
-
-    def __init__(self, question: str, command: str) -> None:
-        self.question: str = question
-        self.command: str = command
-
-
 # Functions
 
 
@@ -92,17 +75,36 @@ def no_or_yes() -> bool:
         return no_or_yes()
 
 
-def select_one(options: list[str]) -> int:
+def select_one_string(options: list[str]) -> str:
     index: int | tuple[int, ...] | None = TerminalMenu(options).show()
     if type(index) == int:
-        return index
+        return options[index]
     else:
         display_warning("No option selected")
-        return select_one(options)
+        return select_one_string(options)
 
 
-def bash(command: str) -> None:
-    run(command, shell=True)
+def select_multiple_strings(options: list[str]) -> None | list[str]:
+    indexes: int | tuple[int, ...] | None = TerminalMenu(
+        options,
+        multi_select=True,
+        show_multi_select_hint=True,
+        multi_select_select_on_accept=False,
+        multi_select_empty_ok=True,
+    ).show()
+    if type(indexes) == None:
+        display_warning("No packages registered")
+        return None
+    elif type(indexes) == int:
+        return [options[indexes]]
+    elif type(indexes) == tuple:
+        selected_options_list = []
+        for index in indexes:
+            selected_options_list += options[index]
+        return selected_options_list
+    else:
+        display_warning("Unexpected input")
+        return select_multiple_strings(options)
 
 
 # Instances
@@ -291,37 +293,92 @@ def main():
 
     display_title("APT Management")
 
-    BashScript(
-        "Backup sources.list?",
-        "sudo cp /etc/apt/sources.list /etc/apt/sources.list.old",
-    ).ask_and_execute()
+    display_question("Backup sources.list?")
+    if no_or_yes():
+        run("sudo cp /etc/apt/sources.list /etc/apt/sources.list.old", shell=True)
 
     display_question("Select your Debian branch")
-    branch_list = ["do nothing", "stable", "testing", "unstable"]
-    selected_branch = branch_list[select_one(branch_list)]
+    selected_branch = select_one_string(["do nothing", "stable", "testing", "unstable"])
     if selected_branch != "do nothing":
-        bash(
-            f"sudo cp ./assets/debian/{selected_branch}/sources.list /etc/apt/sources.list"
+        run(
+            f"sudo cp ./assets/debian/{selected_branch}/sources.list /etc/apt/sources.list",
+            shell=True,
         )
 
-    BashScript(
-        "Update the system? (highly recommended)",
-        "sudo apt update -y;sudo apt upgrade -y",
-    ).ask_and_execute()
+    display_question("Update the system? (highly recommended)")
+    if no_or_yes():
+        run("sudo apt update -y;sudo apt upgrade -y", shell=True)
+
+    display_question("Select native packages to install")
+    apt_packages_to_install = select_multiple_strings(c.APT_PACKAGES)
+    if type(apt_packages_to_install) == list:
+        run(["sudo", "apt", "install", "-y"] + apt_packages_to_install)
+
+    display_question("Install VSCode?")
+    if no_or_yes():
+        run(
+            """
+sudo apt-get install -y wget gpg
+wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
+sudo install -D -o root -g root -m 644 packages.microsoft.gpg /etc/apt/keyrings/packages.microsoft.gpg
+sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list'
+rm -f packages.microsoft.gpg
+sudo apt install -y apt-transport-https
+sudo apt update
+sudo apt install -y code
+""",
+            shell=True,
+        )
+
+    display_question("Install virt-manager?")
+    if no_or_yes():
+        run(
+            """
+sudo apt install -y virt-manager
+sudo usermod -a -G libvirt $(whoami)
+sudo virsh net-autostart default
+sudo virsh net-start default
+""",
+            shell=True,
+        )
+
+    display_question("Install ProtonVPN?")
+    if no_or_yes():
+        run(
+            """
+wget -P . -O protonvpn.deb https://repo.protonvpn.com/debian/dists/stable/main/binary-all/protonvpn-stable-release_1.0.3-2_all.deb
+sudo apt install -f -y ./protonvpn.deb
+rm ./protonvpn.deb
+sudo apt update -y
+sudo apt install -y protonvpn
+""",
+            shell=True,
+        )
+
+    display_question("Install NVM?")
+    if no_or_yes():
+        run(
+            """
+sudo apt install -y curl
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.4/install.sh | bash
+""",
+            shell=True,
+        )
 
     # 2. flatpak management
 
     display_title("Flatpak Management")
 
-    BashScript(
-        "Install flatpak?",
-        "sudo apt install -y flatpak",
-    ).ask_and_execute()
+    display_question("Install flatpak?")
+    if no_or_yes():
+        run("sudo apt install -y flatpak", shell=True)
 
-    BashScript(
-        "Add flathub repo?",
-        "sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo",
-    ).ask_and_execute()
+    display_question("Add flathub repo?")
+    if no_or_yes():
+        run(
+            "sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo",
+            shell=True,
+        )
 
     distro_packages["common"]["install"].register_and_install()
 
