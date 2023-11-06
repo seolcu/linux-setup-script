@@ -54,11 +54,9 @@ FLATPAK_PACKAGES = [
     # Communication
     "us.zoom.Zoom",
     # Utilities
-    "com.obsproject.Studio",
     "com.github.unrud.VideoDownloader",
     "org.raspberrypi.rpi-imager",
     # Web
-    "com.microsoft.Edge",
     # Games
     "com.discordapp.Discord",
     "com.mojang.Minecraft",
