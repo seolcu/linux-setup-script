@@ -53,7 +53,7 @@ def select_multiple_strings(options: list[str]) -> None | list[str]:
     elif type(indexes) == tuple:
         selected_options_list = []
         for index in indexes:
-            selected_options_list += options[index]
+            selected_options_list.append(options[index])
         return selected_options_list
     else:
         display_warning("Unexpected input")
