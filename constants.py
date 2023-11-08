@@ -6,8 +6,6 @@ APT_PACKAGES: list[str] = [
     ## Etc
     "timeshift",
     "solaar",
-    "obs-studio",
-    "steam-installer",
     # CLI
     ## Development
     ### C/C++
@@ -58,7 +56,9 @@ FLATPAK_PACKAGES = [
     "org.raspberrypi.rpi-imager",
     # Web
     # Games
+    "com.valvesoftware.Steam",
     "com.discordapp.Discord",
     "com.mojang.Minecraft",
     # Etc
+    "com.obsproject.Studio",
 ]
