@@ -72,6 +72,18 @@ def main():
 
     display_title("APT Management")
 
+    display_question("Backup sources.list?")
+    if no_or_yes():
+        run("sudo cp /etc/apt/sources.list /etc/apt/sources.list.old", shell=True)
+
+    display_question("Select your Debian branch")
+    selected_branch = select_one_string(["do nothing", "stable", "testing", "unstable"])
+    if selected_branch != "do nothing":
+        run(
+            f"sudo cp ./assets/debian/{selected_branch}/sources.list /etc/apt/sources.list",
+            shell=True,
+        )
+
     display_question("Update the system? (highly recommended)")
     if no_or_yes():
         run("sudo apt update -y;sudo apt upgrade -y", shell=True)
@@ -131,22 +143,6 @@ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.4/install.sh | bash
 """,
             shell=True,
         )
-
-    display_question("Backup sources.list?")
-    if no_or_yes():
-        run("sudo cp /etc/apt/sources.list /etc/apt/sources.list.old", shell=True)
-
-    display_question("Select your Debian branch")
-    selected_branch = select_one_string(["do nothing", "stable", "testing", "unstable"])
-    if selected_branch != "do nothing":
-        run(
-            f"sudo cp ./assets/debian/{selected_branch}/sources.list /etc/apt/sources.list",
-            shell=True,
-        )
-
-    display_question("Update the system? (highly recommended)")
-    if no_or_yes():
-        run("sudo apt update -y;sudo apt upgrade -y", shell=True)
 
     # 2. flatpak management
 

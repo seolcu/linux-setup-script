@@ -48,9 +48,9 @@ rm -rf linux-setup-script
 ### what this script do:
 
 1. apt management
-   1. update packages
-   2. install native packages
-   3. tweak native package managers
+   1. tweak native package managers
+   2. update packages
+   3. install native packages
 2. flatpak management
    1. install flatpak
    2. add flatpak repos
