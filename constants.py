@@ -38,6 +38,7 @@ APT_PACKAGES: list[str] = [
     "gnome-shell-extension-gsconnect",
     ## Etc
     "gnome-software-plugin-flatpak",
+    "steam-devices",
 ]
 
 FLATPAK_PACKAGES = [
