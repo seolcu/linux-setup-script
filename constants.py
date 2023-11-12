@@ -1,10 +1,14 @@
 # Constants
 
-APT_PACKAGES: list[str] = [
+DNF_PACKAGES: list[str] = [
     # GUI
-    ## Development
+    ## Browser
+    "firefox-wayland",
+    ## GNOME
+    "gnome-extensions-app"
+    ## Gaming
+    "steam",
     ## Etc
-    "timeshift",
     "solaar",
     # CLI
     ## Development
@@ -12,19 +16,11 @@ APT_PACKAGES: list[str] = [
     "gcc",
     "g++",
     ### Java
-    "default-jdk",
+    "java-latest-openjdk",
     ### Python
-    "python3-pip",
-    "python3-venv",
     "python3-ipykernel",
     "black",
-    ### Ruby
-    "ruby-full",
-    "bundler",
-    "jekyll",
     ## Utilities
-    "curl",
-    "wget",
     "htop",
     "neofetch",
     "gh",
@@ -34,11 +30,9 @@ APT_PACKAGES: list[str] = [
     ## GNOME extensions
     "gnome-shell-extension-appindicator",
     "gnome-shell-extension-caffeine",
-    "gnome-shell-extension-gamemode",
     "gnome-shell-extension-gsconnect",
-    ## Etc
-    "gnome-software-plugin-flatpak",
-    "steam-devices",
+    # Fonts
+    "google-noto-sans-cjk-fonts",
 ]
 
 FLATPAK_PACKAGES = [
@@ -57,7 +51,6 @@ FLATPAK_PACKAGES = [
     "org.raspberrypi.rpi-imager",
     # Web
     # Games
-    "com.valvesoftware.Steam",
     "com.discordapp.Discord",
     "com.mojang.Minecraft",
     # Etc
