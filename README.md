@@ -1,14 +1,8 @@
 # linux-setup-script
 
-OOTB productive setup script for Debian, GNOME.
+OOTB productive setup script for Fedora, GNOME.
 
 ## setup
-
-### 0. requirements
-
-- python3
-- python3-venv
-- git
 
 ### 1. clone this repo
 
@@ -41,23 +35,21 @@ rm -rf linux-setup-script
 
 ### notes
 
-- this script is not using gext anymore, so you should install gnome extensions manually if they are not provided by debian.
+- this script is not using gext anymore, so you should install gnome extensions manually if they are not provided by fedora repos.
 
 ## documentation: developer manual
 
 ### what this script do:
 
-1. apt management
-   1. tweak native package managers
-   2. update packages
-   3. install native packages
+1. dnf management
+   1. update packages
+   2. add RPMFusion repos
+   3. install neccessary RPMFusion packages (NVIDIA/AMD/Intel)
+   4. install native packages
 2. flatpak management
-   1. install flatpak
-   2. add flatpak repos
-   3. install flatpak packages
+   1. install flatpak packages
 3. misc
-   1. enable firefox on wayland
-   2. fix keyboard faulty fn keys
-   3. fwupdmgr: firmware update(no -y option!! must be confirmed by user)
+   1. fix keyboard faulty fn keys
+   2. fwupdmgr: firmware update(no -y option!! must be confirmed by user)
 
 ### todos:
