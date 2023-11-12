@@ -5,7 +5,7 @@ DNF_PACKAGES: list[str] = [
     ## Browser
     "firefox-wayland",
     ## GNOME
-    "gnome-extensions-app"
+    "gnome-extensions-app",
     ## Gaming
     "steam",
     ## Etc
