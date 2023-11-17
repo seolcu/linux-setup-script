@@ -2,13 +2,7 @@
 
 APT_PACKAGES: list[str] = [
     # GUI
-    ## GNOME
-    "gnome-extensions-app",
-    ## Gaming
-    "steam-installer",
-    ## Etc
     "solaar",
-    "obs-studio",
     # CLI
     ## Development
     ### C/C++
@@ -53,6 +47,9 @@ FLATPAK_PACKAGES = [
     "com.github.unrud.VideoDownloader",
     "org.raspberrypi.rpi-imager",
     # Games
+    "com.valvesoftware.Steam",
     "com.discordapp.Discord",
     "com.mojang.Minecraft",
+    # Etc
+    "com.obsproject.Studio",
 ]
