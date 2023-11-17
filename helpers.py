@@ -70,68 +70,47 @@ def main():
 
     # 1. apt management
 
-    display_title("DNF Management")
+    display_title("APT Management")
+
+    display_question("Add contrib and non-free repos?")
+    if no_or_yes():
+        run(
+            "sudo cp ./assets/debian/stable/sources.list /etc/apt/sources.list",
+            shell=True,
+        )
 
     display_question("Update the system? (highly recommended)")
     if no_or_yes():
-        run("sudo dnf update -y", shell=True)
-
-    display_question("Add RPMFusion repos?")
-    if no_or_yes():
-        run(
-            "sudo dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm; sudo dnf groupupdate -y core",
-            shell=True,
-        )
-
-    display_question("Install multimedia packages from RPMFusion?")
-    if no_or_yes():
-        gpu_type: str = select_one_string(["Intel", "AMD", "NVIDIA", "None"])
-
-        # Common
-        run(
-            """
-sudo dnf swap ffmpeg-free ffmpeg --allowerasing -y
-sudo dnf groupupdate multimedia --setop="install_weak_deps=False" --exclude=PackageKit-gstreamer-plugin -y
-sudo dnf groupupdate sound-and-video -y
-sudo dnf install rpmfusion-free-release-tainted -y
-sudo dnf install libdvdcss -y
-sudo dnf install rpmfusion-nonfree-release-tainted -y
-sudo dnf --repo=rpmfusion-nonfree-tainted install "*-firmware" -y
-""",
-            shell=True,
-        )
-
-        match gpu_type:
-            case "Intel":
-                run("sudo dnf install intel-media-driver -y", shell=True)
-            case "AMD":
-                run(
-                    """
-sudo dnf swap mesa-va-drivers mesa-va-drivers-freeworld -y
-sudo dnf swap mesa-vdpau-drivers mesa-vdpau-drivers-freeworld -y
-sudo dnf swap mesa-va-drivers.i686 mesa-va-drivers-freeworld.i686 -y
-sudo dnf swap mesa-vdpau-drivers.i686 mesa-vdpau-drivers-freeworld.i686 -y
-""",
-                    shell=True,
-                )
-            case "NVIDIA":
-                run("sudo dnf install nvidia-vaapi-driver -y", shell=True)
-            case "None":
-                display_warning("Not installing any VAAPI drivers")
+        run("sudo apt update -y; sudo apt upgrade -y", shell=True)
 
     display_question("Select native packages to install")
-    selected_dnf_packages = select_multiple_strings(c.DNF_PACKAGES)
-    if type(selected_dnf_packages) == list:
-        run(["sudo", "dnf", "install", "-y"] + selected_dnf_packages)
+    selected_apt_packages = select_multiple_strings(c.APT_PACKAGES)
+    if type(selected_apt_packages) == list:
+        run(["sudo", "apt", "install", "-y"] + selected_apt_packages)
 
+    display_question("Install virt-manager?")
+    if no_or_yes():
+        run(
+            """
+sudo apt install -y virt-manager
+sudo usermod -a -G libvirt $(whoami)
+sudo virsh net-autostart default
+sudo virsh net-start default
+""",
+            shell=True,
+        )
     display_question("Install VSCode?")
     if no_or_yes():
         run(
             """
-sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
-sudo sh -c 'echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/vscode.repo'
-dnf check-update
-sudo dnf install code -y
+sudo apt-get install wget gpg -y
+wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
+sudo install -D -o root -g root -m 644 packages.microsoft.gpg /etc/apt/keyrings/packages.microsoft.gpg
+sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list'
+rm -f packages.microsoft.gpg
+sudo apt install apt-transport-https -y
+sudo apt update -y
+sudo apt install code -y
 """,
             shell=True,
         )
@@ -140,11 +119,11 @@ sudo dnf install code -y
     if no_or_yes():
         run(
             """
-wget https://repo.protonvpn.com/fedora-39-stable/protonvpn-stable-release/protonvpn-stable-release-1.0.1-2.noarch.rpm
-sudo dnf install ./protonvpn-stable-release-1.0.1-2.noarch.rpm -y
-sudo dnf check-update
-sudo dnf upgrade -y
-sudo dnf install --refresh proton-vpn-gnome-desktop -y
+wget -P . -O protonvpn.deb https://repo.protonvpn.com/debian/dists/stable/main/binary-all/protonvpn-stable-release_1.0.3-2_all.deb
+sudo apt install -f -y ./protonvpn.deb
+rm ./protonvpn.deb
+sudo apt update -y
+sudo apt install -y proton-vpn-gnome-desktop
 """,
             shell=True,
         )
@@ -162,6 +141,24 @@ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
 
     display_title("Flatpak Management")
 
+    display_question("Install flatpak?")
+    if no_or_yes():
+        run("sudo apt install -y flatpak", shell=True)
+
+    display_question("Add flatpak integration to GNOME Software?")
+    if no_or_yes():
+        run(
+            "sudo apt install -y gnome-software-plugin-flatpak",
+            shell=True,
+        )
+
+    display_question("Add flathub repo?")
+    if no_or_yes():
+        run(
+            "sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo",
+            shell=True,
+        )
+
     display_question("Select flatpak packages to install")
     selected_flatpak_packages = select_multiple_strings(c.FLATPAK_PACKAGES)
     if type(selected_flatpak_packages) == list:
@@ -170,6 +167,18 @@ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
     # 3. misc
 
     display_title("Misc.")
+
+    display_question(
+        "Add 'MOZ_ENABLE_WAYLAND=1' to environment variables to enable Firefox Wayland?"
+    )
+    if no_or_yes():
+        run(
+            """
+mkdir -p ~/.config/environment.d/
+echo "MOZ_ENABLE_WAYLAND=1" > ~/.config/environment.d/firefox_wayland.conf
+""",
+            shell=True,
+        )
 
     display_question(
         "Fix keyboard Fn issue? (https://github.com/adam-savard/keyboard-function-keys-linux)"
