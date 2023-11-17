@@ -1,28 +1,32 @@
 # Constants
 
-DNF_PACKAGES: list[str] = [
+APT_PACKAGES: list[str] = [
     # GUI
-    ## Browser
-    "firefox-wayland",
     ## GNOME
     "gnome-extensions-app",
     ## Gaming
-    "steam",
+    "steam-installer",
     ## Etc
     "solaar",
+    "obs-studio",
     # CLI
     ## Development
     ### C/C++
     "gcc",
     "g++",
     ### Java
-    "java-latest-openjdk",
+    "default-jdk",
     ### Python
+    "python3-pip",
+    "python3-venv",
     "python3-ipykernel",
     "black",
     ## Utilities
+    "curl",
+    "wget",
     "htop",
     "neofetch",
+    "git",
     "gh",
     "distrobox",
     "neovim",
@@ -30,9 +34,8 @@ DNF_PACKAGES: list[str] = [
     ## GNOME extensions
     "gnome-shell-extension-appindicator",
     "gnome-shell-extension-caffeine",
+    "gnome-shell-extension-gamemode",
     "gnome-shell-extension-gsconnect",
-    # Fonts
-    "google-noto-sans-cjk-fonts",
 ]
 
 FLATPAK_PACKAGES = [
@@ -49,10 +52,7 @@ FLATPAK_PACKAGES = [
     # Utilities
     "com.github.unrud.VideoDownloader",
     "org.raspberrypi.rpi-imager",
-    # Web
     # Games
     "com.discordapp.Discord",
     "com.mojang.Minecraft",
-    # Etc
-    "com.obsproject.Studio",
 ]
