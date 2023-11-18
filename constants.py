@@ -36,22 +36,15 @@ APT_PACKAGES: list[str] = [
 
 FLATPAK_PACKAGES = [
     # GNOME Apps
-    ## Circle
-    "com.rafaelmardojai.Blanket",
     ## Etc
     "com.usebottles.bottles",
     # Work
     "org.onlyoffice.desktopeditors",
     "md.obsidian.Obsidian",
-    # Communication
-    "us.zoom.Zoom",
     # Utilities
-    "com.github.unrud.VideoDownloader",
     "org.raspberrypi.rpi-imager",
     # Games
     "com.valvesoftware.Steam",
-    "com.discordapp.Discord",
-    "com.mojang.Minecraft",
     # Etc
     "com.obsproject.Studio",
 ]
