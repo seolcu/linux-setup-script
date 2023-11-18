@@ -30,6 +30,8 @@ APT_PACKAGES: list[str] = [
     "gnome-shell-extension-caffeine",
     "gnome-shell-extension-gamemode",
     "gnome-shell-extension-gsconnect",
+    ## Etc
+    "steam-devices",
 ]
 
 FLATPAK_PACKAGES = [
