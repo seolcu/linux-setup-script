@@ -23,7 +23,6 @@ APT_PACKAGES: list[str] = [
     "git",
     "gh",
     "distrobox",
-    "neovim",
     # Plugins
     ## GNOME extensions
     "gnome-shell-extension-appindicator",

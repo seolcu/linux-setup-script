@@ -115,6 +115,26 @@ sudo apt install code -y
             shell=True,
         )
 
+    display_question("Install NeoVIM(AppImage)?")
+    if no_or_yes():
+        run(
+            """
+cd /usr/local/bin
+curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim.appimage
+sudo mv nvim.appimage nvim
+sudo chmod +x nvim
+CUSTOM_NVIM_PATH=/usr/local/bin/nvim
+set -u
+sudo update-alternatives --install /usr/bin/ex ex "${CUSTOM_NVIM_PATH}" 110
+sudo update-alternatives --install /usr/bin/vi vi "${CUSTOM_NVIM_PATH}" 110
+sudo update-alternatives --install /usr/bin/view view "${CUSTOM_NVIM_PATH}" 110
+sudo update-alternatives --install /usr/bin/vim vim "${CUSTOM_NVIM_PATH}" 110
+sudo update-alternatives --install /usr/bin/vimdiff vimdiff "${CUSTOM_NVIM_PATH}" 110
+cd ~
+""",
+            shell=True,
+        )
+
     display_question("Install ProtonVPN?")
     if no_or_yes():
         run(
