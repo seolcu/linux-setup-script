@@ -30,7 +30,7 @@ APT_PACKAGES: list[str] = [
     "gnome-shell-extension-gamemode",
     "gnome-shell-extension-gsconnect",
     ## Etc
-    "steam-devices",
+    "hugo",
 ]
 
 FLATPAK_PACKAGES = [
