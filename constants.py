@@ -2,6 +2,7 @@
 
 APT_PACKAGES: list[str] = [
     # GUI
+    "chromium",
     "solaar",
     # CLI
     ## Development
@@ -36,6 +37,7 @@ APT_PACKAGES: list[str] = [
 FLATPAK_PACKAGES = [
     # GNOME Apps
     ## Etc
+    "com.belmoussaoui.Decoder",
     "com.usebottles.bottles",
     # Work
     "org.onlyoffice.desktopeditors",
