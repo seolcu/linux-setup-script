@@ -133,6 +133,17 @@ sudo update-alternatives --install /usr/bin/vimdiff vimdiff "${CUSTOM_NVIM_PATH}
             shell=True,
         )
 
+    display_question("Install marp-cli(3.4.0)?")
+    if no_or_yes():
+        run(
+            """
+curl -LO https://github.com/marp-team/marp-cli/releases/download/v3.4.0/marp-cli-v3.4.0-linux.tar.gz
+tar -xzf marp-cli-v3.4.0-linux.tar.gz
+sudo mv marp /usr/local/bin/marp
+""",
+            shell=True,
+        )
+
     display_question("Install ProtonVPN?")
     if no_or_yes():
         run(
