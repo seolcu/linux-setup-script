@@ -105,6 +105,7 @@
       bottles
       rpi-imager
       obs-studio
+      fragments
       gnome.gnome-tweaks
 
       # GNOME Shell Extensions
