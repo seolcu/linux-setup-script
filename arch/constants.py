@@ -66,7 +66,7 @@ AUR_PACKAGES: list[str] = [
 
 FLATPAK_PACKAGES: list[str] = [
     # GNOME Apps
-    "com.mattjakeman.ExtensionManager"
+    "com.mattjakeman.ExtensionManager",
     ## Etc
     "com.belmoussaoui.Decoder",
     "com.usebottles.bottles",
