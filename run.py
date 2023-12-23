@@ -1,13 +1,8 @@
 #!/usr/bin/env python3
 
+import helpers
 
 if __name__ == "__main__":
-    import setup
-
-    setup.setup()
-
-    import helpers
-
     helpers.display_title("Welcome to the package manager")
     helpers.display_title("Setting up the environment")
     helpers.display_question("What distro are you using?")

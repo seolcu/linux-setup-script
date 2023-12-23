@@ -16,13 +16,21 @@ git clone https://github.com/seolcu/linux-setup-script
 cd linux-setup-script
 ```
 
-### 2. execute the script
+### 2. setup venv
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+pip3 install -r requirements.txt
+```
+
+### 3. execute the script
 
 ```bash
 ./run.py
 ```
 
-### 3. cleanup if not needed anymore
+### 4. cleanup if not needed anymore
 
 ```bash
 deactivate
