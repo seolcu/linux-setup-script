@@ -60,11 +60,13 @@ AUR_PACKAGES: list[str] = [
     # Plugins
     ## GNOME extensions
     "gnome-shell-extension-gsconnect",
+    "gnome-shell-extension-vitals",
 ]
 
 
 FLATPAK_PACKAGES: list[str] = [
     # GNOME Apps
+    "com.mattjakeman.ExtensionManager"
     ## Etc
     "com.belmoussaoui.Decoder",
     "com.usebottles.bottles",
