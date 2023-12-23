@@ -44,6 +44,8 @@ PACMAN_PACKAGES: list[str] = [
     ## Etc
     "texinfo",
     # Plugins
+    ## GNOME
+    "power-profiles-daemon",
     ## GNOME extensions
     "gnome-shell-extension-appindicator",
     "gnome-shell-extension-caffeine",
