@@ -4,6 +4,7 @@ APT_PACKAGES: list[str] = [
     # GUI
     "chromium",
     "solaar",
+    "virt-manager",
     # CLI
     ## Development
     ### C/C++
@@ -40,15 +41,6 @@ APT_PACKAGES: list[str] = [
 ]
 
 MANUAL_PACKAGES: list[dict[str, str]] = [
-    {
-        "name": "virt-manager",
-        "install": """
-sudo apt install -y virt-manager
-sudo usermod -a -G libvirt $(whoami)
-sudo virsh net-autostart default
-sudo virsh net-start default
-""",
-    },
     {
         "name": "Visual Studio Code",
         "install": """

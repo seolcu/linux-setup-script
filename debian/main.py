@@ -38,7 +38,7 @@ def main():
         for package in selected_manual_packages:
             subprocess.run(package.install, shell=True)
 
-    # 2. flatpak management
+    # 3. flatpak management
 
     helpers.display_title("Flatpak Management")
 
@@ -56,9 +56,22 @@ def main():
     if type(selected_flatpak_packages) == list:
         subprocess.run(["flatpak", "install", "-y"] + selected_flatpak_packages)
 
-    # 3. misc
+    # 4. misc
 
     helpers.display_title("Misc.")
+
+    helpers.display_question(
+        "Setup virt-manager?(add user to libvirt group, start default network)"
+    )
+    if helpers.no_or_yes():
+        subprocess.run(
+            """
+sudo usermod -a -G libvirt $(whoami)
+sudo virsh net-autostart default
+sudo virsh net-start default
+""",
+            shell=True,
+        )
 
     helpers.display_question(
         "Add 'MOZ_ENABLE_WAYLAND=1' to environment variables to enable Firefox Wayland?"

@@ -12,11 +12,11 @@ if __name__ == "__main__":
     if distro == "arch":
         import arch
 
-        arch.main()
+        arch.main.main()
     elif distro == "debian":
-        import debian.main as main
+        import debian.main
 
-        main.main()
+        debian.main.main()
     else:
         helpers.display_error("Unknown distro")
         exit(1)
