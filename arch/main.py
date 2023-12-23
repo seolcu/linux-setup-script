@@ -33,7 +33,7 @@ def main():
     helpers.display_question("Install paru(AUR helper)?")
     if helpers.no_or_yes():
         subprocess.run(
-            "mkdir ~/문서/AUR; cd ~/문서/AUR; git clone https://aur.archlinux.org/paru.git; cd paru; makepkg -si",
+            "mkdir ~/문서/AUR; cd ~/문서/AUR; git clone https://aur.archlinux.org/paru-bin.git; cd paru-bin; makepkg -si",
             shell=True,
         )
 
