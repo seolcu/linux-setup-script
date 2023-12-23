@@ -8,6 +8,7 @@ PACMAN_PACKAGES: list[str] = [
     "gnome-boxes",
     "steam",
     "obs-studio",
+    "fragments",
     # CLI
     ## Development
     ### C/C++
