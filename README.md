@@ -1,6 +1,6 @@
 # linux-setup-script
 
-OOTB productive setup script for debian, GNOME.
+OOTB productive setup script for [debian, arch, nix], GNOME.
 
 ## setup
 
@@ -16,21 +16,13 @@ git clone https://github.com/seolcu/linux-setup-script
 cd linux-setup-script
 ```
 
-### 2. setup python venv
-
-```bash
-python3 -m venv venv
-source venv/bin/activate
-pip3 install -r requirement.txt
-```
-
-### 3. execute the script
+### 2. execute the script
 
 ```bash
 ./run.py
 ```
 
-### 4. cleanup if not needed anymore
+### 3. cleanup if not needed anymore
 
 ```bash
 deactivate
