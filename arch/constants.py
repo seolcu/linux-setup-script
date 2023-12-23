@@ -12,12 +12,11 @@ PACMAN_PACKAGES: list[str] = [
     ## Development
     ### C/C++
     "gcc",
-    "g++",
     ### Java
     "jdk-openjdk",
     ### Python
     "python-ipykernel",
-    "pythonblack",
+    "python-black",
     ### Node.js
     "nodejs",
     ### Hugo
