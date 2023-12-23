@@ -52,3 +52,13 @@ def main():
     )
     if type(selected_flatpak_packages) == list:
         subprocess.run(["flatpak", "install", "-y"] + selected_flatpak_packages)
+
+    # 4. Misc.
+
+    helpers.display_question("Enable CUPS service?")
+    if helpers.no_or_yes():
+        subprocess.run("sudo systemctl enable --now cups", shell=True)
+
+    helpers.display_question("Enable bluetooth service?")
+    if helpers.no_or_yes():
+        subprocess.run("sudo systemctl enable --now bluetooth", shell=True)
