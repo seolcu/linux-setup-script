@@ -8,7 +8,7 @@ if __name__ == "__main__":
     helpers.display_question("What distro are you using?")
     distro = helpers.select_one_string(["arch", "debian"])
     if distro == "arch":
-        import arch
+        import arch.main
 
         arch.main.main()
     elif distro == "debian":
