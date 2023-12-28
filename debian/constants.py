@@ -56,6 +56,7 @@ FLATPAK_PACKAGES: list[str] = [
     "md.obsidian.Obsidian",
     # Utilities
     "org.raspberrypi.rpi-imager",
+    "org.videolan.VLC",
     # Games
     "com.valvesoftware.Steam",
     # Etc
