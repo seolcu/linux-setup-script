@@ -68,6 +68,15 @@ sudo apt install -y proton-vpn-gnome-desktop
             shell=True,
         )
 
+    helpers.display_question("Install NVM?")
+    if helpers.no_or_yes():
+        subprocess.run(
+            """
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+""",
+            shell=True,
+        )
+
     # 3. flatpak management
 
     helpers.display_title("Flatpak Management")

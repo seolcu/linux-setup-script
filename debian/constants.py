@@ -17,8 +17,6 @@ APT_PACKAGES: list[str] = [
     "python3-venv",
     "python3-ipykernel",
     "black",
-    ### Node.js
-    "nodejs",
     ## Utilities
     "curl",
     "wget",
