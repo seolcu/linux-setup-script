@@ -77,6 +77,18 @@ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
             shell=True,
         )
 
+    helpers.display_question("Install virt-manager?")
+    if helpers.no_or_yes():
+        subprocess.run(
+            """
+sudo apt install virt-manager -y
+sudo systemctl enable --now libvirtd
+sudo usermod -a -G libvirt $(whoami)
+sudo virsh net-autostart default
+""",
+            shell=True,
+        )
+
     # 3. flatpak management
 
     helpers.display_title("Flatpak Management")
