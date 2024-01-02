@@ -73,6 +73,7 @@ FLATPAK_PACKAGES: list[str] = [
     # Work
     "org.onlyoffice.desktopeditors",
     "md.obsidian.Obsidian",
+    "us.zoom.Zoom",
     # Utilities
     "org.raspberrypi.rpi-imager",
     "org.videolan.VLC",
