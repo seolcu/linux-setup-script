@@ -1,0 +1,138 @@
+import helpers
+import subprocess
+import fedora.constants
+
+
+def main():
+    # 1. dnf management
+
+    helpers.display_title("DNF Management")
+
+    helpers.display_question("Update the system? (highly recommended)")
+    if helpers.no_or_yes():
+        subprocess.run("sudo dnf update -y", shell=True)
+
+    helpers.display_question("Select native packages to install")
+    selected_dnf_packages = helpers.select_multiple_strings(
+        fedora.constants.DNF_PACKAGES
+    )
+    if type(selected_dnf_packages) == list:
+        subprocess.run(["sudo", "dnf", "install", "-y"] + selected_dnf_packages)
+
+    # 2. manual package management
+
+    helpers.display_title("Manual Package Management")
+
+    helpers.display_question("Install VSCode?")
+    if helpers.no_or_yes():
+        subprocess.run(
+            """
+sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
+sudo sh -c 'echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/vscode.repo'
+dnf check-update -y
+sudo dnf install code -y
+""",
+            shell=True,
+        )
+
+    helpers.display_question("Install ProtonVPN?")
+    if helpers.no_or_yes():
+        subprocess.run(
+            """
+wget https://repo.protonvpn.com/fedora-39-stable/protonvpn-stable-release/protonvpn-stable-release-1.0.1-2.noarch.rpm
+sudo dnf install ./protonvpn-stable-release-1.0.1-2.noarch.rpm -y
+rm ./protonvpn-stable-release-1.0.1-2.noarch.rpm
+sudo dnf install --refresh proton-vpn-gnome-desktop -y
+""",
+            shell=True,
+        )
+
+    helpers.display_question("Install NVM?")
+    if helpers.no_or_yes():
+        subprocess.run(
+            """
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+""",
+            shell=True,
+        )
+
+    # 3. flatpak management
+
+    helpers.display_title("Flatpak Management")
+
+    helpers.display_question("Select flatpak packages to install")
+    selected_flatpak_packages = helpers.select_multiple_strings(
+        fedora.constants.FLATPAK_PACKAGES
+    )
+    if type(selected_flatpak_packages) == list:
+        subprocess.run(["flatpak", "install", "-y"] + selected_flatpak_packages)
+
+    # 4. RPM Fusion
+
+    helpers.display_title("RPM Fusion")
+
+    helpers.display_question("Enable RPM Fusion?")
+    if helpers.no_or_yes():
+        subprocess.run(
+            """
+sudo dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+sudo dnf groupupdate core -y
+""",
+            shell=True,
+        )
+
+    helpers.display_question(
+        "Install additional packages for multimedia from RPM Fusion? (No VAAPI)"
+    )
+    if helpers.no_or_yes():
+        subprocess.run(
+            """
+sudo dnf swap ffmpeg-free ffmpeg --allowerasing -y
+sudo dnf groupupdate multimedia --setop="install_weak_deps=False" --exclude=PackageKit-gstreamer-plugin -y
+sudo dnf groupupdate sound-and-video -y
+sudo dnf install rpmfusion-free-release-tainted -y
+sudo dnf install libdvdcss -y
+sudo dnf install rpmfusion-nonfree-release-tainted -y
+sudo dnf --repo=rpmfusion-nonfree-tainted install "*-firmware" -y
+""",
+            shell=True,
+        )
+
+    helpers.display_question("Install VAAPI for Intel(recent)?")
+    if helpers.no_or_yes():
+        subprocess.run(
+            """
+sudo dnf install intel-media-driver -y
+""",
+            shell=True,
+        )
+
+    helpers.display_question("Install VAAPI for Intel(older)?")
+    if helpers.no_or_yes():
+        subprocess.run(
+            """
+sudo dnf install libva-intel-driver -y
+""",
+            shell=True,
+        )
+
+    helpers.display_question("Install VAAPI for AMD?")
+    if helpers.no_or_yes():
+        subprocess.run(
+            """
+sudo dnf swap mesa-va-drivers mesa-va-drivers-freeworld -y
+sudo dnf swap mesa-vdpau-drivers mesa-vdpau-drivers-freeworld -y
+sudo dnf swap mesa-va-drivers.i686 mesa-va-drivers-freeworld.i686 -y
+sudo dnf swap mesa-vdpau-drivers.i686 mesa-vdpau-drivers-freeworld.i686 -y
+""",
+            shell=True,
+        )
+
+    helpers.display_question("Install codecs for NVIDIA? (No VAAPI")
+    if helpers.no_or_yes():
+        subprocess.run(
+            """
+sudo dnf install nvidia-vaapi-driver
+""",
+            shell=True,
+        )

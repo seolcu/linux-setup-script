@@ -15,6 +15,10 @@ if __name__ == "__main__":
         import debian.main
 
         debian.main.main()
+    elif distro == "fedora":
+        import fedora.main
+
+        fedora.main.main()
     else:
         helpers.display_error("Unknown distro")
         exit(1)

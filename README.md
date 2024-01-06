@@ -1,6 +1,6 @@
 # linux-setup-script
 
-OOTB productive setup script for [debian, arch, nix], GNOME.
+OOTB productive setup script for [debian, arch, fedora, nix], GNOME.
 
 ## setup
 
