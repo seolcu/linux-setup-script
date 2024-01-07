@@ -30,8 +30,14 @@ DNF_PACKAGES: list[str] = [
     "google-noto-sans-cjk-fonts",
 ]
 
+DNF_REMOVE_PACKAGES: list[str] = [
+    "firefox",
+]
+
 
 FLATPAK_PACKAGES: list[str] = [
+    # Web Browsers
+    "org.mozilla.firefox",
     # GNOME Apps
     "de.haeckerfelix.Fragments",
     ## Etc

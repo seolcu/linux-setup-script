@@ -19,6 +19,13 @@ def main():
     if type(selected_dnf_packages) == list:
         subprocess.run(["sudo", "dnf", "install", "-y"] + selected_dnf_packages)
 
+    helpers.display_question("Select native packages to remove")
+    selected_dnf_remove_packages = helpers.select_multiple_strings(
+        fedora.constants.DNF_REMOVE_PACKAGES
+    )
+    if type(selected_dnf_remove_packages) == list:
+        subprocess.run(["sudo", "dnf", "remove", "-y"] + selected_dnf_remove_packages)
+
     # 2. manual package management
 
     helpers.display_title("Manual Package Management")
