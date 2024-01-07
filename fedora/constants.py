@@ -25,7 +25,6 @@ DNF_PACKAGES: list[str] = [
     ## GNOME extensions
     "gnome-shell-extension-appindicator",
     "gnome-shell-extension-caffeine",
-    "gnome-shell-extension-gamemode",
     "gnome-shell-extension-gsconnect",
     ## Etc
     "hugo",
