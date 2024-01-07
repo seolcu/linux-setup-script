@@ -21,13 +21,13 @@ DNF_PACKAGES: list[str] = [
     "neofetch",
     "gh",
     "distrobox",
-    # Plugins
-    ## GNOME extensions
+    # GNOME extensions
     "gnome-shell-extension-appindicator",
     "gnome-shell-extension-caffeine",
     "gnome-shell-extension-gsconnect",
-    ## Etc
+    # Etc
     "hugo",
+    "google-noto-sans-cjk-fonts",
 ]
 
 
