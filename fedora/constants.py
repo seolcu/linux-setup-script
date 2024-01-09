@@ -26,7 +26,6 @@ DNF_PACKAGES: list[str] = [
     "gnome-shell-extension-caffeine",
     "gnome-shell-extension-gsconnect",
     # Etc
-    "hugo",
     "google-noto-sans-cjk-fonts",
 ]
 
@@ -55,4 +54,10 @@ FLATPAK_PACKAGES: list[str] = [
     "com.valvesoftware.Steam",
     # Etc
     "com.obsproject.Studio",
+]
+
+SNAP_PACKAGES: list[str] = [
+    # CLI
+    ## Development
+    "hugo",
 ]

@@ -74,7 +74,27 @@ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
     if type(selected_flatpak_packages) == list:
         subprocess.run(["flatpak", "install", "-y"] + selected_flatpak_packages)
 
-    # 4. RPM Fusion
+    # 4. snap management
+
+    helpers.display_title("Snap Management")
+
+    helpers.display_question("Install snapd?")
+    if helpers.no_or_yes():
+        subprocess.run(
+            """
+sudo dnf install snapd -y
+""",
+            shell=True,
+        )
+
+    helpers.display_question("Select snap packages to install")
+    selected_snap_packages = helpers.select_multiple_strings(
+        fedora.constants.SNAP_PACKAGES
+    )
+    if type(selected_snap_packages) == list:
+        subprocess.run(["sudo", "snap", "install"] + selected_snap_packages)
+
+    # 5. RPM Fusion
 
     helpers.display_title("RPM Fusion")
 
