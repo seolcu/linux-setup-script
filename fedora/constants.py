@@ -30,6 +30,7 @@ DNF_PACKAGES: list[str] = [
 
 DNF_REMOVE_PACKAGES: list[str] = [
     "firefox",
+    "rhythmbox",
 ]
 
 
@@ -50,6 +51,7 @@ FLATPAK_PACKAGES: list[str] = [
     "org.raspberrypi.rpi-imager",
     "org.videolan.VLC",
     "io.github.pwr_solaar.solaar",
+    "com.vixalien.decibels",
     # Games
     "com.valvesoftware.Steam",
     # Etc
