@@ -3,7 +3,6 @@
 APT_PACKAGES: list[str] = [
     # GUI
     "chromium",
-    "solaar",
     "gnome-boxes",
     # CLI
     ## Development
@@ -56,6 +55,7 @@ FLATPAK_PACKAGES: list[str] = [
     # Utilities
     "org.raspberrypi.rpi-imager",
     "org.videolan.VLC",
+    "io.github.pwr_solaar.solaar",
     # Games
     "com.valvesoftware.Steam",
     # Etc

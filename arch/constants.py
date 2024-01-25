@@ -4,7 +4,6 @@ PACMAN_PACKAGES: list[str] = [
     # GUI
     "firefox",
     "chromium",
-    "solaar",
     "gnome-boxes",
     "steam",
     "obs-studio",
@@ -77,4 +76,5 @@ FLATPAK_PACKAGES: list[str] = [
     # Utilities
     "org.raspberrypi.rpi-imager",
     "org.videolan.VLC",
+    "io.github.pwr_solaar.solaar",
 ]
