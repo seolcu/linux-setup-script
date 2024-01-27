@@ -57,9 +57,3 @@ FLATPAK_PACKAGES: list[str] = [
     # Etc
     "com.obsproject.Studio",
 ]
-
-SNAP_PACKAGES: list[str] = [
-    # CLI
-    ## Development
-    "hugo",
-]
