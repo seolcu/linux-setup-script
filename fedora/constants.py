@@ -3,7 +3,6 @@
 DNF_PACKAGES: list[str] = [
     # GUI
     "gnome-tweaks",
-    "chromium",
     # CLI
     ## Development
     ### C/C++
@@ -36,7 +35,7 @@ DNF_REMOVE_PACKAGES: list[str] = [
 
 FLATPAK_PACKAGES: list[str] = [
     # Web Browsers
-    "org.mozilla.firefox",
+    "com.brave.Browser",
     # GNOME Apps
     "de.haeckerfelix.Fragments",
     ## Etc
