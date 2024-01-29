@@ -35,7 +35,7 @@ DNF_REMOVE_PACKAGES: list[str] = [
 
 FLATPAK_PACKAGES: list[str] = [
     # Web Browsers
-    "com.brave.Browser",
+    "org.mozilla.firefox",
     # GNOME Apps
     "de.haeckerfelix.Fragments",
     ## Etc
