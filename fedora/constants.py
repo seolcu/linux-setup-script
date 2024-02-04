@@ -3,6 +3,7 @@
 DNF_PACKAGES: list[str] = [
     # GUI
     "gnome-tweaks",
+    "solaar",
     # CLI
     ## Development
     ### C/C++
@@ -49,7 +50,6 @@ FLATPAK_PACKAGES: list[str] = [
     # Utilities
     "org.raspberrypi.rpi-imager",
     "org.videolan.VLC",
-    "io.github.pwr_solaar.solaar",
     "com.vixalien.decibels",
     # Games
     "com.valvesoftware.Steam",
