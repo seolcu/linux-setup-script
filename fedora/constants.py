@@ -2,6 +2,7 @@
 
 DNF_PACKAGES: list[str] = [
     # GUI
+    "chromium",
     "gnome-tweaks",
     "solaar",
     # CLI
@@ -16,6 +17,7 @@ DNF_PACKAGES: list[str] = [
     "python3-ipykernel",
     "black",
     ## Utilities
+    "neovim",
     "htop",
     "neofetch",
     "gh",
@@ -39,6 +41,7 @@ FLATPAK_PACKAGES: list[str] = [
     "org.mozilla.firefox",
     # GNOME Apps
     "de.haeckerfelix.Fragments",
+    "org.gnome.SoundRecorder",
     ## Etc
     "com.mattjakeman.ExtensionManager",
     "com.belmoussaoui.Decoder",
@@ -46,7 +49,11 @@ FLATPAK_PACKAGES: list[str] = [
     # Work
     "org.onlyoffice.desktopeditors",
     "md.obsidian.Obsidian",
+    # Communication
     "us.zoom.Zoom",
+    "com.discordapp.Discord",
+    "com.slack.Slack",
+    "org.signal.Signal",
     # Utilities
     "org.raspberrypi.rpi-imager",
     "org.videolan.VLC",
@@ -55,4 +62,5 @@ FLATPAK_PACKAGES: list[str] = [
     "com.valvesoftware.Steam",
     # Etc
     "com.obsproject.Studio",
+    "org.gnome.NetworkDisplays",
 ]
