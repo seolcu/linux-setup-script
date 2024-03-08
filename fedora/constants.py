@@ -28,6 +28,7 @@ DNF_PACKAGES: list[str] = [
     "gnome-shell-extension-gsconnect",
     # Etc
     "google-noto-sans-cjk-fonts",
+    "ripgrep",
 ]
 
 DNF_REMOVE_PACKAGES: list[str] = [
