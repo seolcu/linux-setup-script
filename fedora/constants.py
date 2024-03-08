@@ -60,6 +60,7 @@ FLATPAK_PACKAGES: list[str] = [
     "com.vixalien.decibels",
     # Games
     "com.valvesoftware.Steam",
+    "com.mojang.Minecraft",
     # Etc
     "com.obsproject.Studio",
     "org.gnome.NetworkDisplays",

@@ -75,6 +75,27 @@ rm hugo_extended_0.122.0_linux-amd64.tar.gz
             shell=True,
         )
 
+    helpers.display_question("Install Symbols Nerd Font?(Icons only)")
+    if helpers.no_or_yes():
+        subprocess.run(
+            """
+wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.1.1/NerdFontsSymbolsOnly.zip
+mkdir -p ~/.local/share/fonts
+unzip NerdFontsSymbolsOnly.zip -d ~/.local/share/fonts
+rm NerdFontsSymbolsOnly.zip ~/.local/share/fonts/LICENSE ~/.local/share/fonts/README.md
+""",
+            shell=True,
+        )
+
+    helpers.display_question("Setup Kickstart.nvim?")
+    if helpers.no_or_yes():
+        subprocess.run(
+            """
+git clone https://github.com/seolcu/kickstart.nvim.git "${XDG_CONFIG_HOME:-$HOME/.config}"/nvim
+""",
+            shell=True,
+        )
+
     # 3. flatpak management
 
     helpers.display_title("Flatpak Management")
