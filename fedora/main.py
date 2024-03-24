@@ -75,6 +75,18 @@ rm hugo_extended_0.122.0_linux-amd64.tar.gz
             shell=True,
         )
 
+    helpers.display_question("Install virt-manager?")
+    if helpers.no_or_yes():
+        subprocess.run(
+            """
+sudo dnf install virt-manager -y
+sudo systemctl enable --now libvirtd
+sudo usermod -a -G libvirt $(whoami)
+sudo virsh net-autostart default
+""",
+            shell=True,
+        )
+
     # 3. flatpak management
 
     helpers.display_title("Flatpak Management")
