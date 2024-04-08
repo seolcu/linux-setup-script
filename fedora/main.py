@@ -67,10 +67,13 @@ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
     if helpers.no_or_yes():
         subprocess.run(
             """
+mkdir tmp
+cd tmp
 wget https://github.com/gohugoio/hugo/releases/download/v0.122.0/hugo_extended_0.122.0_linux-amd64.tar.gz
 tar -xzf hugo_extended_0.122.0_linux-amd64.tar.gz
 sudo mv hugo /usr/local/bin
-rm hugo_extended_0.122.0_linux-amd64.tar.gz
+cd ..
+rm -rf tmp
 """,
             shell=True,
         )
