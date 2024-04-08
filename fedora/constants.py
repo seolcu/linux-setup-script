@@ -1,7 +1,7 @@
 # Constants
 
 DNF_PACKAGES: list[str] = [
-    # GUId
+    # GUI
     "gnome-tweaks",
     # CLI
     ## Development
