@@ -14,6 +14,9 @@ DNF_PACKAGES: list[str] = [
     "python3-pip",
     "python3-ipykernel",
     "black",
+    ### Rust
+    "rust",
+    "cargo",
     ## Utilities
     "neovim",
     "htop",
