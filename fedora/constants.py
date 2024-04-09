@@ -19,6 +19,7 @@ DNF_PACKAGES: list[str] = [
     "cargo",
     "rust-src",
     "rustfmt",
+    "clippy",
     ## Utilities
     "neovim",
     "htop",
