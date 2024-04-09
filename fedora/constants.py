@@ -17,6 +17,8 @@ DNF_PACKAGES: list[str] = [
     ### Rust
     "rust",
     "cargo",
+    "rust-src",
+    "rustfmt",
     ## Utilities
     "neovim",
     "htop",
