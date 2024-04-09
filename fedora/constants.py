@@ -9,7 +9,7 @@ DNF_PACKAGES: list[str] = [
     "gcc",
     "g++",
     ### Java
-    "java-17-openjdk-devel",
+    "java-21-openjdk-devel",
     ### Python
     "python3-pip",
     "python3-ipykernel",
