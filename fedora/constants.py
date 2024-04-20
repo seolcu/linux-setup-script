@@ -3,6 +3,7 @@
 DNF_PACKAGES: list[str] = [
     # GUI
     "gnome-tweaks",
+    "steam",  # Not from flatpak but from RPM Fusion, since it allows application shortcuts and seems to be working better
     # CLI
     ## Development
     ### C/C++
