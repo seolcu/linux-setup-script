@@ -26,82 +26,7 @@ def main():
     if type(selected_dnf_remove_packages) == list:
         subprocess.run(["sudo", "dnf", "remove", "-y"] + selected_dnf_remove_packages)
 
-    # 2. manual package management
-
-    helpers.display_title("Manual Package Management")
-
-    helpers.display_question("Install VSCode?")
-    if helpers.no_or_yes():
-        subprocess.run(
-            """
-sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
-sudo sh -c 'echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/vscode.repo'
-dnf check-update -y
-sudo dnf install code -y
-""",
-            shell=True,
-        )
-
-    helpers.display_question("Install ProtonVPN?")
-    if helpers.no_or_yes():
-        subprocess.run(
-            """
-wget https://repo.protonvpn.com/fedora-39-stable/protonvpn-stable-release/protonvpn-stable-release-1.0.1-2.noarch.rpm
-sudo dnf install ./protonvpn-stable-release-1.0.1-2.noarch.rpm -y
-rm ./protonvpn-stable-release-1.0.1-2.noarch.rpm
-sudo dnf install --refresh proton-vpn-gnome-desktop -y
-""",
-            shell=True,
-        )
-
-    helpers.display_question("Install NVM?")
-    if helpers.no_or_yes():
-        subprocess.run(
-            """
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
-""",
-            shell=True,
-        )
-
-    helpers.display_question("Install Hugo(extended, v0.122.0)?")
-    if helpers.no_or_yes():
-        subprocess.run(
-            """
-mkdir tmp
-cd tmp
-wget https://github.com/gohugoio/hugo/releases/download/v0.122.0/hugo_extended_0.122.0_linux-amd64.tar.gz
-tar -xzf hugo_extended_0.122.0_linux-amd64.tar.gz
-sudo mv hugo /usr/local/bin
-cd ..
-rm -rf tmp
-""",
-            shell=True,
-        )
-
-    helpers.display_question("Install virt-manager?")
-    if helpers.no_or_yes():
-        subprocess.run(
-            """
-sudo dnf install virt-manager -y
-sudo systemctl enable --now libvirtd
-sudo usermod -a -G libvirt $(whoami)
-sudo virsh net-autostart default
-""",
-            shell=True,
-        )
-
-    # 3. flatpak management
-
-    helpers.display_title("Flatpak Management")
-
-    helpers.display_question("Select flatpak packages to install")
-    selected_flatpak_packages = helpers.select_multiple_strings(
-        fedora.constants.FLATPAK_PACKAGES
-    )
-    if type(selected_flatpak_packages) == list:
-        subprocess.run(["flatpak", "install", "-y"] + selected_flatpak_packages)
-
-    # 4. RPM Fusion
+    # 2. RPM Fusion
 
     helpers.display_title("RPM Fusion")
 
@@ -171,3 +96,78 @@ sudo dnf install nvidia-vaapi-driver
 """,
             shell=True,
         )
+
+    # 3. manual package management
+
+    helpers.display_title("Manual Package Management")
+
+    helpers.display_question("Install VSCode?")
+    if helpers.no_or_yes():
+        subprocess.run(
+            """
+sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
+sudo sh -c 'echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/vscode.repo'
+dnf check-update -y
+sudo dnf install code -y
+""",
+            shell=True,
+        )
+
+    helpers.display_question("Install ProtonVPN?")
+    if helpers.no_or_yes():
+        subprocess.run(
+            """
+wget https://repo.protonvpn.com/fedora-39-stable/protonvpn-stable-release/protonvpn-stable-release-1.0.1-2.noarch.rpm
+sudo dnf install ./protonvpn-stable-release-1.0.1-2.noarch.rpm -y
+rm ./protonvpn-stable-release-1.0.1-2.noarch.rpm
+sudo dnf install --refresh proton-vpn-gnome-desktop -y
+""",
+            shell=True,
+        )
+
+    helpers.display_question("Install NVM?")
+    if helpers.no_or_yes():
+        subprocess.run(
+            """
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+""",
+            shell=True,
+        )
+
+    helpers.display_question("Install Hugo(extended, v0.122.0)?")
+    if helpers.no_or_yes():
+        subprocess.run(
+            """
+mkdir tmp
+cd tmp
+wget https://github.com/gohugoio/hugo/releases/download/v0.122.0/hugo_extended_0.122.0_linux-amd64.tar.gz
+tar -xzf hugo_extended_0.122.0_linux-amd64.tar.gz
+sudo mv hugo /usr/local/bin
+cd ..
+rm -rf tmp
+""",
+            shell=True,
+        )
+
+    helpers.display_question("Install virt-manager?")
+    if helpers.no_or_yes():
+        subprocess.run(
+            """
+sudo dnf install virt-manager -y
+sudo systemctl enable --now libvirtd
+sudo usermod -a -G libvirt $(whoami)
+sudo virsh net-autostart default
+""",
+            shell=True,
+        )
+
+    # 4. flatpak management
+
+    helpers.display_title("Flatpak Management")
+
+    helpers.display_question("Select flatpak packages to install")
+    selected_flatpak_packages = helpers.select_multiple_strings(
+        fedora.constants.FLATPAK_PACKAGES
+    )
+    if type(selected_flatpak_packages) == list:
+        subprocess.run(["flatpak", "install", "-y"] + selected_flatpak_packages)
