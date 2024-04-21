@@ -31,7 +31,6 @@ DNF_PACKAGES: list[str] = [
     "distrobox",
     # GNOME extensions
     "gnome-shell-extension-appindicator",
-    "gnome-shell-extension-caffeine",
     "gnome-shell-extension-gsconnect",
     # Etc
     "google-noto-sans-cjk-fonts",

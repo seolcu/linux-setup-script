@@ -26,6 +26,7 @@ pip3 install -r requirements.txt
 
 ## Suggested GNOME Extensions
 
+- Caffeine (From GNOME Extensions, not from Fedora Repos, as it is outdated)
 - Vitals
 - RebootToUEFI
 - Thinkpad Battery Threshold
