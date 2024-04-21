@@ -39,6 +39,7 @@ DNF_PACKAGES: list[str] = [
 DNF_REMOVE_PACKAGES: list[str] = [
     "firefox",
     "rhythmbox",
+    "gnome-shell-extension-background-logo",
 ]
 
 
