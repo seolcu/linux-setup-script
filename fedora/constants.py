@@ -51,10 +51,8 @@ FLATPAK_PACKAGES: list[str] = [
     "com.brave.Browser",
     # GNOME Apps
     "de.haeckerfelix.Fragments",
-    "org.gnome.SoundRecorder",
     ## Etc
     "com.mattjakeman.ExtensionManager",
-    "com.belmoussaoui.Decoder",
     "com.usebottles.bottles",
     # Work
     "org.onlyoffice.desktopeditors",
