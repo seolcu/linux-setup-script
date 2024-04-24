@@ -31,7 +31,10 @@ DNF_PACKAGES: list[str] = [
     "distrobox",
     # GNOME extensions
     "gnome-shell-extension-appindicator",
-    "gnome-shell-extension-gsconnect",
+    ## GSConnect Dependencies
+    "openssl",
+    "nautilus-python",
+    "nautilus-extensions",
     # Etc
     "google-noto-sans-cjk-fonts",
 ]

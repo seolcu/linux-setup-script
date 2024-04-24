@@ -24,9 +24,10 @@ source venv/bin/activate
 pip3 install -r requirements.txt
 ```
 
-## Suggested GNOME Extensions
+## Suggested GNOME Extensions (From GNOME Extensions Website)
 
-- Caffeine (From GNOME Extensions, not from Fedora Repos, as it is outdated)
+- Caffeine
+- GSConnect
+- Thinkpad Battery Threshold
 - Vitals
 - RebootToUEFI
-- Thinkpad Battery Threshold
