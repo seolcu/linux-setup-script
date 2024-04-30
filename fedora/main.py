@@ -171,3 +171,17 @@ sudo virsh net-autostart default
     )
     if type(selected_flatpak_packages) == list:
         subprocess.run(["flatpak", "install", "-y"] + selected_flatpak_packages)
+
+    # 5. additional tweaks
+
+    helpers.display_title("Additional Tweaks")
+
+    helpers.display_question("Apply git configuration?")
+    if helpers.no_or_yes():
+        subprocess.run(
+            """
+git config --global init.defaultBranch main
+git config --global push.autoSetupRemote true
+""",
+            shell=True,
+        )
