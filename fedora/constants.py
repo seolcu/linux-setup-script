@@ -17,12 +17,6 @@ DNF_PACKAGES: list[str] = [
     "black",
     ### Node.js
     "nodejs",
-    ### Rust
-    "rust",
-    "cargo",
-    "rust-src",
-    "rustfmt",
-    "clippy",
     ## Utilities
     "neovim",
     "htop",

@@ -161,6 +161,13 @@ sudo virsh net-autostart default
             shell=True,
         )
 
+    helpers.display_question("Install Rustup?")
+    if helpers.no_or_yes():
+        subprocess.run(
+            "curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh",
+            shell=True,
+        )
+
     # 4. flatpak management
 
     helpers.display_title("Flatpak Management")
