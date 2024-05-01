@@ -3,7 +3,6 @@
 DNF_PACKAGES: list[str] = [
     # GUI
     "gnome-tweaks",
-    "steam",  # Not from flatpak but from RPM Fusion, since it allows application shortcuts and seems to be working better
     # CLI
     ## Development
     ### C/C++
@@ -60,6 +59,9 @@ FLATPAK_PACKAGES: list[str] = [
     "org.raspberrypi.rpi-imager",
     "org.videolan.VLC",
     "com.vixalien.decibels",
+    # Gaming
+    "com.valvesoftware.Steam",
+    "com.mojang.Minecraft",
     # Etc
     "com.obsproject.Studio",
     "org.gnome.NetworkDisplays",
