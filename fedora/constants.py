@@ -19,7 +19,7 @@ DNF_PACKAGES: list[str] = [
     ## Utilities
     "neovim",
     "htop",
-    "neofetch",
+    "fastfetch",
     "gh",
     "distrobox",
     # GNOME extensions
