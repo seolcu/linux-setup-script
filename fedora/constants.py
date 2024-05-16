@@ -23,11 +23,15 @@ DNF_PACKAGES: list[str] = [
     "gh",
     "distrobox",
     # GNOME extensions
-    "gnome-shell-extension-appindicator",
+    ## AppIndicator and KStatusNotifierItem Support Dependencies
+    "libappindicator",
     ## GSConnect Dependencies
     "openssl",
     "nautilus-python",
     "nautilus-extensions",
+    ## Vitals Dependencies
+    "libgtop2-devel",
+    "lm_sensors",
     # Etc
     "google-noto-sans-cjk-fonts",
 ]
