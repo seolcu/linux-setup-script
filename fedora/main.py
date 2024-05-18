@@ -117,7 +117,7 @@ sudo dnf install code -y
     if helpers.no_or_yes():
         subprocess.run(
             """
-wget https://repo.protonvpn.com/fedora-39-stable/protonvpn-stable-release/protonvpn-stable-release-1.0.1-2.noarch.rpm
+wget "https://repo.protonvpn.com/fedora-$(cat /etc/fedora-release | cut -d\  -f 3)-stable/protonvpn-stable-release/protonvpn-stable-release-1.0.1-2.noarch.rpm"
 sudo dnf install ./protonvpn-stable-release-1.0.1-2.noarch.rpm -y
 rm ./protonvpn-stable-release-1.0.1-2.noarch.rpm
 sudo dnf install --refresh proton-vpn-gnome-desktop -y
