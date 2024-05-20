@@ -2,7 +2,10 @@
 
 DNF_PACKAGES: list[str] = [
     # GUI
+    ## GNOME Apps
     "gnome-tweaks",
+    ## Games
+    "steam",
     # CLI
     ## Development
     ### C/C++
@@ -64,7 +67,6 @@ FLATPAK_PACKAGES: list[str] = [
     "org.videolan.VLC",
     "com.vixalien.decibels",
     # Gaming
-    "com.valvesoftware.Steam",
     "com.mojang.Minecraft",
     # Etc
     "com.obsproject.Studio",
