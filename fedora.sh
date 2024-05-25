@@ -6,7 +6,7 @@ echo -n "Enable RPM Fusion? [y/N]: "
 
 read answer
 
-if [[ "$answer" == "y"]] || [[ "$answer" == "Y" ]]; then
+if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
     sudo dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
     sudo dnf config-manager --enable fedora-cisco-openh264
     sudo dnf update -y @core
@@ -16,7 +16,7 @@ echo -n "Install additional packages for multimedia from RPM Fusion? (No VAAPI) 
 
 read answer
 
-if [[ "$answer" == "y"]] || [[ "$answer" == "Y" ]]; then
+if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
     sudo dnf swap -y ffmpeg-free ffmpeg --allowerasing
     sudo dnf update -y @multimedia --setopt="install_weak_deps=False" --exclude=PackageKit-gstreamer-plugin
     sudo dnf update -y @sound-and-video
@@ -104,7 +104,7 @@ echo -n "Install Rustup? [y/N]: "
 
 read answer
 
-if [[ "$answer" == "y"]] || [[ "$answer" == "Y" ]]; then
+if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 fi
 
@@ -112,7 +112,7 @@ echo -n "Install VSCode? [y/N]: "
 
 read answer
 
-if [[ "$answer" == "y"]] || [[ "$answer" == "Y" ]]; then
+if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
     sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
     echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" | sudo tee /etc/yum.repos.d/vscode.repo > /dev/null
     dnf check-update -y
@@ -123,7 +123,7 @@ echo -n "Install ProtonVPN? [y/N]: "
 
 read answer
 
-if [[ "$answer" == "y"]] || [[ "$answer" == "Y" ]]; then
+if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
     wget "https://repo.protonvpn.com/fedora-$(cat /etc/fedora-release | cut -d\  -f 3)-stable/protonvpn-stable-release/protonvpn-stable-release-1.0.1-2.noarch.rpm"    sudo dnf install ./protonvpn-stable-release-1.0.1-2.noarch.rpm -y
     sudo dnf install -y ./protonvpn-stable-release-1.0.1-2.noarch.rpm
     rm ./protonvpn-stable-release-1.0.1-2.noarch.rpm
@@ -147,13 +147,21 @@ FLATPAK_INSTALL_PACKAGES=(
     com.mojang.Minecraft
 )
 
-flatpak install flathub "${FLATPAK_INSTALL_PACKAGES[@]}"
-
-echo -n "Appy git configuration? [y/N]: "
+echo -n "Add Flathub repository? [y/N]: "
 
 read answer
 
-if [[ "$answer" == "y"]] || [[ "$answer" == "Y" ]]; then
+if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
+    flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+fi
+
+flatpak install flathub "${FLATPAK_INSTALL_PACKAGES[@]}"
+
+echo -n "Apply git configuration? [y/N]: "
+
+read answer
+
+if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
     echo -n "Enter your name: "
     read name
     echo -n "Enter your email: "
