@@ -124,7 +124,7 @@ echo -n "Install ProtonVPN? [y/N]: "
 read answer
 
 if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
-    wget "https://repo.protonvpn.com/fedora-$(cat /etc/fedora-release | cut -d\  -f 3)-stable/protonvpn-stable-release/protonvpn-stable-release-1.0.1-2.noarch.rpm"    sudo dnf install ./protonvpn-stable-release-1.0.1-2.noarch.rpm -y
+    wget "https://repo.protonvpn.com/fedora-$(cat /etc/fedora-release | cut -d\  -f 3)-stable/protonvpn-stable-release/protonvpn-stable-release-1.0.1-2.noarch.rpm"
     sudo dnf install -y ./protonvpn-stable-release-1.0.1-2.noarch.rpm
     rm ./protonvpn-stable-release-1.0.1-2.noarch.rpm
     sudo dnf install -y --refresh proton-vpn-gnome-desktop
@@ -152,7 +152,7 @@ echo -n "Add Flathub repository? [y/N]: "
 read answer
 
 if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
-    flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+    sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 fi
 
 flatpak install flathub "${FLATPAK_INSTALL_PACKAGES[@]}"
