@@ -93,13 +93,6 @@ DNF_INSTALL_PACKAGES=(
 
 sudo dnf install "${DNF_INSTALL_PACKAGES[@]}"
 
-DNF_REMOVE_PACKAGES=(
-    firefox
-    gnome-shell-extension-background-logo
-)
-
-sudo dnf remove "${DNF_REMOVE_PACKAGES[@]}"
-
 echo -n "Install Rustup? [y/N]: "
 
 read answer
@@ -129,6 +122,13 @@ if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
     rm ./protonvpn-stable-release-1.0.1-2.noarch.rpm
     sudo dnf install -y --refresh proton-vpn-gnome-desktop
 fi
+
+DNF_REMOVE_PACKAGES=(
+    firefox
+    gnome-shell-extension-background-logo
+)
+
+sudo dnf remove "${DNF_REMOVE_PACKAGES[@]}"
 
 FLATPAK_INSTALL_PACKAGES=(
     # Web Browsers
