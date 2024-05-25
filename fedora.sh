@@ -126,6 +126,7 @@ fi
 DNF_REMOVE_PACKAGES=(
     firefox
     gnome-shell-extension-background-logo
+    gnome-shell-extension-appindicator
 )
 
 sudo dnf remove "${DNF_REMOVE_PACKAGES[@]}"
