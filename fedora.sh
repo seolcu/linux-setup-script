@@ -129,6 +129,18 @@ DNF_REMOVE_PACKAGES=(
     gnome-shell-extension-appindicator
 )
 
+echo -n "Install Proton-GE with asdf? [y/N]: "
+
+read answer
+
+if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
+    git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.14.0
+    echo '. "$HOME/.asdf/asdf.sh"' >> ~/.bashrc
+    echo '. "$HOME/.asdf/completions/asdf.bash"' >> ~/.bashrc
+    source ~/.bashrc
+    asdf plugin add protonge
+    asdf install protonge latest
+
 sudo dnf remove "${DNF_REMOVE_PACKAGES[@]}"
 
 FLATPAK_INSTALL_PACKAGES=(
