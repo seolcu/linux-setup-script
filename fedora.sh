@@ -140,6 +140,7 @@ if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
     source ~/.bashrc
     asdf plugin add protonge
     asdf install protonge latest
+fi
 
 echo -n "Install hugo(extended, v0.126.1)? [y/N]: "
 
@@ -153,7 +154,7 @@ if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
     sudo mv hugo /usr/local/bin
     cd ..
     rm -rf tmp
-
+fi
 
 sudo dnf remove "${DNF_REMOVE_PACKAGES[@]}"
 
