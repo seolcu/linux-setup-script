@@ -1,6 +1,13 @@
 #!/usr/bin/env bash
 
-sudo dnf update
+echo -n "Update the system? [y/N]: "
+
+read answer
+
+if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
+    sudo dnf upgrade
+fi
+
 
 echo -n "Enable RPM Fusion? [y/N]: "
 
@@ -91,7 +98,13 @@ DNF_INSTALL_PACKAGES=(
     google-noto-sans-cjk-fonts
 )
 
-sudo dnf install "${DNF_INSTALL_PACKAGES[@]}"
+echo -n "Install additional recommended packages? [y/N]: "
+
+read answer
+
+if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
+    sudo dnf install "${DNF_INSTALL_PACKAGES[@]}"
+fi
 
 echo -n "Install Rustup? [y/N]: "
 
@@ -156,7 +169,21 @@ if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
     rm -rf tmp
 fi
 
-sudo dnf remove "${DNF_REMOVE_PACKAGES[@]}"
+echo -n "Remove unnecessary packages? [y/N]: "
+
+read answer
+
+if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
+    sudo dnf remove "${DNF_REMOVE_PACKAGES[@]}"
+fi
+
+echo -n "Add Flathub repository? [y/N]: "
+
+read answer
+
+if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
+    sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+fi
 
 FLATPAK_INSTALL_PACKAGES=(
     # Web Browsers
@@ -175,15 +202,13 @@ FLATPAK_INSTALL_PACKAGES=(
     com.mojang.Minecraft
 )
 
-echo -n "Add Flathub repository? [y/N]: "
+echo -n "Install additional packages from Flathub? [y/N]: "
 
 read answer
 
 if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
-    sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+    flatpak install flathub "${FLATPAK_INSTALL_PACKAGES[@]}"
 fi
-
-flatpak install flathub "${FLATPAK_INSTALL_PACKAGES[@]}"
 
 echo -n "Apply git configuration? [y/N]: "
 
