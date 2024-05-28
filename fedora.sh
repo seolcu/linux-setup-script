@@ -141,6 +141,20 @@ if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
     asdf plugin add protonge
     asdf install protonge latest
 
+echo -n "Install hugo(extended, v0.126.1)? [y/N]: "
+
+read answer
+
+if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
+    mkdir tmp
+    cd tmp
+    wget https://github.com/gohugoio/hugo/releases/download/v0.126.1/hugo_extended_0.126.1_linux-amd64.tar.gz
+    tar -xzf hugo_extended_0.126.1_linux-amd64.tar.gz
+    sudo mv hugo /usr/local/bin
+    cd ..
+    rm -rf tmp
+
+
 sudo dnf remove "${DNF_REMOVE_PACKAGES[@]}"
 
 FLATPAK_INSTALL_PACKAGES=(
