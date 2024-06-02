@@ -148,6 +148,7 @@ read answer
 
 if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
     sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+    sudo flatpak remote-modify flathub --enable
 fi
 
 FLATPAK_INSTALL_PACKAGES=(
