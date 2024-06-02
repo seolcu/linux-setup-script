@@ -200,6 +200,9 @@ FLATPAK_INSTALL_PACKAGES=(
     org.signal.Signal
     # Gaming
     com.mojang.Minecraft
+    # Utilities
+    com.usebottles.bottles
+    de.haeckerfelix.Fragments
 )
 
 echo -n "Install additional packages from Flathub? [y/N]: "
