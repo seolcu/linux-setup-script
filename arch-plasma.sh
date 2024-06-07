@@ -58,6 +58,7 @@ PACMAN_INSTALL_PACKAGES=(
     fcitx5-hangul
     fcitx5-configtool
     power-profiles-daemon
+    kdeconnect
 )
 
 echo -n "Install additional recommended packages? [y/N]: "
