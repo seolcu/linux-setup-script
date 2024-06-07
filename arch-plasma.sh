@@ -78,7 +78,7 @@ AUR_INSTALL_PACKAGES=(
     zoom
     slack-desktop
     ## Games
-    minecraft-launcher
+    prismlauncher
     # Etc
     proton-vpn-gtk-app
 )
