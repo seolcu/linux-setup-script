@@ -90,8 +90,6 @@ AUR_INSTALL_PACKAGES=(
     onlyoffice-bin
     zoom
     slack-desktop
-    ## Games
-    prismlauncher
     # Etc
     proton-vpn-gtk-app
 )
