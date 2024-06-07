@@ -45,6 +45,7 @@ PACMAN_INSTALL_PACKAGES=(
     flatpak
     fcitx5-hangul
     fcitx5-configtool
+    power-profiles-daemon
 )
 
 echo -n "Install additional recommended packages? [y/N]: "
