@@ -82,14 +82,8 @@ fi
 
 AUR_INSTALL_PACKAGES=(
     # GUI
-    ## Browsers
-    brave-bin
     ## Development
     visual-studio-code-bin
-    ## Work
-    onlyoffice-bin
-    zoom
-    slack-desktop
     # Etc
     proton-vpn-gtk-app
 )
@@ -100,6 +94,27 @@ read answer
 
 if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
     yay -S "${AUR_INSTALL_PACKAGES[@]}"
+fi
+
+FLATPAK_INSTALL_PACKAGES=(
+    # Web Browsers
+    com.brave.Browser
+    # Work
+    org.onlyoffice.desktopeditors
+    us.zoom.Zoom
+    com.slack.Slack
+    # Games
+    org.prismlauncher.PrismLauncher
+    # Utilities
+    com.usebottles.bottles
+)
+
+echo -n "Install additional recommended Flatpak packages? [y/N]: "
+
+read answer
+
+if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
+    flatpak install flathub "${FLATPAK_INSTALL_PACKAGES[@]}"
 fi
 
 echo -n "Setup Fcitx5 environment variables? [y/N]: "
