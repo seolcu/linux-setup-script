@@ -16,6 +16,8 @@ PACMAN_INSTALL_PACKAGES=(
     obsidian
     discord
     signal-desktop
+    obs-studio
+    gnome-boxes
     ## Games
     steam
 
@@ -34,14 +36,24 @@ PACMAN_INSTALL_PACKAGES=(
     ### Hugo
     hugo
     ## Utilities
+    curl
+    wget
     neovim
     htop
     fastfetch
     github-cli
     distrobox
-    # Etc
+    ## Man
+    man-db
+    man-pages
+    ## Printing
+    cups
+    cups-pdf
+    ## Fonts
     noto-fonts-cjk
     noto-fonts-emoji
+    # Etc
+    texinfo
     flatpak
     fcitx5-hangul
     fcitx5-configtool
