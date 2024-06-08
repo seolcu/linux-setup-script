@@ -69,6 +69,7 @@ ZYPPER_INSTALL_PACKAGES=(
     jetbrains-mono-fonts
     ## Etc
     kdeconnect-kde
+    starship
 )
 
 echo -n "Install additional recommended packages? [y/N]: "

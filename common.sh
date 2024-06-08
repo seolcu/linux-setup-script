@@ -35,3 +35,11 @@ if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
     git config --global init.defaultBranch main
     git config --global push.autoSetupRemote true
 fi
+
+echo -n "Add starship init to .bashrc? [y/N]: "
+
+read answer
+
+if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
+    echo 'eval "$(starship init bash)"' >> ~/.bashrc
+fi
