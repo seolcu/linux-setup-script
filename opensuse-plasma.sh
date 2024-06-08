@@ -11,7 +11,7 @@ echo -n "Remove unnecessary packages? [y/N]: "
 read answer
 
 if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
-    sudo dnf remove "${ZYPPER_REMOVE_PACKAGES[@]}"
+    sudo zypper remove "${ZYPPER_REMOVE_PACKAGES[@]}"
 fi
 
 echo -n "Update the system? [y/N]: "
