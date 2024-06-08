@@ -4,6 +4,10 @@ ZYPPER_REMOVE_PACKAGES=(
     *Firefox*
     *fcitx*
     *Fcitx*
+    alee-fonts
+    nanum-fonts
+    nanum-gothic-coding-fonts
+    un-fonts
 )
 
 echo -n "Remove unnecessary packages? [y/N]: "
@@ -58,6 +62,7 @@ ZYPPER_INSTALL_PACKAGES=(
     ## Fonts
     google-noto-sans-cjk-fonts
     google-noto-sans-kr-fonts
+    google-noto-serif-kr-fonts
     google-noto-sans-kr-mono-fonts
     jetbrains-mono-fonts
     ## Etc
