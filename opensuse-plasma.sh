@@ -22,15 +22,6 @@ if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
     sudo zypper dup
 fi
 
-echo -n "Install additional packages for multimedia from Packman? [y/N]: "
-
-read answer
-
-if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
-    sudo zypper in opi
-    opi codecs
-fi
-
 ZYPPER_INSTALL_PACKAGES=(
     # GUI
     ## Work
@@ -58,6 +49,11 @@ ZYPPER_INSTALL_PACKAGES=(
     ## Hangul
     fcitx5-hangul
     fcitx5-configtool-kcm6
+    ## Fonts
+    google-noto-sans-cjk-fonts
+    google-noto-sans-kr-fonts
+    google-noto-sans-kr-mono-fonts
+    jetbrains-mono-fonts
     ## Etc
     kdeconnect-kde
 )
@@ -79,6 +75,15 @@ if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
     echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ntype=rpm-md\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" |sudo tee /etc/zypp/repos.d/vscode.repo > /dev/null
     sudo zypper refresh
     sudo zypper install code
+fi
+
+echo -n "Install additional packages for multimedia from Packman? [y/N]: "
+
+read answer
+
+if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
+    sudo zypper in opi
+    opi codecs
 fi
 
 FLATPAK_INSTALL_PACKAGES=(
@@ -113,6 +118,16 @@ if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
     echo 'GTK_IM_MODULE=fcitx' | sudo tee -a /etc/environment
     echo 'QT_IM_MODULE=fcitx' | sudo tee -a /etc/environment
     echo 'XMODIFIERS=@im=fcitx' | sudo tee -a /etc/environment
+fi
+
+echo -n "Change hostname? [y/N]: "
+
+read answer
+
+if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
+    echo -n "Enter new hostname: "
+    read hostname
+    sudo hostnamectl set-hostname "$hostname"
 fi
 
 ./common.sh
