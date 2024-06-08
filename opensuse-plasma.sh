@@ -1,0 +1,118 @@
+#!/usr/bin/env bash
+
+ZYPPER_REMOVE_PACKAGES=(
+    *Firefox*
+    *fcitx*
+    *Fcitx*
+)
+
+echo -n "Remove unnecessary packages? [y/N]: "
+
+read answer
+
+if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
+    sudo dnf remove "${ZYPPER_REMOVE_PACKAGES[@]}"
+fi
+
+echo -n "Update the system? [y/N]: "
+
+read answer
+
+if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
+    sudo zypper dup
+fi
+
+echo -n "Install additional packages for multimedia from Packman? [y/N]: "
+
+read answer
+
+if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
+    sudo zypper in opi
+    opi codecs
+fi
+
+ZYPPER_INSTALL_PACKAGES=(
+    # GUI
+    ## Work
+    discord
+    obs-studio
+    ## Games
+    steam
+    ## Etc
+    proton-vpn
+
+    # CLI
+    ## Development
+    ### Java
+    java-21-openjdk-devel
+    ### Python
+    python311-ipykernel
+    python311-black
+    ### Node.js
+    nodejs-default
+    ## Utilities
+    neovim
+    htop
+    fastfetch
+    gh
+    ## Hangul
+    fcitx5-hangul
+    fcitx5-configtool-kcm6
+    ## Etc
+    kdeconnect-kde
+)
+
+echo -n "Install additional recommended packages? [y/N]: "
+
+read answer
+
+if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
+    sudo zypper in "${ZYPPER_INSTALL_PACKAGES[@]}"
+fi
+
+echo -n "Install VSCode? [y/N]: "
+
+read answer
+
+if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
+    sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
+    echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ntype=rpm-md\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" |sudo tee /etc/zypp/repos.d/vscode.repo > /dev/null
+    sudo zypper refresh
+    sudo zypper install code
+fi
+
+FLATPAK_INSTALL_PACKAGES=(
+    # Web Browsers
+    com.brave.Browser
+    # Work
+    org.onlyoffice.desktopeditors
+    md.obsidian.Obsidian
+    # Communication
+    us.zoom.Zoom
+    com.slack.Slack
+    org.signal.Signal
+    # Gaming
+    org.prismlauncher.PrismLauncher
+    # Utilities
+    com.usebottles.bottles
+)
+
+echo -n "Install additional packages from Flathub? [y/N]: "
+
+read answer
+
+if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
+    flatpak install flathub "${FLATPAK_INSTALL_PACKAGES[@]}"
+fi
+
+echo -n "Setup Fcitx5 environment variables? [y/N]: "
+
+read answer
+
+if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
+    echo 'GTK_IM_MODULE=fcitx' | sudo tee -a /etc/environment
+    echo 'QT_IM_MODULE=fcitx' | sudo tee -a /etc/environment
+    echo 'XMODIFIERS=@im=fcitx' | sudo tee -a /etc/environment
+fi
+
+./common.sh

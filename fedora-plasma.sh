@@ -121,8 +121,6 @@ fi
 
 DNF_REMOVE_PACKAGES=(
     firefox
-    gnome-shell-extension-background-logo
-    gnome-shell-extension-appindicator
 )
 
 echo -n "Remove unnecessary packages? [y/N]: "
