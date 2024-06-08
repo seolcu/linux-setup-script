@@ -43,6 +43,7 @@ ZYPPER_INSTALL_PACKAGES=(
     ## Etc
     proton-vpn
     kvantum-manager
+    gnome-disk-utility
 
     # CLI
     ## Development
