@@ -24,8 +24,6 @@ fi
 
 ZYPPER_INSTALL_PACKAGES=(
     # GUI
-    ## Work
-    discord
     ## Games
     steam
     ## Etc
@@ -96,6 +94,7 @@ FLATPAK_INSTALL_PACKAGES=(
     us.zoom.Zoom
     com.slack.Slack
     org.signal.Signal
+    com.discordapp.Discord
     # Gaming
     org.prismlauncher.PrismLauncher
     # Utilities
