@@ -137,4 +137,13 @@ if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
     sudo hostnamectl set-hostname "$hostname"
 fi
 
+echo -n "Add nord colorscheme to Konsole? [y/N]: "
+
+read answer
+
+if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
+    mkdir -p ~/.local/share/konsole
+    curl -o ~/.local/share/konsole/Nord.colorscheme https://raw.githubusercontent.com/nordtheme/konsole/develop/src/nord.colorscheme
+fi
+
 ./common.sh
