@@ -62,6 +62,7 @@ DNF_INSTALL_PACKAGES=(
     # GUI
     ## Work
     discord
+    gnome-boxes
     ## Games
     steam
 
