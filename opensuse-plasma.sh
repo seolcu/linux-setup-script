@@ -8,6 +8,7 @@ ZYPPER_REMOVE_PACKAGES=(
     nanum-fonts
     nanum-gothic-coding-fonts
     un-fonts
+    baekmuk-ttf-fonts
 )
 
 echo -n "Remove unnecessary packages? [y/N]: "
