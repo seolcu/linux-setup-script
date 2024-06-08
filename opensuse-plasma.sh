@@ -42,6 +42,7 @@ ZYPPER_INSTALL_PACKAGES=(
     steam
     ## Etc
     proton-vpn
+    kvantum-manager
 
     # CLI
     ## Development
