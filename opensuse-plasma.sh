@@ -26,7 +26,6 @@ ZYPPER_INSTALL_PACKAGES=(
     # GUI
     ## Work
     discord
-    obs-studio
     ## Games
     steam
     ## Etc
@@ -92,6 +91,7 @@ FLATPAK_INSTALL_PACKAGES=(
     # Work
     org.onlyoffice.desktopeditors
     md.obsidian.Obsidian
+    com.obsproject.Studio
     # Communication
     us.zoom.Zoom
     com.slack.Slack
