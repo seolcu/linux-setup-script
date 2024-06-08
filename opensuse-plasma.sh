@@ -22,6 +22,15 @@ if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
     sudo zypper dup
 fi
 
+echo -n "Install additional packages for multimedia from Packman? [y/N]: "
+
+read answer
+
+if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
+    sudo zypper in opi
+    opi codecs
+fi
+
 ZYPPER_INSTALL_PACKAGES=(
     # GUI
     ## Games
@@ -72,15 +81,6 @@ if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
     echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ntype=rpm-md\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" |sudo tee /etc/zypp/repos.d/vscode.repo > /dev/null
     sudo zypper refresh
     sudo zypper install code
-fi
-
-echo -n "Install additional packages for multimedia from Packman? [y/N]: "
-
-read answer
-
-if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
-    sudo zypper in opi
-    opi codecs
 fi
 
 FLATPAK_INSTALL_PACKAGES=(
