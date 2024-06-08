@@ -62,8 +62,6 @@ DNF_INSTALL_PACKAGES=(
     # GUI
     ## Work
     discord
-    ## GNOME Apps
-    gnome-tweaks
     ## Games
     steam
 
@@ -86,16 +84,6 @@ DNF_INSTALL_PACKAGES=(
     fastfetch
     gh
     distrobox
-    # GNOME extensions
-    ## AppIndicator and KStatusNotifierItem Support Dependencies
-    libappindicator
-    ## GSConnect Dependencies
-    openssl
-    nautilus-python
-    nautilus-extensions
-    ## Vitals Dependencies
-    libgtop2-devel
-    lm_sensors
     # Etc
     google-noto-sans-cjk-fonts
 )
@@ -156,8 +144,6 @@ fi
 FLATPAK_INSTALL_PACKAGES=(
     # Web Browsers
     com.brave.Browser
-    # GNOME Apps
-    com.mattjakeman.ExtensionManager
     # Work
     org.onlyoffice.desktopeditors
     md.obsidian.Obsidian
