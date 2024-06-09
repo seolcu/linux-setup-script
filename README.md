@@ -1,12 +1,11 @@
 # linux-setup-script
 
-OOTB productive setup script for [debian, arch, fedora, nix], GNOME.
+OOTB productive setup script for some distros/desktops.
 
-## setup
+## Usage
 
 ### 0. prerequisites
 
-- python3-venv
 - git
 
 ### 1. clone this repo
@@ -19,10 +18,10 @@ cd linux-setup-script
 ### 2. setup venv
 
 ```bash
-python3 -m venv venv
-source venv/bin/activate
-pip3 install -r requirements.txt
+./distro-desktop.sh
 ```
+
+(substitute `distro` and `desktop` with your distro and desktop environment)
 
 ## Suggested GNOME Extensions (From GNOME Extensions Website)
 
