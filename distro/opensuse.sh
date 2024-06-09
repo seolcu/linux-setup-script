@@ -37,3 +37,13 @@ if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
     read hostname
     sudo hostnamectl set-hostname "$hostname"
 fi
+
+echo -n "Setup virtualization with Yast? [y/N]: "
+
+read answer
+
+if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
+    sudo yast2 virtualization
+    sudo usermod -a -G libvirt $(whoami)
+    sudo virsh net-autostart default
+fi
