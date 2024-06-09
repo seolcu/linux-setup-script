@@ -2,13 +2,9 @@
 
 # Use this script after installing Arch Linux with Plasma Desktop Environment through the archinstall script.
 
-echo -n "Update the system? [y/N]: "
-
-read answer
-
-if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
-    sudo pacman -Syu
-fi
+./distro/arch.sh
+./distro/plasma.sh
+./common.sh
 
 PACMAN_INSTALL_PACKAGES=(
     # GUI
@@ -69,18 +65,6 @@ if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
     sudo pacman -S "${PACMAN_INSTALL_PACKAGES[@]}"
 fi
 
-echo -n "Install AUR helper? [y/N]: "
-
-read answer
-
-if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
-    git clone https://aur.archlinux.org/yay-bin.git
-    cd yay-bin
-    makepkg -si
-    cd ..
-    rm -rf yay-bin
-fi
-
 AUR_INSTALL_PACKAGES=(
     # GUI
     ## Development
@@ -117,23 +101,3 @@ read answer
 if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
     flatpak install flathub "${FLATPAK_INSTALL_PACKAGES[@]}"
 fi
-
-echo -n "Setup Fcitx5 environment variables? [y/N]: "
-
-read answer
-
-if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
-    echo 'GTK_IM_MODULE=fcitx' | sudo tee -a /etc/environment
-    echo 'QT_IM_MODULE=fcitx' | sudo tee -a /etc/environment
-    echo 'XMODIFIERS=@im=fcitx' | sudo tee -a /etc/environment
-fi
-
-echo -n "Enable Bluetooth service? [y/N]: "
-
-read answer
-
-if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
-    sudo systemctl enable --now bluetooth
-fi
-
-./common.sh

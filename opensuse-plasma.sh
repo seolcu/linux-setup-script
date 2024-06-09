@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+./distro/opensuse.sh
+./desktop/plasma.sh
+./common.sh
+
 ZYPPER_REMOVE_PACKAGES=(
     *Firefox*
     *fcitx*
@@ -17,23 +21,6 @@ read answer
 
 if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
     sudo zypper remove "${ZYPPER_REMOVE_PACKAGES[@]}"
-fi
-
-echo -n "Update the system? [y/N]: "
-
-read answer
-
-if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
-    sudo zypper dup
-fi
-
-echo -n "Install additional packages for multimedia from Packman? [y/N]: "
-
-read answer
-
-if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
-    sudo zypper in opi
-    opi codecs
 fi
 
 ZYPPER_INSTALL_PACKAGES=(
@@ -81,17 +68,6 @@ if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
     sudo zypper in "${ZYPPER_INSTALL_PACKAGES[@]}"
 fi
 
-echo -n "Install VSCode? [y/N]: "
-
-read answer
-
-if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
-    sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
-    echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ntype=rpm-md\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" |sudo tee /etc/zypp/repos.d/vscode.repo > /dev/null
-    sudo zypper refresh
-    sudo zypper install code
-fi
-
 FLATPAK_INSTALL_PACKAGES=(
     # Web Browsers
     com.brave.Browser
@@ -117,25 +93,3 @@ read answer
 if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
     flatpak install flathub "${FLATPAK_INSTALL_PACKAGES[@]}"
 fi
-
-echo -n "Setup Fcitx5 environment variables? [y/N]: "
-
-read answer
-
-if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
-    echo 'GTK_IM_MODULE=fcitx' | sudo tee -a /etc/environment
-    echo 'QT_IM_MODULE=fcitx' | sudo tee -a /etc/environment
-    echo 'XMODIFIERS=@im=fcitx' | sudo tee -a /etc/environment
-fi
-
-echo -n "Change hostname? [y/N]: "
-
-read answer
-
-if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
-    echo -n "Enter new hostname: "
-    read hostname
-    sudo hostnamectl set-hostname "$hostname"
-fi
-
-./common.sh

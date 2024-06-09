@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# Packages
+
 echo -n "Install Rustup? [y/N]: "
 
 read answer
@@ -21,6 +23,8 @@ if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
     asdf install protonge latest
 fi
 
+# Configuration
+
 echo -n "Apply git configuration? [y/N]: "
 
 read answer
@@ -34,15 +38,6 @@ if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
     git config --global user.email "$email"
     git config --global init.defaultBranch main
     git config --global push.autoSetupRemote true
-fi
-
-echo -n "Add nord colorscheme to Konsole? [y/N]: "
-
-read answer
-
-if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
-    mkdir -p ~/.local/share/konsole
-    curl -o ~/.local/share/konsole/Nord.colorscheme https://raw.githubusercontent.com/nordtheme/konsole/develop/src/nord.colorscheme
 fi
 
 echo -n "Load fastfetch configuration? [y/N]: "
