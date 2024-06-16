@@ -48,6 +48,15 @@ PACMAN_INSTALL_PACKAGES=(
     ## Fonts
     noto-fonts-cjk
     noto-fonts-emoji
+    ttf-jetbrains-mono
+    ttf-jetbrains-mono-nerd
+    ## Filesystem
+    dosfstools
+    exfatprogs
+    f2fs-tools
+    ntfs-3g
+    xfsprogs
+    udftools
     # Etc
     texinfo
     flatpak
@@ -55,6 +64,7 @@ PACMAN_INSTALL_PACKAGES=(
     fcitx5-configtool
     power-profiles-daemon
     kdeconnect
+    starship
 )
 
 echo -n "Install additional recommended packages? [y/N]: "
@@ -67,6 +77,7 @@ fi
 
 AUR_INSTALL_PACKAGES=(
     # GUI
+    brave-bin
     ## Development
     visual-studio-code-bin
     # Etc
@@ -82,14 +93,12 @@ if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
 fi
 
 FLATPAK_INSTALL_PACKAGES=(
-    # Web Browsers
-    com.brave.Browser
     # Work
     org.onlyoffice.desktopeditors
     us.zoom.Zoom
     com.slack.Slack
     # Games
-    org.prismlauncher.PrismLauncher
+    com.mojang.Minecraft
     # Utilities
     com.usebottles.bottles
 )
