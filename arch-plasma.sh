@@ -3,7 +3,7 @@
 # Use this script after installing Arch Linux with Plasma Desktop Environment through the archinstall script.
 
 ./distro/arch.sh
-./distro/plasma.sh
+./desktop/plasma.sh
 ./common.sh
 
 PACMAN_INSTALL_PACKAGES=(
