@@ -42,6 +42,8 @@ DNF_INSTALL_PACKAGES=(
     ## Vitals Dependencies
     libgtop2-devel
     lm_sensors
+    ## Fonts
+    jetbrains-mono-fonts
 )
 
 echo -n "Install additional recommended packages? [y/N]: "

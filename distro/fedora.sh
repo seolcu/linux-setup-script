@@ -96,6 +96,17 @@ if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
     curl -sS https://starship.rs/install.sh | sh
 fi
 
+echo -n "Install JetBrainsMono Nerd Font? [y/N]: "
+
+read answer
+
+if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
+    mkdir -p ~/.local/share/fonts
+    wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/JetBrainsMono.zip
+    unzip JetBrainsMono.zip -d ~/.local/share/fonts
+    rm JetBrainsMono.zip
+fi
+
 echo -n "Install hugo(extended, v0.126.1)? [y/N]: "
 
 read answer
