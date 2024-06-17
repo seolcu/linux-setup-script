@@ -42,8 +42,6 @@ DNF_INSTALL_PACKAGES=(
     ## Vitals Dependencies
     libgtop2-devel
     lm_sensors
-    # Etc
-    google-noto-sans-cjk-fonts
 )
 
 echo -n "Install additional recommended packages? [y/N]: "
@@ -81,7 +79,7 @@ FLATPAK_INSTALL_PACKAGES=(
     com.slack.Slack
     org.signal.Signal
     # Gaming
-    org.prismlauncher.PrismLauncher
+    com.mojang.Minecraft
     # Utilities
     com.usebottles.bottles
 )

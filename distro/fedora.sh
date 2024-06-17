@@ -88,6 +88,14 @@ if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
     sudo dnf install -y --refresh proton-vpn-gnome-desktop
 fi
 
+echo -n "Install Starship.rs? [y/N]: "
+
+read answer
+
+if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
+    curl -sS https://starship.rs/install.sh | sh
+fi
+
 echo -n "Install hugo(extended, v0.126.1)? [y/N]: "
 
 read answer

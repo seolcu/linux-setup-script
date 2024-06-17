@@ -53,3 +53,19 @@ read answer
 if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
     echo -e '\neval "$(starship init bash)"' >> ~/.bashrc
 fi
+
+echo -n "Apply Wayland & Wayland native input method flag for brave? [y/N]: "
+
+read answer
+
+if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
+    cp config/flags/brave-flags.conf ~/.config/
+fi
+
+echo -n "Apply Wayland & Wayland native input method flag for vscode? [y/N]: "
+
+read answer
+
+if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
+    cp config/flags/code-flags.conf ~/.config/
+fi
