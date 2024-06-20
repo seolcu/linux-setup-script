@@ -13,7 +13,6 @@ PACMAN_INSTALL_PACKAGES=(
     discord
     signal-desktop
     obs-studio
-    gnome-boxes
     ## Games
     steam
 
@@ -51,6 +50,7 @@ PACMAN_INSTALL_PACKAGES=(
     ttf-jetbrains-mono
     ttf-jetbrains-mono-nerd
     ## Filesystem
+    btrfs-progs
     dosfstools
     exfatprogs
     f2fs-tools
@@ -109,4 +109,15 @@ read answer
 
 if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
     flatpak install flathub "${FLATPAK_INSTALL_PACKAGES[@]}"
+fi
+
+echo -n "Setup virt-manager for KVM? [y/N]: "
+
+read answer
+
+if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
+    sudo pacman -S virt-manager
+    sudo systemctl enable --now libvirtd
+    sudo usermod -a -G libvirt $(whoami)
+    sudo virsh net-autostart default
 fi
