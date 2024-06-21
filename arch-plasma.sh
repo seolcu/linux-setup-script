@@ -116,7 +116,7 @@ echo -n "Setup virt-manager for KVM? [y/N]: "
 read answer
 
 if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
-    sudo pacman -S virt-manager
+    sudo pacman -S virt-manager qemu-full dnsmasq
     sudo systemctl enable --now libvirtd
     sudo usermod -a -G libvirt $(whoami)
     sudo virsh net-autostart default
