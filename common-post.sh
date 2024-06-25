@@ -77,6 +77,8 @@ echo -n "Apply Wayland & Wayland native input method flag for Brave (Flatpak)? [
 read answer
 
 if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
+    flatpak run com.brave.Browser
+    echo -n "Close Brave to continue"
     cp config/flags/electron-flags.conf ~/.var/app/com.brave.Browser/config/brave-flags.conf
 fi
 

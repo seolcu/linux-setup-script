@@ -33,6 +33,8 @@ DNF_INSTALL_PACKAGES=(
     distrobox
     # Etc
     jetbrains-mono-fonts
+    fcitx5-hangul
+    kcm-fcitx5
 )
 
 echo -n "Install additional recommended packages? [y/N]: "
