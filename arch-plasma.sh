@@ -4,7 +4,7 @@
 
 ./distro/arch.sh
 ./desktop/plasma.sh
-./common.sh
+./common-pre.sh
 
 PACMAN_INSTALL_PACKAGES=(
     # GUI
@@ -13,6 +13,10 @@ PACMAN_INSTALL_PACKAGES=(
     discord
     signal-desktop
     obs-studio
+    ## Virtualization
+    virt-manager
+    qemu-full
+    dnsmasq
     ## Games
     steam
 
@@ -111,13 +115,4 @@ if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
     flatpak install flathub "${FLATPAK_INSTALL_PACKAGES[@]}"
 fi
 
-echo -n "Setup virt-manager for KVM? [y/N]: "
-
-read answer
-
-if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
-    sudo pacman -S virt-manager qemu-full dnsmasq
-    sudo systemctl enable --now libvirtd
-    sudo usermod -a -G libvirt $(whoami)
-    sudo virsh net-autostart default
-fi
+./common-post.sh

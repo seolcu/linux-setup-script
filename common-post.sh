@@ -12,6 +12,16 @@ fi
 
 # Configuration
 
+echo -n "Setup virt-manager for KVM? [y/N]: "
+
+read answer
+
+if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
+    sudo systemctl enable --now libvirtd
+    sudo usermod -a -G libvirt $(whoami)
+    sudo virsh net-autostart default
+fi
+
 echo -n "Apply git configuration? [y/N]: "
 
 read answer
@@ -54,12 +64,20 @@ if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
     echo -e '\neval "$(starship init bash)"' >> ~/.bashrc
 fi
 
-echo -n "Apply Wayland & Wayland native input method flag for brave? [y/N]: "
+echo -n "Apply Wayland & Wayland native input method flag for Brave (Native)? [y/N]: "
 
 read answer
 
 if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
-    cp config/flags/brave-flags.conf ~/.config/
+    cp config/flags/electron-flags.conf ~/.config/brave-flags.conf
+fi
+
+echo -n "Apply Wayland & Wayland native input method flag for Brave (Flatpak)? [y/N]: "
+
+read answer
+
+if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
+    cp config/flags/electron-flags.conf ~/.var/app/com.brave.Browser/config/brave-flags.conf
 fi
 
 echo -n "Apply Wayland & Wayland native input method flag for vscode? [y/N]: "
@@ -67,5 +85,5 @@ echo -n "Apply Wayland & Wayland native input method flag for vscode? [y/N]: "
 read answer
 
 if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
-    cp config/flags/code-flags.conf ~/.config/
+    cp config/flags/electron-flags.conf ~/.config/code-flags.conf
 fi

@@ -107,16 +107,17 @@ if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
     rm JetBrainsMono.zip
 fi
 
-echo -n "Install hugo(extended, v0.126.1)? [y/N]: "
+echo -n "Install hugo(extended, v0.127.0)? [y/N]: "
 
 read answer
 
 if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
     mkdir tmp
     cd tmp
-    wget https://github.com/gohugoio/hugo/releases/download/v0.126.1/hugo_extended_0.126.1_linux-amd64.tar.gz
-    tar -xzf hugo_extended_0.126.1_linux-amd64.tar.gz
-    sudo mv hugo /usr/local/bin
+    wget https://github.com/gohugoio/hugo/releases/download/v0.127.0/hugo_extended_0.127.0_Linux-64bit.tar.gz
+    tar -xzf hugo_extended_0.127.0_Linux-64bit.tar.gz
+    mkdir -p ~/.local/bin
+    mv hugo ~/.local/bin
     cd ..
     rm -rf tmp
 fi

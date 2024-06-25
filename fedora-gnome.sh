@@ -2,7 +2,7 @@
 
 ./distro/fedora.sh
 ./desktop/gnome.sh
-./common.sh
+./common-pre.sh
 
 DNF_INSTALL_PACKAGES=(
     # GUI
@@ -93,3 +93,5 @@ read answer
 if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
     flatpak install flathub "${FLATPAK_INSTALL_PACKAGES[@]}"
 fi
+
+./common-post.sh

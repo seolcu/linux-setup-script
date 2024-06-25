@@ -2,13 +2,13 @@
 
 ./distro/fedora.sh
 ./desktop/plasma.sh
-./common.sh
+./common-pre.sh
 
 DNF_INSTALL_PACKAGES=(
     # GUI
     ## Work
     discord
-    gnome-boxes
+    virt-manager
     ## Games
     steam
 
@@ -32,7 +32,7 @@ DNF_INSTALL_PACKAGES=(
     gh
     distrobox
     # Etc
-    google-noto-sans-cjk-fonts
+    jetbrains-mono-fonts
 )
 
 echo -n "Install additional recommended packages? [y/N]: "
@@ -66,7 +66,7 @@ FLATPAK_INSTALL_PACKAGES=(
     com.slack.Slack
     org.signal.Signal
     # Gaming
-    org.prismlauncher.PrismLauncher
+    com.mojang.Minecraft
     # Utilities
     com.usebottles.bottles
 )
@@ -78,3 +78,5 @@ read answer
 if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
     flatpak install flathub "${FLATPAK_INSTALL_PACKAGES[@]}"
 fi
+
+./common-post.sh

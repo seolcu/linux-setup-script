@@ -4,7 +4,7 @@
 
 ./distro/arch.sh
 ./desktop/plasma.sh
-./common.sh
+./common-pre.sh
 
 PACMAN_INSTALL_PACKAGES=(
     # GUI
@@ -108,3 +108,6 @@ read answer
 if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
     flatpak install flathub "${FLATPAK_INSTALL_PACKAGES[@]}"
 fi
+
+
+./common-post.sh

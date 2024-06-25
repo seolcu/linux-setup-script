@@ -2,7 +2,7 @@
 
 ./distro/opensuse.sh
 ./desktop/plasma.sh
-./common.sh
+./common-pre.sh
 
 ZYPPER_REMOVE_PACKAGES=(
     *Firefox*
@@ -93,3 +93,5 @@ read answer
 if [[ "$answer" == "y" ]] || [[ "$answer" == "Y" ]]; then
     flatpak install flathub "${FLATPAK_INSTALL_PACKAGES[@]}"
 fi
+
+./common-post.sh
