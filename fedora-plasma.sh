@@ -47,6 +47,7 @@ fi
 
 DNF_REMOVE_PACKAGES=(
     firefox
+    dragon
 )
 
 echo -n "Remove unnecessary packages? [y/N]: "
@@ -71,6 +72,7 @@ FLATPAK_INSTALL_PACKAGES=(
     com.mojang.Minecraft
     # Utilities
     com.usebottles.bottles
+    org.videolan.VLC
 )
 
 echo -n "Install additional packages from Flathub? [y/N]: "
